@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#399CE5</color>
+    <color name="colorPrimaryDark">#348dcf</color>
+    <color name="colorAccent">#4285F4</color>
+
+    // Registration/Login Background Color
+    <color name="colorRegBackgroundAss">#f7f7f7</color>
+    <color name="colorRegPhotoBorder">#e6e6e6</color>
+
+
+
+    <color name="colorBackgroundAss">#EBEBEB</color>
+    <color name="colorBackgroundDarkAss">#C1C1C1</color>
+    <color name="colorBackgroundTransparent">#2c000000</color>
+    <color name="colorBlackTransparent">#76000000</color>
+    <color name="colorWhite">#ffffff</color>
+    <color name="colorBlack">#000000</color>
+    <color name="colorYellow">#FFEC00</color>
+    <color name="colorTabUnselectedText">#606060</color>
+
+    <color name="colorPlus">#00C917</color>
+    <color name="colorMinus">#FF4646</color>
+    <color name="colorUserCategory">#399CE5</color>
+    <color name="colorBorder">#707070</color>
+    <color name="transparent">#00ffffff</color>
+    <color name="slack_background">#F3F3E9</color>
+
+
+
+
+    <color name="fab_color_1">#5856d6</color>
+    <color name="fab_color_2">#4cd964</color>
+    <color name="fab_color_3">#ff9500</color>
+    <color name="fab_color_4">#ff95ff</color>
+
+
+
+    <!--For Loading Color-->
+
+    <color name="holo_blue_light">#ff33b5e5</color>
+    <!-- A light Holo shade of gray -->
+    <color name="holo_gray_light">#33999999</color>
+    <!-- A light Holo shade of green -->
+    <color name="holo_green_light">#5ccc00</color>
+    <!-- A light Holo shade of red -->
+    <color name="holo_red_light">#ffff4444</color>
+    <!-- A dark Holo shade of blue -->
+    <color name="holo_blue_dark">#ff0099cc</color>
+    <!-- A dark Holo shade of green -->
+    <color name="holo_green_dark">#ff669900</color>
+    <!-- A dark Holo shade of red -->
+    <color name="holo_red_dark">#ffcc0000</color>
+    <!-- A Holo shade of purple -->
+    <color name="holo_purple">#ffaa66cc</color>
+    <!-- A light Holo shade of orange -->
+    <color name="holo_orange_light">#ffffbb33</color>
+    <!-- A dark Holo shade of orange -->
+    <color name="holo_orange_dark">#ffff8800</color>
+    <!-- A really bright Holo shade of blue -->
+    <color name="holo_blue_bright">#ff00ddff</color>
+    <!-- A really bright Holo shade of gray -->
+    <color name="holo_gray_bright">#33CCCCCC</color>
+    <!-- A really lighter Holo shade of gray -->
+    <color name="holo_lighter_gray">#ffefefef</color>
+    <!-- A really darker Holo shade of gray -->
+    <color name="holo_darker_gray">#ffaaaaaa</color>
+
+
+
+
+</resources>

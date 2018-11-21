@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.mdjahirulislam.doobbi.view.pickUpMe.PickUpLocationActivity">
+
+
+    <RelativeLayout
+        android:id="@+id/mapMainView"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginBottom="0dp"
+        android:visibility="visible">
+
+
+        <com.google.android.gms.maps.MapView
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/registrationDialogMap"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+        </com.google.android.gms.maps.MapView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+
+            >
+
+
+            <android.support.v7.widget.CardView
+                xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/autocompleteViewCV"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="6dp"
+                android:layout_marginRight="6dp"
+                android:layout_weight="1"
+                android:background="@color/colorWhite"
+                android:paddingLeft="2dp"
+                card_view:cardCornerRadius="0dp">
+
+                <fragment
+                    android:id="@+id/dialog_place_autocomplete_fragment"
+                    android:name="com.google.android.gms.location.places.ui.SupportPlaceAutocompleteFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:tag="dialogPlaceSearch"
+
+                    />
+
+            </android.support.v7.widget.CardView>
+
+            <!--<TextView-->
+            <!--android:id="@+id/mapDialogShowAddressTV"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="40dp"-->
+            <!--android:layout_alignParentStart="true"-->
+            <!--android:layout_gravity="center_vertical"-->
+            <!--android:layout_marginRight="6dp"-->
+            <!--android:layout_marginBottom="0dp"-->
+            <!--android:background="@drawable/white_rectangle_backgrount"-->
+            <!--android:drawableLeft="@drawable/ic_near_me_blue_24dp"-->
+            <!--android:drawablePadding="6dp"-->
+            <!--android:ellipsize="end"-->
+            <!--android:ems="10"-->
+            <!--android:gravity="center_vertical"-->
+            <!--android:hint="Search Area "-->
+            <!--android:inputType="text"-->
+            <!--android:maxLines="1"-->
+            <!--android:minLines="1"-->
+            <!--android:padding="6dp"-->
+            <!--android:scrollHorizontally="true"-->
+            <!--android:textSize="@dimen/regular_text_size"-->
+            <!--android:visibility="gone"/>-->
+
+        </LinearLayout>
+
+
+        <ImageView
+            android:id="@+id/mapDialogPinIV"
+            android:layout_width="50dp"
+            android:layout_height="100dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:paddingBottom="50dp"
+            android:src="@drawable/pin_black"/>
+
+
+        <!--<ImageView-->
+        <!--android:id="@+id/mapDialogCurrentIV"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_centerInParent="true"-->
+        <!--android:layout_margin="16dp"-->
+        <!--android:layout_marginBottom="400dp"-->
+        <!--android:src="@drawable/ic_add_white_36dp"-->
+        <!--android:visibility="gone"/>-->
+
+
+        <com.github.clans.fab.FloatingActionMenu
+            android:id="@+id/map_floating_menu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/currentLocationInfoTV"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="11dp"
+            android:layout_marginRight="11dp"
+            android:layout_marginBottom="0dp"
+            android:visibility="visible"
+            fab:menu_animationDelayPerItem="100"
+            fab:menu_backgroundColor="@android:color/transparent"
+            fab:menu_buttonSpacing="0dp"
+            fab:menu_colorNormal="#dc4337"
+            fab:menu_colorPressed="#dc4b3f"
+            fab:menu_colorRipple="#99d4d4d4"
+            fab:menu_fab_size="normal"
+            fab:menu_icon="@drawable/ic_add_white_36dp"
+            fab:menu_labels_colorNormal="#333"
+            fab:menu_labels_colorPressed="#444"
+            fab:menu_labels_colorRipple="#66efecec"
+            fab:menu_labels_cornerRadius="3dp"
+            fab:menu_labels_ellipsize="none"
+            fab:menu_labels_hideAnimation="@anim/fab_slide_out_to_right"
+            fab:menu_labels_margin="0dp"
+            fab:menu_labels_maxLines="-1"
+            fab:menu_labels_padding="8dp"
+            fab:menu_labels_position="left"
+            fab:menu_labels_showAnimation="@anim/fab_slide_in_from_right"
+            fab:menu_labels_showShadow="true"
+            fab:menu_labels_singleLine="false"
+            fab:menu_labels_textColor="#f2f1f1"
+            fab:menu_labels_textSize="15sp"
+            fab:menu_openDirection="up"
+            fab:menu_shadowColor="#66aff198"
+            fab:menu_shadowRadius="4dp"
+            fab:menu_shadowXOffset="1dp"
+            fab:menu_shadowYOffset="4dp"
+            fab:menu_showShadow="true">
+
+
+            <com.github.clans.fab.FloatingActionButton
+                android:id="@+id/floating_compass"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_flare_white_36dp"
+                fab:fab_colorNormal="@color/fab_color_1"
+                fab:fab_size="normal"/>
+
+            <com.github.clans.fab.FloatingActionButton
+                android:id="@+id/floating_zoom_out"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_zoom_out_white_36dp"
+                fab:fab_colorNormal="@color/fab_color_2"
+                fab:fab_size="normal"/>
+
+            <com.github.clans.fab.FloatingActionButton
+                android:id="@+id/floating_zoom_in"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_zoom_in_white_36dp"
+                fab:fab_colorNormal="@color/fab_color_3"
+                fab:fab_size="normal"
+                />
+
+            <com.github.clans.fab.FloatingActionButton
+                android:id="@+id/floating_my_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_my_location_white_36dp"
+                fab:fab_colorNormal="@color/fab_color_4"
+                fab:fab_size="normal"
+                />
+
+
+        </com.github.clans.fab.FloatingActionMenu>
+
+
+        <TextView
+            android:id="@+id/currentLocationInfoTV"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_above="@id/mapDialogActionLL"
+            android:layout_alignParentBottom="false"
+            android:layout_margin="@dimen/margin_2dp"
+            android:background="@drawable/custom_location_info_design"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="2"
+            android:text="My Location Details"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/regular_text_size"
+            android:textStyle="bold"
+            android:visibility="visible"/>
+
+
+        <LinearLayout
+            android:id="@+id/mapDialogActionLL"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/colorPrimary"
+            android:orientation="horizontal"
+            android:visibility="visible">
+
+            <TextView
+                android:id="@+id/mapDialogCancelTV"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/white_rectangle_backgrount"
+                android:gravity="center"
+                android:padding="2dp"
+                android:text="Cancel"
+                android:textSize="@dimen/regular_text_size"/>
+
+            <TextView
+                android:id="@+id/mapDialogOkTV"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/white_rectangle_backgrount"
+                android:gravity="center"
+                android:padding="2dp"
+                android:text="Ok"
+                android:textSize="@dimen/regular_text_size"/>
+        </LinearLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/mapMainNoInternetView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/slack_background"
+        android:visibility="gone"
+        >
+
+        <pl.droidsonroids.gif.GifImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/slack"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:gravity="center"
+            android:paddingBottom="20dp"
+            android:text="No Internet Connection"
+            android:textColor="@color/colorBlack"/>
+
+    </RelativeLayout>
+</RelativeLayout>

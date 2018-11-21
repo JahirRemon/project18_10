@@ -1,0 +1,52 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">Doobbi</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+
+    <string name="call_now">Call Now</string>
+    <string name="home_schedule">Schedule</string>
+    <string name="home_make_order">Make My Order</string>
+    <string name="home_pick_up_point">Pick Up Point</string>
+    <string name="home_price_list">Price List</string>
+    <string name="home_order">Order</string>
+    <string name="home_offer">Offer</string>
+    <string name="copy_right">2018 © Dhobi Private Limited - All rights reserved</string>
+
+
+    <string name="schedule_time">Time </string>
+    <string name="schedule_check_box_text">Do you want to keep this schedule for next 2 month </string>
+    <string name="schedule_confirm">Confirm </string>
+    <string name="title_activity_maps" tools:ignore="ExtraTranslation">Map</string>
+
+
+    <string name="reg_submit">Submit</string>
+    <string name="reg_login">Login</string>
+    <string name="login_forgot_password">Forgot Password? </string>
+    <string name="login_no_account">Don\'t have an account? Sign up </string>
+
+
+    <string name="user_type">User Type Regular/Premium</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_pick_up_location">Map</string>
+
+
+    <!--  Activity Name  -->
+    <string name="activity_schedule">Schedule</string>
+    <string name="activity_schedule_summary">Schedule Summary</string>
+    <string name="activity_make_schedule">Make Schedule </string>
+    <string name="activity_registration">Registration</string>
+    <string name="activity_login">Login</string>
+    <string name="activity_product">Product List</string>
+    <string name="activity_make_order">Make Order</string>
+    <string name="activity_order_summary">Order Summary</string>
+    <string name="activity_Price">Price</string>
+    <string name="activity_order_list">Order List</string>
+    <string name="activity_offer">Offer</string>
+    <string name="activity_pick_up">Location</string>
+
+</resources>

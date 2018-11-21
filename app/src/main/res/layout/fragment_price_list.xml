@@ -1,0 +1,109 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.mdjahirulislam.doobbi.view.priceList.PriceListFragment">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/activity_vertical_margin"
+        android:layout_marginRight="@dimen/activity_vertical_margin"
+        android:orientation="vertical"
+
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin_6dp"
+            android:orientation="horizontal"
+            android:visibility="visible"
+            >
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/margin_8dp"
+                android:layout_weight="1"
+                android:background="@drawable/price_list_category_background"
+                android:orientation="vertical"
+
+                >
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Regular"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="@dimen/large_text_size"
+                    />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Delivery within 48 hours "
+                    android:textColor="@color/colorWhite"
+                    android:textSize="@dimen/small_text_size"
+                    android:paddingBottom="@dimen/margin_6dp"
+                    />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_8dp"
+                android:layout_weight="1"
+                android:background="@drawable/price_list_category_background"
+                android:orientation="vertical"
+                >
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Premier"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="@dimen/large_text_size"
+                    />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Delivery within 24 hours "
+                    android:textColor="@color/colorWhite"
+                    android:textSize="@dimen/small_text_size"
+                    android:paddingBottom="@dimen/margin_6dp"
+                    />
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+        <include
+            layout="@layout/single_item_price_list_design"
+            />
+ <include
+            layout="@layout/single_item_price_list_design"/>
+ <include
+            layout="@layout/single_item_price_list_design"/>
+
+        <!--<android.support.v7.widget.RecyclerView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:visibility="gone"></android.support.v7.widget.RecyclerView>-->
+
+
+    </LinearLayout>
+</LinearLayout>

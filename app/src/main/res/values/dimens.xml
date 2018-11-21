@@ -1,0 +1,31 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="nav_header_vertical_spacing">8dp</dimen>
+    <dimen name="nav_header_height">176dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="home_icon_height">38dp</dimen>
+    <dimen name="home_icon_width">38dp</dimen>
+    <dimen name="home_text_size">18sp</dimen>
+    <dimen name="home_icon_margin">6dp</dimen>
+    <dimen name="home_icon_margin_right">3dp</dimen>
+    <dimen name="home_icon_margin_left">3dp</dimen>
+    <dimen name="regular_text_size" tools:ignore="MissingDefaultResource">18sp</dimen>
+    <dimen name="extra_large_text_size">36sp</dimen>
+    <dimen name="large_text_size">22sp</dimen>
+    <dimen name="small_text_size">14sp</dimen>
+    <dimen name="button_height">45dp</dimen>
+    <dimen name="input_text_bottom_margin">6dp</dimen>
+    <dimen name="margin_2dp">2dp</dimen>
+    <dimen name="margin_4dp">4dp</dimen>
+    <dimen name="margin_6dp">6dp</dimen>
+    <dimen name="margin_8dp">8dp</dimen>
+    <dimen name="margin_10dp">10dp</dimen>
+    <dimen name="margin_12dp">12dp</dimen>
+    <dimen name="margin_16dp">16dp</dimen>
+    <dimen name="price_text_width">28dp</dimen>
+
+
+
+</resources>

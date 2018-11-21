@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.schedule.ScheduleCalendarActivity"
+    android:orientation="vertical"
+    android:background="@color/colorBackgroundAss">
+
+    <LinearLayout
+        android:id="@+id/selectedLL"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/colorWhite"
+        android:layout_marginBottom="3dp"
+        android:layout_marginTop="3dp"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp">
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_event_yellow_a400_24dp"
+                android:padding="0dp"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"/>
+
+            <TextView
+                android:id="@+id/selectedDateTV"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textColor="@color/colorBlack"
+                android:hint="select Date"
+                android:gravity="center"
+                android:textSize="@dimen/regular_text_size"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/selectedTimeLL"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:onClick="selectTime">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_access_time_yellow_a400_24dp"
+                android:padding="0dp"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"/>
+
+            <TextView
+                android:id="@+id/selectedTimeTV"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textColor="@color/colorBlack"
+                android:text="Select Time"
+                android:gravity="center"
+                android:textSize="@dimen/regular_text_size"/>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <CalendarView
+        android:id="@+id/scheduleCalendarCV"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorWhite"
+        android:firstDayOfWeek="6"
+        android:layout_below="@+id/selectedLL"
+        android:layout_marginBottom="50dp"
+        android:layout_centerInParent="true"
+        android:selectedDateVerticalBar="@color/colorBlack"
+        android:weekSeparatorLineColor="#0f0"
+        android:paddingTop="20dp"
+        >
+
+
+    </CalendarView>
+
+    <TextView
+    android:id="@+id/scheduleDoneTV"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/button_height"
+    android:text="@string/schedule_time"
+    android:background="@color/colorPrimary"
+    android:gravity="center"
+    android:textColor="@color/colorWhite"
+    android:padding="6dp"
+    android:onClick="goToScheduleTimeActivity"
+    android:layout_alignParentBottom="true"
+    android:textSize="@dimen/regular_text_size"
+    />
+
+</RelativeLayout>
