@@ -79,6 +79,7 @@
                 android:background="@drawable/item_background_transparent_gradient"
                 android:gravity="center"
                 android:text="I love you"
+                android:textStyle="bold"
                 android:textColor="@color/colorWhite"/>
 
 

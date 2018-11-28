@@ -18,7 +18,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.API_ACCESS_ADD_USER_FUNCTION;
+import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.API_ACCESS_FUNCTION_ADD_USER;
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.API_ACCESS_DENY_CODE;
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.API_ACCESS_ID;
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.API_ACCESS_PASSWORD;
@@ -52,7 +52,7 @@ public class InsertNewUserThread extends Thread {
         super.run();
         RequestBody password = RequestBody.create( MultipartBody.FORM,API_ACCESS_PASSWORD );
         RequestBody user = RequestBody.create( MultipartBody.FORM,API_ACCESS_ID );
-        RequestBody function = RequestBody.create( MultipartBody.FORM,API_ACCESS_ADD_USER_FUNCTION );
+        RequestBody function = RequestBody.create( MultipartBody.FORM, API_ACCESS_FUNCTION_ADD_USER );
         RequestBody data = RequestBody.create( MultipartBody.FORM, String.valueOf( dataModel ) );
 
         Log.d( TAG, "run: data: "+data+"\ndataModel: " +dataModel);

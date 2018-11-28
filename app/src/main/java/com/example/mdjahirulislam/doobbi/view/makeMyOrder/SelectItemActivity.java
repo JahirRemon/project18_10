@@ -13,18 +13,36 @@ import android.widget.TextView;
 import com.example.mdjahirulislam.doobbi.R;
 import com.example.mdjahirulislam.doobbi.controller.adapter.TabPageAdapter;
 import com.example.mdjahirulislam.doobbi.controller.adapter.ViewPagerAdapter;
+import com.example.mdjahirulislam.doobbi.controller.connectionInterface.ConnectionAPI;
+import com.example.mdjahirulislam.doobbi.controller.helper.Functions;
 import com.example.mdjahirulislam.doobbi.controller.helper.SessionManager;
-import com.example.mdjahirulislam.doobbi.view.HomeActivity;
-import com.example.mdjahirulislam.doobbi.view.order.OrderListActivity;
+import com.example.mdjahirulislam.doobbi.model.CategoryItemsModel;
+import com.example.mdjahirulislam.doobbi.model.requestModel.InsertOrderHistoryDBModel;
+import com.example.mdjahirulislam.doobbi.model.responseModel.GetTadItemResponseModel;
 
-public class SelectItemActivity extends AppCompatActivity implements SelectCategoryItemFragment.onTotalPriceListener{
+import java.util.ArrayList;
+
+import io.realm.Realm;
+import io.realm.RealmChangeListener;
+import io.realm.RealmResults;
+
+public class SelectItemActivity extends AppCompatActivity implements SelectCategoryItemFragment.onTotalPriceListener {
 
     private static final String TAG = SelectItemActivity.class.getSimpleName();
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private TextView totalPriceTV;
-    private int totalPrice = 0 ;
+    private int totalPrice = 0;
     private SessionManager sessionManager;
+
+
+    private ConnectionAPI connectionApi;
+    private ArrayList<String> tabNameList;
+    private ArrayList<String> tabIdList;
+    private GetTadItemResponseModel tadItemResponseModel;
+    private ArrayList<CategoryItemsModel> items;
+    private Realm mRealm;
+
 
     private TabPageAdapter tabPageAdapter;
     private final int[] tabIconsAss = {
@@ -47,7 +65,7 @@ public class SelectItemActivity extends AppCompatActivity implements SelectCateg
 
     };
 
-    private final String[] tabNames = {"Shirt", "Pant", "Panjabi", "Suit", "Accessories"};
+//    private final String[] tabNames = {"Shirt", "Pant", "Panjabi", "Suit", "Accessories"};
 
 
     @Override
@@ -56,7 +74,14 @@ public class SelectItemActivity extends AppCompatActivity implements SelectCateg
         setContentView( R.layout.activity_select_item );
 
 //        for back button on action bar
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled( true );
+
+        connectionApi = Functions.getRetrofit().create( ConnectionAPI.class );
+        tabNameList = new ArrayList<>();
+        tabIdList = new ArrayList<>();
+
+        items = (ArrayList<CategoryItemsModel>) getIntent().getSerializableExtra( "itemsModel" );
+        mRealm = Realm.getDefaultInstance();
 
         totalPriceTV = findViewById( R.id.totalSelectedPriceTV );
         sessionManager = new SessionManager( this );
@@ -66,19 +91,35 @@ public class SelectItemActivity extends AppCompatActivity implements SelectCateg
 
         tabLayout = (TabLayout) findViewById( R.id.select_category_tab_layout );
         tabLayout.setupWithViewPager( viewPager );
-
-        tabPageAdapter = new TabPageAdapter( this, getSupportFragmentManager(), tabNames, 1 );
+        for (int i = 0; i < items.size(); i++) {
+            tabNameList.add( items.get( i ).getItemName() );
+            tabIdList.add( items.get( i ).getItemId() );
+        }
+//        Functions.ProgressDialog( this );
+//        Functions.showDialog();
+        tabPageAdapter = new TabPageAdapter( this, getSupportFragmentManager(), tabNameList, tabIdList, 1 );
         viewPager.setAdapter( tabPageAdapter );
 
         tabLayout.setupWithViewPager( viewPager );
 
-//        tab text color change
-//        tabLayout.setTabTextColors(Color.parseColor("#000000"), Color.parseColor("#ffffff"));
+        try {
+            RealmResults<InsertOrderHistoryDBModel> results = mRealm.where( InsertOrderHistoryDBModel.class ).findAll();
 
+            mRealm.beginTransaction();
 
+            Log.d( TAG, "onCreate: size---> " + results.size() );
+            for (int i = 0; i < results.size(); i++) {
+                totalPrice += Integer.parseInt( results.get( i ).getTotalPrice() );
+                Log.d( TAG, "onCreate: totalPrice---->" + totalPrice );
+                Log.d( TAG, "onCreate: rowDetails-----> " +results.get( i ).toString());
+            }
+            mRealm.commitTransaction();
+        }finally {
+            mRealm.close();
+            totalPriceTV.setText( "Remon Tk: "+String.valueOf( totalPrice ) );
 
+        }
 
-        setupTabIcons();
 
         tabLayout.setOnTabSelectedListener( new TabLayout.OnTabSelectedListener() {
             @Override
@@ -88,8 +129,6 @@ public class SelectItemActivity extends AppCompatActivity implements SelectCateg
                 switch (position) {
                     case 0:
                         tabLayout.getTabAt( position ).setIcon( tabIconsWhite[position] );
-//                        tabLayout.setTabTextColors(R.color.colorBlack,R.color.colorWhite);
-
                         break;
                     case 1:
                         tabLayout.getTabAt( position ).setIcon( tabIconsWhite[position] );
@@ -166,12 +205,12 @@ public class SelectItemActivity extends AppCompatActivity implements SelectCateg
     public void setPrice(int price, int operator) {
 
 
-        if (operator == 1){
-            this.totalPrice += price;
-            totalPriceTV.setText( "Tk. "+ String.valueOf( totalPrice ) );
-        }else if (operator == 2){
-            this.totalPrice -= price;
-            totalPriceTV.setText( "Tk. "+ String.valueOf( totalPrice ) );
+        if (operator == 1) {
+//            this.totalPrice += price;
+//            totalPriceTV.setText( "Tk. "+ String.valueOf( totalPrice ) );
+        } else if (operator == 2) {
+//            this.totalPrice -= price;
+//            totalPriceTV.setText( "Tk. "+ String.valueOf( totalPrice ) );
         }
     }
 
@@ -181,21 +220,21 @@ public class SelectItemActivity extends AppCompatActivity implements SelectCateg
         super.onBackPressed();
         Log.d( TAG, "onBackPressed: " );
         sessionManager.setTotalPrice( String.valueOf( totalPrice ) );
-        startActivity( new Intent( SelectItemActivity.this,OrderHomeActivity.class ).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) );
+        startActivity( new Intent( SelectItemActivity.this, OrderHomeActivity.class ).setFlags( Intent.FLAG_ACTIVITY_CLEAR_TOP ) );
         finish();
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            Intent intent = new Intent(this,OrderHomeActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
+            Intent intent = new Intent( this, OrderHomeActivity.class );
+            intent.setFlags( Intent.FLAG_ACTIVITY_CLEAR_TOP );
+            startActivity( intent );
 
             finish();
         }
         // app icon in action bar clicked; goto parent activity.
         this.finish();
-        return super.onOptionsItemSelected(item);
+        return super.onOptionsItemSelected( item );
     }
 }

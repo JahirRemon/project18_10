@@ -58,7 +58,7 @@
                             android:drawableLeft="@drawable/ic_perm_identity_blue_400_24dp"
                             android:drawablePadding="6dp"
                             android:hint="Name"
-                            android:inputType="text"
+                            android:inputType="number"
                             />
 
                     </LinearLayout>

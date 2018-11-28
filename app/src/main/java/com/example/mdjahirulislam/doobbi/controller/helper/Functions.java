@@ -38,6 +38,7 @@ import java.text.DateFormat;
 import java.text.DateFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -59,10 +60,15 @@ public class Functions {
     public static final String NO_USER_FOUND_CODE = "101";
     public static final String API_ACCESS_ID = "rajib";
     public static final String API_ACCESS_PASSWORD = "123456";
-    public static final String API_ACCESS_ADD_USER_FUNCTION = "addcustomer";
-    public static final String API_ACCESS_ADD_USER_IMAGE_FUNCTION = "customerimage";
-    public static final String API_ACCESS_LOGIN_FUNCTION = "verifycustomer";
-    public static final String API_ACCESS_USER_DETAILS_FUNCTION = "verifycustomer";
+
+    //Function Name
+    public static final String API_ACCESS_FUNCTION_ADD_USER = "addcustomer";
+    public static final String API_ACCESS_FUNCTION_ADD_USER_IMAGE = "customerimage";
+    public static final String API_ACCESS_FUNCTION_LOGIN = "verifycustomer";
+    public static final String API_ACCESS_FUNCTION_USER_DETAILS = "getcustomer";
+    public static final String API_ACCESS_FUNCTION_GET_CATEGORY = "getcategory";
+    public static final String API_ACCESS_FUNCTION_GET_CATEGORY_ITEMS = "getcategoryitem";
+    public static final String API_ACCESS_FUNCTION_GET_CATEGORY_ITEMS_PRICE = "getitemwiseprise";
 
     public static String BASE_URL = "http://transparentgroup.net/services/services/";
 
@@ -87,7 +93,8 @@ public class Functions {
     };
 
 
-    public static final String[] tabNames = {"Man", "Woman", "Child", "House Hold", "Accessories"};
+//    public static final String[] tabNames = {"No Data"};
+    public static ArrayList<String> tabNames = new ArrayList<>(  );
 
 
     public static Retrofit getRetrofit() {
@@ -291,6 +298,9 @@ public class Functions {
     public static void showDialog() {
         if (!alertDialog.isShowing()) {
             simulateProgress();
+            Log.d( TAG, "showDialog: Yes" );
+        }else {
+            Log.d( TAG, "showDialog: No " +alertDialog.isShowing());
         }
 
     }
@@ -298,6 +308,9 @@ public class Functions {
     public static void hideDialog() {
         if (alertDialog.isShowing()) {
             alertDialog.dismiss();
+            Log.d( TAG, "hideDialog: Yes" );
+        }else {
+            Log.d( TAG, "hideDialog: No " +alertDialog.isShowing());
         }
     }
 

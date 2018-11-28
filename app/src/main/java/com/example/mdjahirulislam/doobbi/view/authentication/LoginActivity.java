@@ -1,6 +1,8 @@
 package com.example.mdjahirulislam.doobbi.view.authentication;
 
+import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.method.HideReturnsTransformationMethod;
@@ -9,12 +11,31 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.mdjahirulislam.doobbi.R;
+import com.example.mdjahirulislam.doobbi.controller.connectionInterface.ConnectionAPI;
 import com.example.mdjahirulislam.doobbi.controller.helper.Functions;
-import com.example.mdjahirulislam.doobbi.controller.requestThread.GetLoginUserDetailsThread;
+import com.example.mdjahirulislam.doobbi.controller.helper.SessionManager;
 import com.example.mdjahirulislam.doobbi.controller.requestThread.GetUserDetailsThread;
+import com.example.mdjahirulislam.doobbi.controller.requestThread.InsertNewUserThread;
+import com.example.mdjahirulislam.doobbi.model.requestModel.InsertUserDataModel;
+import com.example.mdjahirulislam.doobbi.model.responseModel.GetUserDetailsResponseModel;
+import com.example.mdjahirulislam.doobbi.view.HomeActivity;
 
+import io.realm.Realm;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.API_ACCESS_FUNCTION_LOGIN;
+import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.API_ACCESS_ID;
+import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.API_ACCESS_PASSWORD;
+import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.API_ACCESS_SUCCESS_CODE;
+import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.NO_USER_FOUND_CODE;
+import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.hideDialog;
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.isEmpty;
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.setError;
 
@@ -23,7 +44,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private static String userPhone = "";
     private GetUserDetailsThread getUserDetailsThread;
-    private GetLoginUserDetailsThread getLoginUserDetailsThread;
+    private Thread getLoginUserDetailsThread;
 
     // View
 
@@ -44,10 +65,10 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_login );
         initialization();
+        getUserDetailsThread = new GetUserDetailsThread( this, userPhone );
 
         userPhone = Functions.getMyPhoneNO( this );
         if (!userPhone.isEmpty()) {
-            getUserDetailsThread = new GetUserDetailsThread( this, userPhone );
             getUserDetailsThread.run();
             Functions.ProgressDialog( this );
             Functions.showDialog();
@@ -66,12 +87,12 @@ public class LoginActivity extends AppCompatActivity {
 
         if (isEmpty( userIdET )) {
             setError( userIdET, "Enter Your Mobile No. " );
-        }else if (isEmpty( userPasswordET )) {
+        } else if (isEmpty( userPasswordET )) {
             setError( userPasswordET, "Enter Your Password. " );
-        }else {
+        } else {
 
-            getLoginUserDetailsThread = new GetLoginUserDetailsThread( this, userIdET.getText().toString(),userPasswordET.getText().toString()  );
-            getLoginUserDetailsThread.run();
+            getLoginUserDetailsThread = new Thread( new GetLoginUserDetailsThread( this, userIdET.getText().toString(), userPasswordET.getText().toString() ) );
+            getLoginUserDetailsThread.start();
             Functions.ProgressDialog( this );
             Functions.showDialog();
 
@@ -83,7 +104,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
 
-        Log.d( TAG, "onPause: " + getUserDetailsThread.isAlive() );
+//        Log.d( TAG, "onPause: " + getLoginUserDetailsThread.isAlive() );
     }
 
     public void showPassword(View view) {
@@ -104,5 +125,122 @@ public class LoginActivity extends AppCompatActivity {
 
             showPass = false;
         }
+    }
+
+
+    public class GetLoginUserDetailsThread implements Runnable {
+
+        private final String TAG = InsertNewUserThread.class.getSimpleName();
+
+        private ConnectionAPI connectionApi;
+        private Context context;
+        private String userPhone;
+        private String userPassword;
+        private GetUserDetailsResponseModel userDetailsResponseModel;
+        private InsertUserDataModel userDetailsModelDB;
+
+        private SessionManager sessionManager;
+
+        private Realm mRealm = null;
+
+
+        public GetLoginUserDetailsThread(Context context, String userPhone, String userPassword) {
+            this.context = context;
+            connectionApi = Functions.getRetrofit().create( ConnectionAPI.class );
+            this.userPhone = userPhone;
+            this.userPassword = userPassword;
+            sessionManager = new SessionManager( context );
+        }
+
+        @Override
+        public void run() {
+            try {
+
+                RequestBody password = RequestBody.create( MultipartBody.FORM, API_ACCESS_PASSWORD );
+                RequestBody user = RequestBody.create( MultipartBody.FORM, API_ACCESS_ID );
+                RequestBody function = RequestBody.create( MultipartBody.FORM, API_ACCESS_FUNCTION_LOGIN );
+                RequestBody phone = RequestBody.create( MultipartBody.FORM, String.valueOf( userPhone ) );
+                RequestBody userPass = RequestBody.create( MultipartBody.FORM, String.valueOf( userPassword ) );
+
+                Log.d( TAG, "run: data: " + phone + "\ndataModel: " + userPhone );
+
+                final Call<GetUserDetailsResponseModel> insertUserResponseModelCallBack = connectionApi.getLogin( password, user,
+                        function, phone, userPass );
+
+
+                insertUserResponseModelCallBack.enqueue( new Callback<GetUserDetailsResponseModel>() {
+                    @Override
+                    public void onResponse(Call<GetUserDetailsResponseModel> call, Response<GetUserDetailsResponseModel> response) {
+                        if (response.code() == 200) {
+                            userDetailsResponseModel = response.body();
+                            String status = userDetailsResponseModel.getStatus();
+                            Log.d( TAG, "Status : " + userDetailsResponseModel.toString() );
+                            // deny code is 100
+                            if (status.equalsIgnoreCase( API_ACCESS_SUCCESS_CODE )) { // Status success code = 100
+
+                                mRealm = Realm.getDefaultInstance();
+
+                                mRealm.beginTransaction();
+
+                                userDetailsModelDB = mRealm.createObject( InsertUserDataModel.class );
+                                userDetailsModelDB.setClint_id( userDetailsResponseModel.getCid() );
+                                userDetailsModelDB.setName( userDetailsResponseModel.getCustomerName() );
+                                userDetailsModelDB.setPhone( userDetailsResponseModel.getPhone() );
+                                userDetailsModelDB.setEmail( userDetailsResponseModel.getEmail() );
+                                userDetailsModelDB.setAddress( userDetailsResponseModel.getAddress() );
+                                userDetailsModelDB.setClint_image_path( userDetailsResponseModel.getFileLink() );
+
+                                mRealm.commitTransaction();
+
+
+                                sessionManager.setLogin( true );
+                                sessionManager.setUserID( userDetailsResponseModel.getCid() );
+
+                                Intent myIntent = new Intent( context, HomeActivity.class );
+                                myIntent.setFlags( Intent.FLAG_ACTIVITY_CLEAR_TOP );
+//                            myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                                context.startActivity( myIntent );
+
+                                finish();
+
+
+                            }
+                            // deny code is 101
+                            else if (status.equalsIgnoreCase( NO_USER_FOUND_CODE )) {
+                                String error_msg = userDetailsResponseModel.getDetail();
+                                Log.d( TAG, "onResponse: " + error_msg );
+                            } else {
+                                Log.d( TAG, "onResponse: Some Is Wrong" );
+                            }
+
+
+                        } else {
+//                    Toast.makeText(context, "Server Error", Toast.LENGTH_SHORT).show();
+                            Log.d( TAG, "onResponse: Server Error response.code ===> " + response.code() );
+                        }
+                        Log.d( TAG, "onResponse: " + response.body() + " \n\n" + response.raw() + " \n\n" + response.toString() + " \n\n" + response.errorBody() );
+                        hideDialog();
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<GetUserDetailsResponseModel> call, Throwable t) {
+
+                        Log.d( TAG, "onFailure: " + t.getLocalizedMessage() );
+                        Log.d( TAG, "onFailure: " + t.toString() );
+                        Log.d( TAG, "onFailure: " + t.getMessage() );
+                        hideDialog();
+
+                    }
+                } );
+            } finally {
+
+                if (mRealm != null) {
+                    mRealm.close();
+                }
+            }
+
+        }
+
     }
 }

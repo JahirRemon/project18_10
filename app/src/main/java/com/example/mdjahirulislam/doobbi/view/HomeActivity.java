@@ -1,13 +1,9 @@
 package com.example.mdjahirulislam.doobbi.view;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
-import android.telephony.TelephonyManager;
+import android.os.Handler;
 import android.util.Log;
 import android.view.MenuInflater;
 import android.support.design.widget.NavigationView;
@@ -22,14 +18,18 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mdjahirulislam.doobbi.R;
+import com.example.mdjahirulislam.doobbi.controller.connectionInterface.ConnectionAPI;
 import com.example.mdjahirulislam.doobbi.controller.helper.ConnectivityReceiver;
 import com.example.mdjahirulislam.doobbi.controller.helper.Functions;
-import com.example.mdjahirulislam.doobbi.controller.helper.MyApplication;
+import com.example.mdjahirulislam.doobbi.controller.helper.SessionManager;
+import com.example.mdjahirulislam.doobbi.controller.requestThread.GetTadItemThread;
+import com.example.mdjahirulislam.doobbi.model.requestModel.InsertUserDataModel;
+import com.example.mdjahirulislam.doobbi.model.responseModel.GetTadItemResponseModel;
 import com.example.mdjahirulislam.doobbi.view.authentication.LoginActivity;
-import com.example.mdjahirulislam.doobbi.view.authentication.RegistrationActivity;
 import com.example.mdjahirulislam.doobbi.view.makeMyOrder.OrderHomeActivity;
 import com.example.mdjahirulislam.doobbi.view.offers.MyOfferActivity;
 import com.example.mdjahirulislam.doobbi.view.order.OrderListActivity;
@@ -38,6 +38,24 @@ import com.example.mdjahirulislam.doobbi.view.priceList.PriceListActivity;
 import com.example.mdjahirulislam.doobbi.view.schedule.ScheduleListActivity;
 import com.smarteist.autoimageslider.SliderLayout;
 import com.smarteist.autoimageslider.SliderView;
+
+import java.util.ArrayList;
+
+import io.realm.Realm;
+import io.realm.RealmResults;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.API_ACCESS_ID;
+import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.API_ACCESS_FUNCTION_LOGIN;
+import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.API_ACCESS_PASSWORD;
+import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.API_ACCESS_SUCCESS_CODE;
+import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.NO_USER_FOUND_CODE;
+import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.hideDialog;
+import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.progressBar;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -52,6 +70,18 @@ public class HomeActivity extends AppCompatActivity
     private LinearLayout myOfferLL;
 
 
+    private TextView navUserName;
+    private TextView navUserMobile;
+
+    private Realm mRealm;
+
+    private String user_id;
+    private Menu navMenuItem;
+
+    private boolean doubleBackToExitPressedOnce = false;
+    private SessionManager sessionManager;
+
+
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,8 +94,8 @@ public class HomeActivity extends AppCompatActivity
         pickUpMeLL = findViewById( R.id.pickUpMeLL );
         orderListLL = findViewById( R.id.orderListLL );
         myOfferLL = findViewById( R.id.myOfferLL );
-        setSupportActionBar( toolbar );
-//        toolbar.setNavigationIcon(R.drawable.ic_dashboard_white_24dp);
+        mRealm = Realm.getDefaultInstance();
+        sessionManager = new SessionManager( this );
 
         final DrawerLayout drawer = (DrawerLayout) findViewById( R.id.drawer_layout );
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -88,6 +118,13 @@ public class HomeActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById( R.id.nav_view );
         navigationView.setNavigationItemSelectedListener( this );
+
+        View headerLayout = navigationView.getHeaderView( 0 );
+
+        navUserName = headerLayout.findViewById( R.id.navUserName );
+        navUserMobile = headerLayout.findViewById( R.id.navUserMobile );
+        navMenuItem = navigationView.getMenu();
+
 
         sliderLayout = findViewById( R.id.imageSlider );
         sliderLayout.setIndicatorAnimation( SliderLayout.Animations.WORM ); //set indicator animation by using SliderLayout.Animations. :WORM or THIN_WORM or COLOR or DROP or FILL or NONE or SCALE or SCALE_DOWN or SLIDE and SWAP!!
@@ -151,7 +188,7 @@ public class HomeActivity extends AppCompatActivity
                     case MotionEvent.ACTION_UP:
                         if (event.getX() < width && event.getY() < height && event.getY() > 0) {
                             makeOrderLL.setAlpha( 1.0f );
-                            startActivity(new Intent(HomeActivity.this,OrderHomeActivity.class));
+                            startActivity( new Intent( HomeActivity.this, OrderHomeActivity.class ) );
 
                         }
                         break;
@@ -184,7 +221,7 @@ public class HomeActivity extends AppCompatActivity
                     case MotionEvent.ACTION_UP:
                         if (event.getX() < width && event.getY() < height && event.getY() > 0) {
                             priceListLL.setAlpha( 1.0f );
-                            startActivity(new Intent(HomeActivity.this,PriceListActivity.class));
+                            startActivity( new Intent( HomeActivity.this, PriceListActivity.class ) );
 
                         }
                         break;
@@ -215,10 +252,10 @@ public class HomeActivity extends AppCompatActivity
                         Log.d( TAG, "onTouch 2: classTimeLL ---> " + MotionEvent.ACTION_DOWN );
                         break;
                     case MotionEvent.ACTION_UP:
-                        Log.d( TAG, "onTouch: X: " +event.getX()+"\nY: "+event.getY());
-                        if (event.getX() < width && event.getY() < height && event.getY() > 0 ) {
+                        Log.d( TAG, "onTouch: X: " + event.getX() + "\nY: " + event.getY() );
+                        if (event.getX() < width && event.getY() < height && event.getY() > 0) {
                             pickUpMeLL.setAlpha( 1.0f );
-                            startActivity(new Intent(HomeActivity.this,PickUpLocationActivity.class));
+                            startActivity( new Intent( HomeActivity.this, PickUpLocationActivity.class ) );
 
                         }
                         break;
@@ -248,10 +285,10 @@ public class HomeActivity extends AppCompatActivity
                         Log.d( TAG, "onTouch 2: classTimeLL ---> " + MotionEvent.ACTION_DOWN );
                         break;
                     case MotionEvent.ACTION_UP:
-                        Log.d( TAG, "onTouch: X: " +event.getX()+"\nY: "+event.getY());
-                        if (event.getX() < width && event.getY() < height && event.getY() > 0 ) {
+                        Log.d( TAG, "onTouch: X: " + event.getX() + "\nY: " + event.getY() );
+                        if (event.getX() < width && event.getY() < height && event.getY() > 0) {
                             orderListLL.setAlpha( 1.0f );
-                            startActivity(new Intent(HomeActivity.this,OrderListActivity.class));
+                            startActivity( new Intent( HomeActivity.this, OrderListActivity.class ) );
 
                         }
                         break;
@@ -281,10 +318,10 @@ public class HomeActivity extends AppCompatActivity
                         Log.d( TAG, "onTouch 2: classTimeLL ---> " + MotionEvent.ACTION_DOWN );
                         break;
                     case MotionEvent.ACTION_UP:
-                        Log.d( TAG, "onTouch: X: " +event.getX()+"\nY: "+event.getY());
-                        if (event.getX() < width && event.getY() < height && event.getY() > 0 ) {
+                        Log.d( TAG, "onTouch: X: " + event.getX() + "\nY: " + event.getY() );
+                        if (event.getX() < width && event.getY() < height && event.getY() > 0) {
                             myOfferLL.setAlpha( 1.0f );
-                            startActivity(new Intent(HomeActivity.this,MyOfferActivity.class));
+                            startActivity( new Intent( HomeActivity.this, MyOfferActivity.class ) );
 
                         }
                         break;
@@ -304,13 +341,61 @@ public class HomeActivity extends AppCompatActivity
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        mRealm.beginTransaction();
+
+        final RealmResults<InsertUserDataModel> getUserInfo = mRealm.where( InsertUserDataModel.class ).findAll();
+
+        Log.d( TAG, "onResume: " + getUserInfo.size() );
+
+        if (0 < getUserInfo.size()) {
+            for (InsertUserDataModel userDataModel : getUserInfo) {
+                navUserName.setText( userDataModel.getName() );
+                navUserMobile.setText( getUserInfo.get( 0 ).getPhone() );
+                navMenuItem.findItem( R.id.nav_log_out ).setVisible( true );
+                navMenuItem.findItem( R.id.nav_signIn ).setVisible( false );
+                this.user_id = getUserInfo.get( 0 ).getClint_id();
+            }
+        } else {
+            Log.d( TAG, "onResume: Data not found of not login" );
+            navMenuItem.findItem( R.id.nav_log_out ).setVisible( false );
+            navMenuItem.findItem( R.id.nav_signIn ).setVisible( true );
+
+
+        }
+        mRealm.commitTransaction();
+
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mRealm.close();
+    }
+
+    @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById( R.id.drawer_layout );
         if (drawer.isDrawerOpen( GravityCompat.START )) {
             drawer.closeDrawer( GravityCompat.START );
-        } else {
+        } else if (doubleBackToExitPressedOnce) {
             super.onBackPressed();
+            finish();
+            return;
         }
+
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText( this, "Please click BACK again to exit", Toast.LENGTH_SHORT ).show();
+
+        new Handler().postDelayed( new Runnable() {
+
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce = false;
+            }
+        }, 1000 );
     }
 
 
@@ -340,9 +425,22 @@ public class HomeActivity extends AppCompatActivity
         } else if (id == R.id.nav_payment) {
 
         } else if (id == R.id.nav_signIn) {
-            startActivity(new Intent(HomeActivity.this,LoginActivity.class));
+            startActivity( new Intent( HomeActivity.this, LoginActivity.class ) );
 
         } else if (id == R.id.nav_log_out) {
+            Log.d( TAG, "onNavigationItemSelected: log out " + user_id );
+
+            mRealm.beginTransaction();
+            RealmResults<InsertUserDataModel> result = mRealm.where( InsertUserDataModel.class ).equalTo( "clint_id", user_id ).findAll();
+            result.deleteAllFromRealm();
+
+
+            mRealm.commitTransaction();
+
+            Functions.ProgressDialog( this );
+            sessionManager.setLogin( false );
+            finish();
+            startActivity( getIntent() );
 
         }
         DrawerLayout drawer = (DrawerLayout) findViewById( R.id.drawer_layout );
@@ -354,73 +452,56 @@ public class HomeActivity extends AppCompatActivity
 
         for (int i = 0; i <= 3; i++) {
 
-            SliderView sliderView = new SliderView(this);
+            SliderView sliderView = new SliderView( this );
 
             switch (i) {
                 case 0:
-                    sliderView.setImageUrl("https://i.imgur.com/3rNjPzP.jpg");
+                    sliderView.setImageUrl( "https://i.imgur.com/3rNjPzP.jpg" );
                     break;
                 case 1:
-                    sliderView.setImageUrl("https://i.imgur.com/8wX7Ttz.jpg");
+                    sliderView.setImageUrl( "https://i.imgur.com/8wX7Ttz.jpg" );
                     break;
                 case 2:
-                    sliderView.setImageUrl("https://imgur.com/mOa6L8z.jpg");
+                    sliderView.setImageUrl( "https://imgur.com/mOa6L8z.jpg" );
                     break;
                 case 3:
-                    sliderView.setImageUrl("https://imgur.com/aWCAnF5.jpg");
+                    sliderView.setImageUrl( "https://imgur.com/aWCAnF5.jpg" );
                     break;
             }
 
-            sliderView.setImageScaleType( ImageView.ScaleType.CENTER_CROP);
+            sliderView.setImageScaleType( ImageView.ScaleType.CENTER_CROP );
 //            sliderView.setDescription("setDescription " + (i + 1));
 
             final int finalI = i;
-            sliderView.setOnSliderClickListener(new SliderView.OnSliderClickListener() {
+            sliderView.setOnSliderClickListener( new SliderView.OnSliderClickListener() {
                 @Override
                 public void onSliderClick(SliderView sliderView) {
-                    Toast.makeText(HomeActivity.this, "This is slider " + (finalI + 1), Toast.LENGTH_SHORT).show();
+                    Toast.makeText( HomeActivity.this, "This is slider " + (finalI + 1), Toast.LENGTH_SHORT ).show();
                 }
-            });
+            } );
 
             //at last add this view in your layout :
-            sliderLayout.addSliderView(sliderView);
+            sliderLayout.addSliderView( sliderView );
         }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.home_menu, menu);
+        inflater.inflate( R.menu.home_menu, menu );
         return true;
     }
 
     public void goToScheduleListActivity(final View view) {
 
         Log.d( TAG, "goToScheduleListActivity: " );
-
-
-
-
     }
 
-//    @Override
-//    public void onNetworkConnectionChanged(boolean isConnected) {
-//        Log.d( TAG, "onNetworkConnectionChanged: " +isConnected);
-//        Functions.showSnack(isConnected, findViewById( R.id.copyRightTV ) );
-//    }
-//
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//
-//        // register connection status listener
-//        MyApplication.getInstance().setConnectivityListener(this);
-////        ConnectivityReceiver.connectivityReceiverListener = this;
-//        Log.d( TAG, "onResume: " );
-//    }
 
     public void callTheAuthority(View view) {
         Log.d( TAG, "callTheAuthority: " );
-        Functions.showSnack( ConnectivityReceiver.isConnected(HomeActivity.this), view );
+        Functions.showSnack( ConnectivityReceiver.isConnected( HomeActivity.this ), view );
     }
+
+
 }

@@ -17,7 +17,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.API_ACCESS_ADD_USER_IMAGE_FUNCTION;
+import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.API_ACCESS_FUNCTION_ADD_USER_IMAGE;
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.API_ACCESS_DENY_CODE;
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.API_ACCESS_ID;
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.API_ACCESS_PASSWORD;
@@ -53,13 +53,13 @@ public class InsertNewUserPhotoThread extends Thread {
 
         RequestBody password = RequestBody.create( MultipartBody.FORM,API_ACCESS_PASSWORD );
         RequestBody user = RequestBody.create( MultipartBody.FORM,API_ACCESS_ID );
-        RequestBody function = RequestBody.create( MultipartBody.FORM, API_ACCESS_ADD_USER_IMAGE_FUNCTION );
+        RequestBody function = RequestBody.create( MultipartBody.FORM, API_ACCESS_FUNCTION_ADD_USER_IMAGE );
         RequestBody phone = RequestBody.create( MultipartBody.FORM, mPhone  );
         RequestBody requestBody = RequestBody.create(MediaType.parse("*/*"), file);
         MultipartBody.Part image = MultipartBody.Part.createFormData("image",file.getName(),requestBody);
 
 //        final Call<InsertUserResponseModel> insertUserResponseModelCallBack = connectionApi.image(  API_ACCESS_ID,
-//                API_ACCESS_ADD_USER_IMAGE_FUNCTION );
+//                API_ACCESS_FUNCTION_ADD_USER_IMAGE );
 
         final Call<InsertUserResponseModel> insertUserResponseModelCallBack = connectionApi.uploadNewUserPhoto( password , user,
                 function ,phone, image);

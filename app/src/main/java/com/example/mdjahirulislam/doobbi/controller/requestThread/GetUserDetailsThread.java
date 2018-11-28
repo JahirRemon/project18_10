@@ -7,10 +7,7 @@ import android.util.Log;
 import com.example.mdjahirulislam.doobbi.controller.connectionInterface.ConnectionAPI;
 import com.example.mdjahirulislam.doobbi.controller.helper.Functions;
 import com.example.mdjahirulislam.doobbi.model.responseModel.GetUserDetailsResponseModel;
-import com.example.mdjahirulislam.doobbi.model.responseModel.InsertUserResponseModel;
 import com.example.mdjahirulislam.doobbi.view.HomeActivity;
-
-import java.io.File;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -18,12 +15,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.API_ACCESS_ADD_USER_FUNCTION;
-import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.API_ACCESS_DENY_CODE;
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.API_ACCESS_ID;
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.API_ACCESS_PASSWORD;
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.API_ACCESS_SUCCESS_CODE;
-import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.API_ACCESS_USER_DETAILS_FUNCTION;
+import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.API_ACCESS_FUNCTION_USER_DETAILS;
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.NO_USER_FOUND_CODE;
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.hideDialog;
 
@@ -48,7 +43,7 @@ public class GetUserDetailsThread extends Thread {
         super.run();
         RequestBody password = RequestBody.create( MultipartBody.FORM,API_ACCESS_PASSWORD );
         RequestBody user = RequestBody.create( MultipartBody.FORM,API_ACCESS_ID );
-        RequestBody function = RequestBody.create( MultipartBody.FORM,API_ACCESS_USER_DETAILS_FUNCTION );
+        RequestBody function = RequestBody.create( MultipartBody.FORM, API_ACCESS_FUNCTION_USER_DETAILS );
         RequestBody phone = RequestBody.create( MultipartBody.FORM, String.valueOf( userPhone ) );
 
         Log.d( TAG, "run: data: "+phone+"\ndataModel: " +userPhone);

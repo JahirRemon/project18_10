@@ -1,26 +1,62 @@
 package com.example.mdjahirulislam.doobbi.model;
 
-public class CategoryItemsModel {
+import java.io.Serializable;
 
-    private String price;
-    private String description;
-    private String posterURL;
+public class CategoryItemsModel implements Serializable {
 
-    public CategoryItemsModel(String price, String description, String posterURL) {
-        this.price = price;
-        this.description = description;
-        this.posterURL = posterURL;
+    private String categoryId;
+    private String itemId;
+    private String itemName;
+    private String minPrice;
+    private String image;
+
+    public CategoryItemsModel(String categoryId, String itemId, String itemName, String minPrice, String image) {
+        this.categoryId = categoryId;
+        this.itemId = itemId;
+        this.itemName = itemName;
+        this.minPrice = minPrice;
+        this.image = image;
     }
 
-    public String getPrice() {
-        return price;
+    public String getCategoryId() {
+        return categoryId;
     }
 
-    public String getDescription() {
-        return description;
+    public void setCategoryId(String categoryId) {
+        this.categoryId = categoryId;
     }
 
-    public String getPosterURL() {
-        return posterURL;
+    public String getItemId() {
+        return itemId;
     }
+
+    public void setItemId(String itemId) {
+        this.itemId = itemId;
+    }
+
+    public String getItemName() {
+        return itemName;
+    }
+
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
+    }
+
+    public String getMinPrice() {
+        return minPrice;
+    }
+
+    public void setMinPrice(String minPrice) {
+        this.minPrice = minPrice;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+
 }

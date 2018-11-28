@@ -19,11 +19,28 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.mdjahirulislam.doobbi.R;
+import com.example.mdjahirulislam.doobbi.controller.adapter.TabPageAdapter;
+import com.example.mdjahirulislam.doobbi.controller.connectionInterface.ConnectionAPI;
+import com.example.mdjahirulislam.doobbi.controller.helper.Functions;
 import com.example.mdjahirulislam.doobbi.controller.helper.ItemClickListener;
 import com.example.mdjahirulislam.doobbi.controller.adapter.CategoryItemsAdapter;
 import com.example.mdjahirulislam.doobbi.model.CategoryItemsModel;
+import com.example.mdjahirulislam.doobbi.model.responseModel.GetCategoryItemResponseModel;
 
 import java.util.ArrayList;
+
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.API_ACCESS_FUNCTION_GET_CATEGORY_ITEMS;
+import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.API_ACCESS_ID;
+import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.API_ACCESS_PASSWORD;
+import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.API_ACCESS_SUCCESS_CODE;
+import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.NO_USER_FOUND_CODE;
+import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.hideDialog;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -45,6 +62,9 @@ public class CategoryListFragment extends Fragment {
     private ArrayList<CategoryItemsModel> items;
     private Context context;
 
+    private ConnectionAPI connectionApi;
+    private GetCategoryItemResponseModel itemResponseModel;
+    private Thread getCategoryItemThread;
 
 
     private OnFragmentInteractionListener mListener;
@@ -65,8 +85,32 @@ public class CategoryListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
+        context = getActivity().getApplicationContext();
+
         if (getArguments() != null) {
+
             mPosition = getArguments().getInt( ARG_POSITION );
+            Log.d( TAG, "onCreate: " + mPosition );
+        }
+        connectionApi = Functions.getRetrofit().create( ConnectionAPI.class );
+
+        getCategoryItemThread = new Thread( new GetCategoryItemThread() );
+
+        try {
+            Functions.ProgressDialog( getActivity() );
+            Functions.showDialog();
+            getCategoryItemThread.start();
+            Log.d( TAG, "onCreateView: show dialog" );
+
+
+        } catch (Exception e) {
+            Log.d( TAG, "onCreate: " + e.getLocalizedMessage() );
+        } finally {
+            Log.d( TAG, "onCreate: finally" + getCategoryItemThread.isAlive() );
+
+//            getTabNameThread.interrupt();
+            Log.d( TAG, "onCreate: finally " + Thread.currentThread().isAlive() );
+            hideDialog();
         }
     }
 
@@ -74,11 +118,10 @@ public class CategoryListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view =  inflater.inflate( R.layout.fragment_category_list, container, false );
+        View view = inflater.inflate( R.layout.fragment_category_list, container, false );
 
         mRecyclerView = view.findViewById( R.id.category_list_view_RV );
-        items = new ArrayList<>(  );
-        context = getActivity();
+        items = new ArrayList<>();
 
 
         return view;
@@ -96,11 +139,11 @@ public class CategoryListFragment extends Fragment {
         mRecyclerView.setHasFixedSize( true );
 
 
-        items.add( new CategoryItemsModel( "Tk.10","Only Iron" ,null));
-        items.add( new CategoryItemsModel( "Tk.120","Wash and Iron" ,null));
-        items.add( new CategoryItemsModel( "30 Tk","Wash and Clean" ,null));
-        items.add( new CategoryItemsModel( "Tk.50","Wash and Clean" ,null));
-        items.add( new CategoryItemsModel( "Tk. 20","Wash and Clean" ,null));
+//        items.add( new CategoryItemsModel( "Tk.10", "Only Iron", null ) );
+//        items.add( new CategoryItemsModel( "Tk.120", "Wash and Iron", null ) );
+//        items.add( new CategoryItemsModel( "30 Tk", "Wash and Clean", null ) );
+//        items.add( new CategoryItemsModel( "Tk.50", "Wash and Clean", null ) );
+//        items.add( new CategoryItemsModel( "Tk. 20", "Wash and Clean", null ) );
 
 //        items = Constants.loadAllData();
         currentPosition = getArguments().getInt( ARG_POSITION );
@@ -109,21 +152,21 @@ public class CategoryListFragment extends Fragment {
 //        Log.d( "xxxxxx", "onViewCreated: " + currentPosition+"\t item is: "+items.get( currentPosition ).toString() );
         //Use this now
 //        mRecyclerView.addItemDecoration( new MaterialViewPagerHeaderDecorator() );
-        mRecyclerView.setAdapter( new CategoryItemsAdapter( getContext(), items, currentPosition ) );
+//        mRecyclerView.setAdapter( new CategoryItemsAdapter( getContext(), items, currentPosition ) );
 
-        mRecyclerView.addOnItemTouchListener(new ItemClickListener( getActivity(), mRecyclerView, new ItemClickListener.ClickListener() {
+        mRecyclerView.addOnItemTouchListener( new ItemClickListener( getActivity(), mRecyclerView, new ItemClickListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
-                startActivity( new Intent( context, SelectItemActivity.class ) );
+                startActivity( new Intent( context, SelectItemActivity.class ).putExtra( "itemsModel",items ) );
                 getActivity().finish();
-                Log.d( TAG, "onClick: "+position );
+                Log.d( TAG, "onClick: " + position );
             }
 
             @Override
             public void onLongClick(View view, int position) {
 
             }
-        } ));
+        } ) );
 
 
     }
@@ -168,7 +211,6 @@ public class CategoryListFragment extends Fragment {
     }
 
 
-
     public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
 
         private int spanCount;
@@ -207,5 +249,75 @@ public class CategoryListFragment extends Fragment {
     private int dpToPx(int dp) {
         Resources r = getResources();
         return Math.round( TypedValue.applyDimension( TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics() ) );
+    }
+
+
+    class GetCategoryItemThread implements Runnable {
+        public void run() {
+
+            RequestBody password = RequestBody.create( MultipartBody.FORM, API_ACCESS_PASSWORD );
+            RequestBody user = RequestBody.create( MultipartBody.FORM, API_ACCESS_ID );
+            RequestBody function = RequestBody.create( MultipartBody.FORM, API_ACCESS_FUNCTION_GET_CATEGORY_ITEMS );
+            RequestBody categoryID = RequestBody.create( MultipartBody.FORM, String.valueOf( mPosition ) );
+
+            final Call<GetCategoryItemResponseModel> insertUserResponseModelCallBack = connectionApi.getCategoryItem( password, user, categoryID,
+                    function );
+
+            insertUserResponseModelCallBack.enqueue( new Callback<GetCategoryItemResponseModel>() {
+                @Override
+                public void onResponse(Call<GetCategoryItemResponseModel> call, Response<GetCategoryItemResponseModel> response) {
+                    if (response.code() == 200) {
+                        itemResponseModel = response.body();
+                        String status = itemResponseModel.getStatus();
+                        Log.d( TAG, "Status : " + itemResponseModel.toString() );
+                        // deny code is 100
+                        if (status.equalsIgnoreCase( API_ACCESS_SUCCESS_CODE )) { // Status success code = 100
+
+                            items.clear();
+                            for (int i = 0; i < itemResponseModel.getCategory().size(); i++) {
+                                GetCategoryItemResponseModel.Category itemsModel = itemResponseModel.getCategory().get( i );
+
+                                items.add( new CategoryItemsModel( itemsModel.getCategoryId(),
+                                        itemsModel.getItemId(),
+                                        itemsModel.getItemName(),
+                                        itemsModel.getMinPrice(),
+                                        String.valueOf( itemsModel.getImage() ) ) );
+//                                tabIdList.add( tadItemResponseModel.getCategory().get( i ).getId() );
+                            }
+//                            hideDialog();
+                            mRecyclerView.setAdapter( new CategoryItemsAdapter( getContext(), items, currentPosition ) );
+
+                        }
+                        // deny code is 101
+                        else if (status.equalsIgnoreCase( NO_USER_FOUND_CODE )) {
+                            String error_msg = itemResponseModel.getDetail();
+                            Log.d( TAG, "onResponse: " + error_msg );
+                        } else {
+                            Log.d( TAG, "onResponse: Some Is Wrong" );
+                        }
+
+
+                    } else {
+//                    Toast.makeText(context, "Server Error", Toast.LENGTH_SHORT).show();
+                        Log.d( TAG, "onResponse: Server Error response.code ===> " + response.code() );
+                    }
+                    Log.d( TAG, "onResponse: " + response.body() + " \n\n" + response.raw() + " \n\n" + response.toString() + " \n\n" + response.errorBody() );
+//                    hideDialog();
+
+
+                }
+
+                @Override
+                public void onFailure(Call<GetCategoryItemResponseModel> call, Throwable t) {
+
+                    Log.d( TAG, "onFailure: " + t.getLocalizedMessage() );
+                    Log.d( TAG, "onFailure: " + t.toString() );
+                    Log.d( TAG, "onFailure: " + t.getMessage() );
+//                    hideDialog();
+
+                }
+            } );
+
+        }
     }
 }

@@ -3,7 +3,8 @@ package com.example.mdjahirulislam.doobbi.model.responseModel;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class GetUserDetailsResponseModel {
+
+public class GetUserDetailsResponseModel  {
 
     @SerializedName("cid")
     @Expose
@@ -182,4 +183,26 @@ public class GetUserDetailsResponseModel {
         this.detail = detail;
     }
 
+
+    @Override
+    public String toString() {
+        return "GetUserDetailsResponseModel{" +
+                "cid='" + cid + '\'' +
+                ", customerName='" + customerName + '\'' +
+                ", phone='" + phone + '\'' +
+                ", email='" + email + '\'' +
+                ", address='" + address + '\'' +
+                ", flatNo='" + flatNo + '\'' +
+                ", roadNo='" + roadNo + '\'' +
+                ", houseNo='" + houseNo + '\'' +
+                ", area='" + area + '\'' +
+                ", latitude='" + latitude + '\'' +
+                ", longitude='" + longitude + '\'' +
+                ", phone2=" + phone2 +
+                ", createDate='" + createDate + '\'' +
+                ", fileLink='" + fileLink + '\'' +
+                ", status='" + status + '\'' +
+                ", detail='" + detail + '\'' +
+                '}';
+    }
 }

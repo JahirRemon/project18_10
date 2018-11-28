@@ -50,8 +50,8 @@ public class CategoryItemsAdapter extends RecyclerView.Adapter<CategoryItemsAdap
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         CategoryItemsModel item = mItemsList.get(position);
-        holder.priceTV.setText(item.getPrice());
-        holder.descriptionTV.setText(item.getDescription());
+        holder.priceTV.setText("Tk. "+item.getMinPrice());
+        holder.descriptionTV.setText(item.getItemName());
 //        holder.itemPosterIV.setImageURI( Uri.parse( item.getPosterURL() ) );
     }
 

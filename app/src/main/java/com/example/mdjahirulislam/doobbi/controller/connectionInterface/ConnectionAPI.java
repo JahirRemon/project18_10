@@ -1,6 +1,9 @@
 package com.example.mdjahirulislam.doobbi.controller.connectionInterface;
 
 import com.example.mdjahirulislam.doobbi.model.requestModel.InsertUserDataModel;
+import com.example.mdjahirulislam.doobbi.model.responseModel.GetCategoryItemResponseModel;
+import com.example.mdjahirulislam.doobbi.model.responseModel.GetItemWisePriceResponseModel;
+import com.example.mdjahirulislam.doobbi.model.responseModel.GetTadItemResponseModel;
 import com.example.mdjahirulislam.doobbi.model.responseModel.GetUserDetailsResponseModel;
 import com.example.mdjahirulislam.doobbi.model.responseModel.InsertUserResponseModel;
 
@@ -57,6 +60,35 @@ public interface ConnectionAPI {
             @Part("function") RequestBody function,
             @Part("phone") RequestBody phone,
             @Part("userpass") RequestBody pass
+    );
+
+    @Multipart
+    @POST("request")
+    Call<GetTadItemResponseModel> getTabItem(
+            @Part("password") RequestBody password,
+            @Part("user") RequestBody user,
+            @Part("function") RequestBody function
+
+    );
+
+    @Multipart
+    @POST("request")
+    Call<GetCategoryItemResponseModel> getCategoryItem(
+            @Part("password") RequestBody password,
+            @Part("user") RequestBody user,
+            @Part("categoryid") RequestBody categoryID,
+            @Part("function") RequestBody function
+
+    );
+
+    @Multipart
+    @POST("request")
+    Call<GetItemWisePriceResponseModel> getCategoryItemWisePrice(
+            @Part("password") RequestBody password,
+            @Part("user") RequestBody user,
+            @Part("itemid") RequestBody itemID,
+            @Part("function") RequestBody function
+
     );
 
 
