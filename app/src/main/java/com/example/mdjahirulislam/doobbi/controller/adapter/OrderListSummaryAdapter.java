@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.mdjahirulislam.doobbi.R;
 import com.example.mdjahirulislam.doobbi.controller.helper.DBFunctions;
@@ -25,22 +26,16 @@ import java.util.UUID;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
-public class SelectedCategoryItemPriceAdapter extends RecyclerView.Adapter<SelectedCategoryItemPriceAdapter.MyViewHolder> {
+public class OrderListSummaryAdapter extends RecyclerView.Adapter<OrderListSummaryAdapter.MyViewHolder> {
 
-    private static final String TAG = SelectedCategoryItemPriceAdapter.class.getSimpleName();
+    private static final String TAG = OrderListSummaryAdapter.class.getSimpleName();
 
-    private List<ItemPriceModel> mItemsList;
+    private List<InsertOrderHistoryDBModel> mItemsList;
     private Context mContext;
     private Realm mRealm;
     private InsertOrderHistoryDBModel insertOrderHistoryDBModel;
     private SessionManager sessionManager;
     private String uniqueID;
-
-    private OnTotalPriceListener totalPriceListener;
-
-    public interface OnTotalPriceListener {
-        void setPrice();
-    }
 
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -65,52 +60,51 @@ public class SelectedCategoryItemPriceAdapter extends RecyclerView.Adapter<Selec
     }
 
 
-    public SelectedCategoryItemPriceAdapter(Context context, List<ItemPriceModel> itemsList,OnTotalPriceListener onTotalPriceListener ) {
+    public OrderListSummaryAdapter(Context context, List<InsertOrderHistoryDBModel> itemsList) {
         this.mItemsList = itemsList;
         this.mContext = context;
 //        this.mPosition = position;
         mRealm = Realm.getDefaultInstance();
         sessionManager = new SessionManager( context );
-        try {
-            totalPriceListener = onTotalPriceListener;
-        } catch (ClassCastException e) {
-            Log.d( TAG, "SelectedCategoryItemPriceAdapter: " +e.getLocalizedMessage());
-            throw new ClassCastException( context.toString() + " must implement onSomeEventListener" );
-        }
 
 
     }
 
     @Override
-    public SelectedCategoryItemPriceAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public OrderListSummaryAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from( parent.getContext() )
                 .inflate( R.layout.single_oder_list_design, parent, false );
 
-        return new SelectedCategoryItemPriceAdapter.MyViewHolder( itemView );
+        return new OrderListSummaryAdapter.MyViewHolder( itemView );
     }
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
-    public void onBindViewHolder(final SelectedCategoryItemPriceAdapter.MyViewHolder holder, int position) {
-        final ItemPriceModel item = mItemsList.get( position );
+    public void onBindViewHolder(final OrderListSummaryAdapter.MyViewHolder holder, int position) {
+        final InsertOrderHistoryDBModel item = mItemsList.get( position );
         final int[] quantity = {0};
         final int[] totalPrice = {0};
         int regularPrice = 0;
 
-        regularPrice = Integer.parseInt( item.getSalesPrice() );
-        totalPrice[0] = regularPrice * quantity[0];
+        if (Integer.parseInt( item.getItemQuantity()) != 0){
+            regularPrice =  Integer.parseInt(item.getTotalPrice())/Integer.parseInt( item.getItemQuantity()) ;
+            totalPrice[0] = regularPrice * quantity[0];
+        }else {
+            Toast.makeText( mContext, "No Item Selected", Toast.LENGTH_SHORT ).show();
+        }
+
 
         holder.itemType.setText( item.getServiceName() );
-        holder.priceTV.setText( item.getSalesPrice() );
+        holder.priceTV.setText( String.valueOf( regularPrice ) );
 //        holder.totalPriceTV.setText( String.valueOf( totalPrice[0] ) );
 //        holder.itemPosterIV.setImageURI( Uri.parse( item.getPosterURL() ) );
 
         mRealm.beginTransaction();
 
         InsertOrderHistoryDBModel getQuantity = mRealm.where( InsertOrderHistoryDBModel.class )
-                .equalTo( "itemID", item.getItemId() )
+                .equalTo( "itemID", item.getItemID() )
                 .and()
-                .equalTo( "serviceID", item.getServiceId() )
+                .equalTo( "serviceID", item.getServiceID() )
                 .findFirst();
         try {
 
@@ -161,8 +155,8 @@ public class SelectedCategoryItemPriceAdapter extends RecyclerView.Adapter<Selec
                                 uniqueID = UUID.randomUUID().toString();
 
                                 RealmResults<InsertOrderHistoryDBModel> getResult = mRealm.where( InsertOrderHistoryDBModel.class )
-                                        .equalTo( "itemID", item.getItemId() )
-                                        .and().equalTo( "serviceID", item.getServiceId() )
+                                        .equalTo( "itemID", item.getItemID() )
+                                        .and().equalTo( "serviceID", item.getServiceID() )
                                         .findAll();
 
                                 Log.d( TAG, "onResume: " + getResult.size() );
@@ -170,10 +164,8 @@ public class SelectedCategoryItemPriceAdapter extends RecyclerView.Adapter<Selec
 
                                 insertOrderHistoryDBModel = new InsertOrderHistoryDBModel();
                                 insertOrderHistoryDBModel.setUserID( sessionManager.getUserId() );
-                                insertOrderHistoryDBModel.setItemID( item.getItemId() );
-//                                insertOrderHistoryDBModel.setItemName( item.get() );
-                                insertOrderHistoryDBModel.setServiceID( item.getServiceId() );
-                                insertOrderHistoryDBModel.setServiceName( item.getServiceName() );
+                                insertOrderHistoryDBModel.setItemID( item.getItemID() );
+                                insertOrderHistoryDBModel.setServiceID( item.getServiceID() );
                                 insertOrderHistoryDBModel.setItemQuantity( String.valueOf( quantity[0] ) );
                                 insertOrderHistoryDBModel.setTotalPrice( String.valueOf( totalPrice[0] ) );
 
@@ -183,14 +175,9 @@ public class SelectedCategoryItemPriceAdapter extends RecyclerView.Adapter<Selec
 
                                 } else {
 
-
                                     Log.d( TAG, "onResume: id--> " + uniqueID + " \nData not found new data inset " + insertOrderHistoryDBModel.toString() );
                                     DBFunctions.addOrderHistory( insertOrderHistoryDBModel, uniqueID );
-
-
                                 }
-
-                                totalPriceListener.setPrice();
                             }
 
                         }
@@ -244,8 +231,8 @@ public class SelectedCategoryItemPriceAdapter extends RecyclerView.Adapter<Selec
                                 uniqueID = UUID.randomUUID().toString();
 
                                 RealmResults<InsertOrderHistoryDBModel> getResult = mRealm.where( InsertOrderHistoryDBModel.class )
-                                        .equalTo( "itemID", item.getItemId() )
-                                        .and().equalTo( "serviceID", item.getServiceId() )
+                                        .equalTo( "itemID", item.getItemID() )
+                                        .and().equalTo( "serviceID", item.getServiceID() )
                                         .findAll();
 
                                 Log.d( TAG, "onResume: " + getResult.size() );
@@ -253,9 +240,8 @@ public class SelectedCategoryItemPriceAdapter extends RecyclerView.Adapter<Selec
 
                                 insertOrderHistoryDBModel = new InsertOrderHistoryDBModel();
                                 insertOrderHistoryDBModel.setUserID( sessionManager.getUserId() );
-                                insertOrderHistoryDBModel.setItemID( item.getItemId() );
-                                insertOrderHistoryDBModel.setServiceID( item.getServiceId() );
-                                insertOrderHistoryDBModel.setServiceName( item.getServiceName() );
+                                insertOrderHistoryDBModel.setItemID( item.getItemID() );
+                                insertOrderHistoryDBModel.setServiceID( item.getServiceID() );
                                 insertOrderHistoryDBModel.setItemQuantity( String.valueOf( quantity[0] ) );
                                 insertOrderHistoryDBModel.setTotalPrice( String.valueOf( totalPrice[0] ) );
 
@@ -265,13 +251,9 @@ public class SelectedCategoryItemPriceAdapter extends RecyclerView.Adapter<Selec
 
                                 } else {
 
-
                                     Log.d( TAG, "onResume: id--> " + uniqueID + " \nData not found new data inset " + insertOrderHistoryDBModel.toString() );
                                     DBFunctions.addOrderHistory( insertOrderHistoryDBModel, uniqueID );
-
-
                                 }
-                                totalPriceListener.setPrice();
                             }
 
 

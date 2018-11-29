@@ -5,19 +5,21 @@ import io.realm.annotations.PrimaryKey;
 
 public class InsertOrderHistoryDBModel extends RealmObject {
     @PrimaryKey
-    private  String _id;
-    private  String userID;
-    private  String itemID;
-    private  String serviceID;
-    private  String itemQuantity;
-    private  String totalPrice;
+    private String _id;
+    private String userID;
+    private String itemID;
+    private String itemName;
+    private String serviceID;
+    private String serviceName;
+    private String itemQuantity;
+    private String totalPrice;
 
 
-    public String  get_id() {
+    public String get_id() {
         return _id;
     }
 
-    public void set_id(String  _id) {
+    public void set_id(String _id) {
         this._id = _id;
     }
 
@@ -37,12 +39,28 @@ public class InsertOrderHistoryDBModel extends RealmObject {
         this.itemID = itemID;
     }
 
+    public String getItemName() {
+        return itemName;
+    }
+
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
+    }
+
     public String getServiceID() {
         return serviceID;
     }
 
     public void setServiceID(String serviceID) {
         this.serviceID = serviceID;
+    }
+
+    public String getServiceName() {
+        return serviceName;
+    }
+
+    public void setServiceName(String serviceName) {
+        this.serviceName = serviceName;
     }
 
     public String getItemQuantity() {
@@ -64,13 +82,15 @@ public class InsertOrderHistoryDBModel extends RealmObject {
     @Override
     public String toString() {
         return "InsertOrderHistoryDBModel{" +
-                "_id=" + _id +
+                "_id='" + _id + '\'' +
                 ", userID='" + userID + '\'' +
                 ", itemID='" + itemID + '\'' +
+                ", itemName='" + itemName + '\'' +
                 ", serviceID='" + serviceID + '\'' +
+                ", serviceName='" + serviceName + '\'' +
                 ", itemQuantity='" + itemQuantity + '\'' +
                 ", totalPrice='" + totalPrice + '\'' +
-                '}'+"\n";
+                '}';
     }
 
 }

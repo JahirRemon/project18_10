@@ -180,21 +180,10 @@ public class OrderHomeActivity extends AppCompatActivity {
     }
 
 
-//    private void setupTabIcons() {
-//
-//        tabLayout.getTabAt( 0 ).setIcon( tabIconsWhite[0] );
-//        tabLayout.getTabAt( 1 ).setIcon( tabIconsAss[1] );
-//        tabLayout.getTabAt( 2 ).setIcon( tabIconsAss[2] );
-//        tabLayout.getTabAt( 3 ).setIcon( tabIconsAss[3] );
-//        tabLayout.getTabAt( 4 ).setIcon( tabIconsAss[4] );
-//
-//
-//    }
-
     public void goToOrderListActivity(View view) {
 
         startActivity( new Intent( OrderHomeActivity.this, OrderSummaryActivity.class ) );
-        finish();
+//        finish();
     }
 
 

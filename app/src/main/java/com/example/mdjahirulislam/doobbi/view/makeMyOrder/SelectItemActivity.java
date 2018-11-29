@@ -102,8 +102,8 @@ public class SelectItemActivity extends AppCompatActivity implements SelectedCat
 
         tabLayout.setupWithViewPager( viewPager );
 
-        totalPrice =  DBFunctions.getAllOrderHistoryTotalPrice();
-        totalPriceTV.setText( String.valueOf( totalPrice ));
+        totalPrice = DBFunctions.getAllOrderHistoryTotalPrice();
+        totalPriceTV.setText( String.valueOf( totalPrice ) );
 
 
         tabLayout.setOnTabSelectedListener( new TabLayout.OnTabSelectedListener() {
@@ -186,19 +186,6 @@ public class SelectItemActivity extends AppCompatActivity implements SelectedCat
         startActivity( new Intent( SelectItemActivity.this, OrderSummaryActivity.class ) );
     }
 
-//    @Override
-//    public void setPrice(int price, int operator) {
-//
-//
-//        if (operator == 1) {
-////            this.totalPrice += price;
-//            totalPriceTV.setText( "Interface + Tk. "+ String.valueOf( DBFunctions.getAllOrderHistoryTotalPrice() ) );
-//        } else if (operator == 2) {
-////            this.totalPrice -= price;
-//            totalPriceTV.setText( "Interface - Tk. "+ String.valueOf( DBFunctions.getAllOrderHistoryTotalPrice() ) );
-//        }
-//    }
-
 
     @Override
     public void onBackPressed() {
@@ -226,17 +213,17 @@ public class SelectItemActivity extends AppCompatActivity implements SelectedCat
     public void setPrice() {
 //                    totalPriceTV.setText( "Interface - Tk. "+ String.valueOf( DBFunctions.getAllOrderHistoryTotalPrice() ) );
 
-                    startCountAnimation();
+        startCountAnimation();
     }
 
     private void startCountAnimation() {
-        ValueAnimator animator = ValueAnimator.ofInt( totalPrice ,DBFunctions.getAllOrderHistoryTotalPrice());
-        animator.setDuration(1000);
-        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+        ValueAnimator animator = ValueAnimator.ofInt( totalPrice, DBFunctions.getAllOrderHistoryTotalPrice() );
+        animator.setDuration( 1000 );
+        animator.addUpdateListener( new ValueAnimator.AnimatorUpdateListener() {
             public void onAnimationUpdate(ValueAnimator animation) {
-                totalPriceTV.setText("Animation Tk. "+animation.getAnimatedValue().toString());
+                totalPriceTV.setText( "Animation Tk. " + animation.getAnimatedValue().toString() );
             }
-        });
+        } );
         animator.start();
     }
 }

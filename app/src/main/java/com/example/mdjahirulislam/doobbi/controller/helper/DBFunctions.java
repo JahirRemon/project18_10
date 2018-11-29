@@ -18,6 +18,7 @@ public  class DBFunctions {
         insertOrderHistoryDBModel.setUserID( model.getUserID() );
         insertOrderHistoryDBModel.setItemID( model.getItemID() );
         insertOrderHistoryDBModel.setServiceID( model.getServiceID() );
+        insertOrderHistoryDBModel.setServiceName( model.getServiceName() );
         insertOrderHistoryDBModel.setItemQuantity( model.getItemQuantity() );
         insertOrderHistoryDBModel.setTotalPrice( model.getTotalPrice() );
 
@@ -33,6 +34,7 @@ public  class DBFunctions {
         updateModel.setUserID( model.getUserID() );
         updateModel.setItemID( model.getItemID() );
         updateModel.setServiceID( model.getServiceID() );
+        updateModel.setServiceName( model.getServiceName() );
         updateModel.setItemQuantity( model.getItemQuantity() );
         updateModel.setTotalPrice( model.getTotalPrice() );
 //                                    InsertOrderHistoryDBModel update = mRealm.copyToRealm( getResultServiceID );
