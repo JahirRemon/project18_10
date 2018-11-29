@@ -1,5 +1,6 @@
 package com.example.mdjahirulislam.doobbi.view.makeMyOrder;
 
+import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -11,22 +12,21 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.mdjahirulislam.doobbi.R;
+import com.example.mdjahirulislam.doobbi.controller.adapter.SelectedCategoryItemPriceAdapter;
 import com.example.mdjahirulislam.doobbi.controller.adapter.TabPageAdapter;
 import com.example.mdjahirulislam.doobbi.controller.adapter.ViewPagerAdapter;
 import com.example.mdjahirulislam.doobbi.controller.connectionInterface.ConnectionAPI;
+import com.example.mdjahirulislam.doobbi.controller.helper.DBFunctions;
 import com.example.mdjahirulislam.doobbi.controller.helper.Functions;
 import com.example.mdjahirulislam.doobbi.controller.helper.SessionManager;
 import com.example.mdjahirulislam.doobbi.model.CategoryItemsModel;
-import com.example.mdjahirulislam.doobbi.model.requestModel.InsertOrderHistoryDBModel;
 import com.example.mdjahirulislam.doobbi.model.responseModel.GetTadItemResponseModel;
 
 import java.util.ArrayList;
 
 import io.realm.Realm;
-import io.realm.RealmChangeListener;
-import io.realm.RealmResults;
 
-public class SelectItemActivity extends AppCompatActivity implements SelectCategoryItemFragment.onTotalPriceListener {
+public class SelectItemActivity extends AppCompatActivity implements SelectedCategoryItemPriceAdapter.OnTotalPriceListener {
 
     private static final String TAG = SelectItemActivity.class.getSimpleName();
     private TabLayout tabLayout;
@@ -102,23 +102,8 @@ public class SelectItemActivity extends AppCompatActivity implements SelectCateg
 
         tabLayout.setupWithViewPager( viewPager );
 
-        try {
-            RealmResults<InsertOrderHistoryDBModel> results = mRealm.where( InsertOrderHistoryDBModel.class ).findAll();
-
-            mRealm.beginTransaction();
-
-            Log.d( TAG, "onCreate: size---> " + results.size() );
-            for (int i = 0; i < results.size(); i++) {
-                totalPrice += Integer.parseInt( results.get( i ).getTotalPrice() );
-                Log.d( TAG, "onCreate: totalPrice---->" + totalPrice );
-                Log.d( TAG, "onCreate: rowDetails-----> " +results.get( i ).toString());
-            }
-            mRealm.commitTransaction();
-        }finally {
-            mRealm.close();
-            totalPriceTV.setText( "Remon Tk: "+String.valueOf( totalPrice ) );
-
-        }
+        totalPrice =  DBFunctions.getAllOrderHistoryTotalPrice();
+        totalPriceTV.setText( String.valueOf( totalPrice ));
 
 
         tabLayout.setOnTabSelectedListener( new TabLayout.OnTabSelectedListener() {
@@ -201,25 +186,24 @@ public class SelectItemActivity extends AppCompatActivity implements SelectCateg
         startActivity( new Intent( SelectItemActivity.this, OrderSummaryActivity.class ) );
     }
 
-    @Override
-    public void setPrice(int price, int operator) {
-
-
-        if (operator == 1) {
-//            this.totalPrice += price;
-//            totalPriceTV.setText( "Tk. "+ String.valueOf( totalPrice ) );
-        } else if (operator == 2) {
-//            this.totalPrice -= price;
-//            totalPriceTV.setText( "Tk. "+ String.valueOf( totalPrice ) );
-        }
-    }
+//    @Override
+//    public void setPrice(int price, int operator) {
+//
+//
+//        if (operator == 1) {
+////            this.totalPrice += price;
+//            totalPriceTV.setText( "Interface + Tk. "+ String.valueOf( DBFunctions.getAllOrderHistoryTotalPrice() ) );
+//        } else if (operator == 2) {
+////            this.totalPrice -= price;
+//            totalPriceTV.setText( "Interface - Tk. "+ String.valueOf( DBFunctions.getAllOrderHistoryTotalPrice() ) );
+//        }
+//    }
 
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         Log.d( TAG, "onBackPressed: " );
-        sessionManager.setTotalPrice( String.valueOf( totalPrice ) );
         startActivity( new Intent( SelectItemActivity.this, OrderHomeActivity.class ).setFlags( Intent.FLAG_ACTIVITY_CLEAR_TOP ) );
         finish();
     }
@@ -236,5 +220,23 @@ public class SelectItemActivity extends AppCompatActivity implements SelectCateg
         // app icon in action bar clicked; goto parent activity.
         this.finish();
         return super.onOptionsItemSelected( item );
+    }
+
+    @Override
+    public void setPrice() {
+//                    totalPriceTV.setText( "Interface - Tk. "+ String.valueOf( DBFunctions.getAllOrderHistoryTotalPrice() ) );
+
+                    startCountAnimation();
+    }
+
+    private void startCountAnimation() {
+        ValueAnimator animator = ValueAnimator.ofInt( totalPrice ,DBFunctions.getAllOrderHistoryTotalPrice());
+        animator.setDuration(1000);
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            public void onAnimationUpdate(ValueAnimator animation) {
+                totalPriceTV.setText("Animation Tk. "+animation.getAnimatedValue().toString());
+            }
+        });
+        animator.start();
     }
 }

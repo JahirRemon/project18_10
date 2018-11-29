@@ -72,11 +72,11 @@ public class SelectCategoryItemFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public interface onTotalPriceListener {
-        public void setPrice(int price, int operator);
-    }
-
-    private onTotalPriceListener totalPriceListener;
+//    public interface OnTotalPriceListener {
+//        public void setPrice(int price, int operator);
+//    }
+//
+    private SelectedCategoryItemPriceAdapter.OnTotalPriceListener totalPriceListener;
 
 
     public static SelectCategoryItemFragment newInstance(int position) {
@@ -92,7 +92,7 @@ public class SelectCategoryItemFragment extends Fragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            totalPriceListener = (onTotalPriceListener) activity;
+            totalPriceListener = (SelectedCategoryItemPriceAdapter.OnTotalPriceListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString() + " must implement onSomeEventListener");
         }
@@ -191,7 +191,7 @@ public class SelectCategoryItemFragment extends Fragment {
                             itemTitleTV.setText( priceResponseModel.getItemName());
                             regularPriceTV.setText( "Tk. "+priceResponseModel.getItem().get( 0 ).getSalesPrice() );
                             LinearLayoutManager mLayoutManager = new LinearLayoutManager(context);
-                            mAdapter = new SelectedCategoryItemPriceAdapter( context, itemPriceModels );
+                            mAdapter = new SelectedCategoryItemPriceAdapter( context, itemPriceModels,totalPriceListener );
                             mRecyclerView.setLayoutManager(mLayoutManager);
                             mRecyclerView.setAdapter(mAdapter);
 

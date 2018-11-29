@@ -15,13 +15,9 @@ import android.widget.TextView;
 import com.example.mdjahirulislam.doobbi.R;
 import com.example.mdjahirulislam.doobbi.controller.helper.DBFunctions;
 import com.example.mdjahirulislam.doobbi.controller.helper.SessionManager;
-import com.example.mdjahirulislam.doobbi.model.CategoryItemsModel;
 import com.example.mdjahirulislam.doobbi.model.ItemPriceModel;
 import com.example.mdjahirulislam.doobbi.model.requestModel.InsertOrderHistoryDBModel;
-import com.example.mdjahirulislam.doobbi.model.requestModel.InsertUserDataModel;
 import com.example.mdjahirulislam.doobbi.view.authentication.LoginActivity;
-import com.example.mdjahirulislam.doobbi.view.makeMyOrder.SelectCategoryItemFragment;
-import com.example.mdjahirulislam.doobbi.view.makeMyOrder.SelectItemActivity;
 
 import java.util.List;
 import java.util.UUID;
@@ -40,12 +36,11 @@ public class SelectedCategoryItemPriceAdapter extends RecyclerView.Adapter<Selec
     private SessionManager sessionManager;
     private String uniqueID;
 
+    private OnTotalPriceListener totalPriceListener;
 
-    public interface onTotalPriceListener {
-        public void setPrice(int price, int operator);
+    public interface OnTotalPriceListener {
+        void setPrice();
     }
-
-    private onTotalPriceListener totalPriceListener;
 
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -70,12 +65,19 @@ public class SelectedCategoryItemPriceAdapter extends RecyclerView.Adapter<Selec
     }
 
 
-    public SelectedCategoryItemPriceAdapter(Context context, List<ItemPriceModel> itemsList) {
+    public SelectedCategoryItemPriceAdapter(Context context, List<ItemPriceModel> itemsList,OnTotalPriceListener onTotalPriceListener ) {
         this.mItemsList = itemsList;
         this.mContext = context;
 //        this.mPosition = position;
         mRealm = Realm.getDefaultInstance();
         sessionManager = new SessionManager( context );
+        try {
+            totalPriceListener = onTotalPriceListener;
+        } catch (ClassCastException e) {
+            Log.d( TAG, "SelectedCategoryItemPriceAdapter: " +e.getLocalizedMessage());
+            throw new ClassCastException( context.toString() + " must implement onSomeEventListener" );
+        }
+
 
     }
 
@@ -112,13 +114,13 @@ public class SelectedCategoryItemPriceAdapter extends RecyclerView.Adapter<Selec
                 .findFirst();
         try {
 
-            if (getQuantity!=null) {
+            if (getQuantity != null) {
                 quantity[0] = Integer.parseInt( getQuantity.getItemQuantity() );
                 totalPrice[0] = Integer.parseInt( getQuantity.getTotalPrice() );
 
             }
 
-        }finally {
+        } finally {
             holder.quantityTV.setText( String.valueOf( quantity[0] ) );
             holder.totalPriceTV.setText( String.valueOf( totalPrice[0] ) );
         }
@@ -155,6 +157,7 @@ public class SelectedCategoryItemPriceAdapter extends RecyclerView.Adapter<Selec
                                 holder.quantityTV.setText( String.valueOf( quantity[0] ) );
                                 holder.totalPriceTV.setText( String.valueOf( totalPrice[0] ) );
 
+
                                 uniqueID = UUID.randomUUID().toString();
 
                                 RealmResults<InsertOrderHistoryDBModel> getResult = mRealm.where( InsertOrderHistoryDBModel.class )
@@ -184,6 +187,8 @@ public class SelectedCategoryItemPriceAdapter extends RecyclerView.Adapter<Selec
 
 
                                 }
+
+                                totalPriceListener.setPrice();
                             }
 
                         }
@@ -217,17 +222,55 @@ public class SelectedCategoryItemPriceAdapter extends RecyclerView.Adapter<Selec
                     case MotionEvent.ACTION_UP:
                         if (event.getX() < width && event.getY() < height && event.getY() > 0) {
                             holder.minusIV.setAlpha( 1.0f );
-                            if (quantity[0] > 0) {
-                                quantity[0]--;
-//                                totalPriceListener.setPrice( regularPrice, 2 );
 
+                            Log.d( TAG, "onTouch: is login? -->" + sessionManager.isLoggedIn() + "-----" +
+                                    ">>>>> " + sessionManager.getUserId() );
+                            if (!sessionManager.isLoggedIn()) {
+                                Intent intent = new Intent( mContext, LoginActivity.class );
+                                mContext.startActivity( intent );
                             } else {
-                                quantity[0] = 0;
+
+                                if (quantity[0] > 0) {
+                                    quantity[0]--;
+                                } else {
+                                    quantity[0] = 0;
+                                }
+                                totalPrice[0] = finalRegularPrice * quantity[0];
+                                holder.quantityTV.setText( String.valueOf( quantity[0] ) );
+                                holder.totalPriceTV.setText( String.valueOf( totalPrice[0] ) );
+
+                                uniqueID = UUID.randomUUID().toString();
+
+                                RealmResults<InsertOrderHistoryDBModel> getResult = mRealm.where( InsertOrderHistoryDBModel.class )
+                                        .equalTo( "itemID", item.getItemId() )
+                                        .and().equalTo( "serviceID", item.getServiceId() )
+                                        .findAll();
+
+                                Log.d( TAG, "onResume: " + getResult.size() );
+
+
+                                insertOrderHistoryDBModel = new InsertOrderHistoryDBModel();
+                                insertOrderHistoryDBModel.setUserID( sessionManager.getUserId() );
+                                insertOrderHistoryDBModel.setItemID( item.getItemId() );
+                                insertOrderHistoryDBModel.setServiceID( item.getServiceId() );
+                                insertOrderHistoryDBModel.setItemQuantity( String.valueOf( quantity[0] ) );
+                                insertOrderHistoryDBModel.setTotalPrice( String.valueOf( totalPrice[0] ) );
+
+                                if (0 < getResult.size()) {
+                                    DBFunctions.updateOrderHistory( insertOrderHistoryDBModel, getResult.get( 0 ).get_id() );
+                                    Log.d( TAG, "onTouch: find serviceId----> update history---> " + insertOrderHistoryDBModel.toString() );
+
+                                } else {
+
+
+                                    Log.d( TAG, "onResume: id--> " + uniqueID + " \nData not found new data inset " + insertOrderHistoryDBModel.toString() );
+                                    DBFunctions.addOrderHistory( insertOrderHistoryDBModel, uniqueID );
+
+
+                                }
+                                totalPriceListener.setPrice();
                             }
-                            totalPrice[0] = finalRegularPrice1 * quantity[0];
-                            Log.d( TAG, "onTouch: " + totalPrice[0] );
-                            holder.quantityTV.setText( String.valueOf( quantity[0] ) );
-                            holder.totalPriceTV.setText( String.valueOf( totalPrice[0] ) );
+
 
                         }
                         break;
