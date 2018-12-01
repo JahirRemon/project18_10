@@ -148,10 +148,10 @@ public class SelectedCategoryItemPriceAdapter extends RecyclerView.Adapter<Selec
 
                             Log.d( TAG, "onTouch: is login? -->" + sessionManager.isLoggedIn() + "-----" +
                                     ">>>>> " + sessionManager.getUserId() );
-                            if (!sessionManager.isLoggedIn()) {
-                                Intent intent = new Intent( mContext, LoginActivity.class );
-                                mContext.startActivity( intent );
-                            } else {
+//                            if (!sessionManager.isLoggedIn()) {
+//                                Intent intent = new Intent( mContext, LoginActivity.class );
+//                                mContext.startActivity( intent );
+//                            } else {
                                 quantity[0]++;
                                 totalPrice[0] = finalRegularPrice * quantity[0];
                                 holder.quantityTV.setText( String.valueOf( quantity[0] ) );
@@ -191,7 +191,7 @@ public class SelectedCategoryItemPriceAdapter extends RecyclerView.Adapter<Selec
                                 }
 
                                 totalPriceListener.setPrice();
-                            }
+//                            }
 
                         }
                         break;
@@ -227,10 +227,10 @@ public class SelectedCategoryItemPriceAdapter extends RecyclerView.Adapter<Selec
 
                             Log.d( TAG, "onTouch: is login? -->" + sessionManager.isLoggedIn() + "-----" +
                                     ">>>>> " + sessionManager.getUserId() );
-                            if (!sessionManager.isLoggedIn()) {
-                                Intent intent = new Intent( mContext, LoginActivity.class );
-                                mContext.startActivity( intent );
-                            } else {
+//                            if (!sessionManager.isLoggedIn()) {
+//                                Intent intent = new Intent( mContext, LoginActivity.class );
+//                                mContext.startActivity( intent );
+//                            } else {
 
                                 if (quantity[0] > 0) {
                                     quantity[0]--;
@@ -272,7 +272,7 @@ public class SelectedCategoryItemPriceAdapter extends RecyclerView.Adapter<Selec
 
                                 }
                                 totalPriceListener.setPrice();
-                            }
+//                            }
 
 
                         }

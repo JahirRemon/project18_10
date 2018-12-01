@@ -2,35 +2,35 @@ package com.example.mdjahirulislam.doobbi.model.requestModel;
 
 public class InsertOrderDataModel {
 
-    private String itemId;
-    private String serviceId;
+    private String item_id;
+    private String service_id;
     private String quantity;
     private String price;
 
     public InsertOrderDataModel() {
     }
 
-    public InsertOrderDataModel(String itemId, String serviceId, String quantity, String price) {
-        this.itemId = itemId;
-        this.serviceId = serviceId;
+    public InsertOrderDataModel(String item_id, String service_id, String quantity, String price) {
+        this.item_id = item_id;
+        this.service_id = service_id;
         this.quantity = quantity;
         this.price = price;
     }
 
-    public String getItemId() {
-        return itemId;
+    public String getItem_id() {
+        return item_id;
     }
 
-    public void setItemId(String itemId) {
-        this.itemId = itemId;
+    public void setItem_id(String item_id) {
+        this.item_id = item_id;
     }
 
-    public String getServiceId() {
-        return serviceId;
+    public String getService_id() {
+        return service_id;
     }
 
-    public void setServiceId(String serviceId) {
-        this.serviceId = serviceId;
+    public void setService_id(String service_id) {
+        this.service_id = service_id;
     }
 
     public String getQuantity() {
@@ -49,4 +49,13 @@ public class InsertOrderDataModel {
         this.price = price;
     }
 
+    @Override
+    public String toString() {
+        return "InsertOrderDataModel{" +
+                "itemId='" + item_id + '\'' +
+                ", serviceId='" + service_id + '\'' +
+                ", quantity='" + quantity + '\'' +
+                ", price='" + price + '\'' +
+                '}';
+    }
 }

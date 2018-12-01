@@ -19,12 +19,15 @@ import com.example.mdjahirulislam.doobbi.controller.helper.SessionManager;
 import com.example.mdjahirulislam.doobbi.model.ItemPriceModel;
 import com.example.mdjahirulislam.doobbi.model.requestModel.InsertOrderHistoryDBModel;
 import com.example.mdjahirulislam.doobbi.view.authentication.LoginActivity;
+import com.example.mdjahirulislam.doobbi.view.makeMyOrder.OrderSummaryActivity;
 
 import java.util.List;
 import java.util.UUID;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
+
+import static com.example.mdjahirulislam.doobbi.controller.helper.Functions._INTENT_FROM;
 
 public class OrderListSummaryAdapter extends RecyclerView.Adapter<OrderListSummaryAdapter.MyViewHolder> {
 
@@ -36,7 +39,13 @@ public class OrderListSummaryAdapter extends RecyclerView.Adapter<OrderListSumma
     private InsertOrderHistoryDBModel insertOrderHistoryDBModel;
     private SessionManager sessionManager;
     private String uniqueID;
+    private OnTotalPriceAndQuantityListener onTotalPriceAndQuantityListener;
 
+    public interface OnTotalPriceAndQuantityListener {
+        void setPrice();
+
+        void setQuantity();
+    }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         private ImageView plusIV;
@@ -60,14 +69,18 @@ public class OrderListSummaryAdapter extends RecyclerView.Adapter<OrderListSumma
     }
 
 
-    public OrderListSummaryAdapter(Context context, List<InsertOrderHistoryDBModel> itemsList) {
+    public OrderListSummaryAdapter(Context context, List<InsertOrderHistoryDBModel> itemsList, OnTotalPriceAndQuantityListener onTotalPriceAndQuantityListener) {
         this.mItemsList = itemsList;
         this.mContext = context;
 //        this.mPosition = position;
         mRealm = Realm.getDefaultInstance();
         sessionManager = new SessionManager( context );
-
-
+        try {
+            this.onTotalPriceAndQuantityListener = onTotalPriceAndQuantityListener;
+        } catch (ClassCastException e) {
+            Log.d( TAG, "SelectedCategoryItemPriceAdapter: " + e.getLocalizedMessage() );
+            throw new ClassCastException( context.toString() + " must implement onSomeEventListener" );
+        }
     }
 
     @Override
@@ -86,18 +99,16 @@ public class OrderListSummaryAdapter extends RecyclerView.Adapter<OrderListSumma
         final int[] totalPrice = {0};
         int regularPrice = 0;
 
-        if (Integer.parseInt( item.getItemQuantity()) != 0){
-            regularPrice =  Integer.parseInt(item.getTotalPrice())/Integer.parseInt( item.getItemQuantity()) ;
+        if (Integer.parseInt( item.getItemQuantity() ) != 0) {
+            regularPrice = Integer.parseInt( item.getTotalPrice() ) / Integer.parseInt( item.getItemQuantity() );
             totalPrice[0] = regularPrice * quantity[0];
-        }else {
+        } else {
             Toast.makeText( mContext, "No Item Selected", Toast.LENGTH_SHORT ).show();
         }
 
 
         holder.itemType.setText( item.getServiceName() );
         holder.priceTV.setText( String.valueOf( regularPrice ) );
-//        holder.totalPriceTV.setText( String.valueOf( totalPrice[0] ) );
-//        holder.itemPosterIV.setImageURI( Uri.parse( item.getPosterURL() ) );
 
         mRealm.beginTransaction();
 
@@ -144,6 +155,7 @@ public class OrderListSummaryAdapter extends RecyclerView.Adapter<OrderListSumma
                                     ">>>>> " + sessionManager.getUserId() );
                             if (!sessionManager.isLoggedIn()) {
                                 Intent intent = new Intent( mContext, LoginActivity.class );
+                                intent.putExtra( _INTENT_FROM, OrderSummaryActivity.class.getSimpleName() );
                                 mContext.startActivity( intent );
                             } else {
                                 quantity[0]++;
@@ -178,6 +190,8 @@ public class OrderListSummaryAdapter extends RecyclerView.Adapter<OrderListSumma
                                     Log.d( TAG, "onResume: id--> " + uniqueID + " \nData not found new data inset " + insertOrderHistoryDBModel.toString() );
                                     DBFunctions.addOrderHistory( insertOrderHistoryDBModel, uniqueID );
                                 }
+                                onTotalPriceAndQuantityListener.setPrice();
+                                onTotalPriceAndQuantityListener.setQuantity();
                             }
 
                         }
@@ -216,6 +230,7 @@ public class OrderListSummaryAdapter extends RecyclerView.Adapter<OrderListSumma
                                     ">>>>> " + sessionManager.getUserId() );
                             if (!sessionManager.isLoggedIn()) {
                                 Intent intent = new Intent( mContext, LoginActivity.class );
+                                intent.putExtra( _INTENT_FROM, OrderSummaryActivity.class.getSimpleName() );
                                 mContext.startActivity( intent );
                             } else {
 
@@ -254,9 +269,9 @@ public class OrderListSummaryAdapter extends RecyclerView.Adapter<OrderListSumma
                                     Log.d( TAG, "onResume: id--> " + uniqueID + " \nData not found new data inset " + insertOrderHistoryDBModel.toString() );
                                     DBFunctions.addOrderHistory( insertOrderHistoryDBModel, uniqueID );
                                 }
+                                onTotalPriceAndQuantityListener.setPrice();
+                                onTotalPriceAndQuantityListener.setQuantity();
                             }
-
-
                         }
                         break;
                     case MotionEvent.ACTION_CANCEL:

@@ -38,6 +38,7 @@ import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.API_
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.API_ACCESS_PASSWORD;
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.API_ACCESS_SUCCESS_CODE;
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.NO_USER_FOUND_CODE;
+import static com.example.mdjahirulislam.doobbi.controller.helper.Functions._INTENT_FROM;
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.hideDialog;
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.tabIconsAss;
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.tabIconsWhite;
@@ -180,7 +181,8 @@ public class OrderHomeActivity extends AppCompatActivity {
     }
 
 
-    public void goToOrderListActivity(View view) {
+    public void goToOrderSummaryActivityFromOrderHomeActivity(View view) {
+        Log.d( TAG, "goToOrderSummaryActivityFromOrderHomeActivity: "+OrderHomeActivity.class.getSimpleName() );
 
         startActivity( new Intent( OrderHomeActivity.this, OrderSummaryActivity.class ) );
 //        finish();

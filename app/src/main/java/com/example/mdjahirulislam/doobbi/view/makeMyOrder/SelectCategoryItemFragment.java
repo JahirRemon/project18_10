@@ -137,6 +137,7 @@ public class SelectCategoryItemFragment extends Fragment {
 
 //            getTabNameThread.interrupt();
             Log.d( TAG, "onCreate: finally " + Thread.currentThread().isAlive() );
+            hideDialog();
         }
 
         return view;

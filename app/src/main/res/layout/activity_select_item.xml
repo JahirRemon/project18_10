@@ -41,7 +41,7 @@
         android:layout_alignParentBottom="true"
         android:background="@color/colorPrimary"
         android:orientation="horizontal"
-        android:onClick="goToOrderListActivity"
+        android:onClick="goToOrderSummaryActivity"
         >
 
 

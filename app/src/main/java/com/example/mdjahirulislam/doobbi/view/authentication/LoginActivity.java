@@ -22,6 +22,9 @@ import com.example.mdjahirulislam.doobbi.controller.requestThread.InsertNewUserT
 import com.example.mdjahirulislam.doobbi.model.requestModel.InsertUserDataModel;
 import com.example.mdjahirulislam.doobbi.model.responseModel.GetUserDetailsResponseModel;
 import com.example.mdjahirulislam.doobbi.view.HomeActivity;
+import com.example.mdjahirulislam.doobbi.view.makeMyOrder.OrderHomeActivity;
+import com.example.mdjahirulislam.doobbi.view.makeMyOrder.OrderSummaryActivity;
+import com.example.mdjahirulislam.doobbi.view.makeMyOrder.SelectItemActivity;
 
 import io.realm.Realm;
 import okhttp3.MultipartBody;
@@ -35,6 +38,7 @@ import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.API_
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.API_ACCESS_PASSWORD;
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.API_ACCESS_SUCCESS_CODE;
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.NO_USER_FOUND_CODE;
+import static com.example.mdjahirulislam.doobbi.controller.helper.Functions._INTENT_FROM;
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.hideDialog;
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.isEmpty;
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.setError;
@@ -52,6 +56,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText userPasswordET;
     private ImageView showPassIV;
     private boolean showPass = false;
+    private String from;
 
 
     private void initialization() {
@@ -65,6 +70,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_login );
         initialization();
+        from = getIntent().getStringExtra( _INTENT_FROM );
         getUserDetailsThread = new GetUserDetailsThread( this, userPhone );
 
         userPhone = Functions.getMyPhoneNO( this );
@@ -130,7 +136,7 @@ public class LoginActivity extends AppCompatActivity {
 
     public class GetLoginUserDetailsThread implements Runnable {
 
-        private final String TAG = InsertNewUserThread.class.getSimpleName();
+        private final String TAG = GetLoginUserDetailsThread.class.getSimpleName();
 
         private ConnectionAPI connectionApi;
         private Context context;
@@ -196,11 +202,25 @@ public class LoginActivity extends AppCompatActivity {
                                 sessionManager.setLogin( true );
                                 sessionManager.setUserID( userDetailsResponseModel.getCid() );
 
-                                Intent myIntent = new Intent( context, HomeActivity.class );
-                                myIntent.setFlags( Intent.FLAG_ACTIVITY_CLEAR_TOP );
-//                            myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                                context.startActivity( myIntent );
 
+                                Intent myIntent = new Intent();
+                                if (from.equalsIgnoreCase( HomeActivity.class.getSimpleName() )) {
+                                    myIntent = new Intent( context, HomeActivity.class );
+
+                                }
+                                else if (from.equalsIgnoreCase( OrderHomeActivity.class.getSimpleName() )) {
+                                    myIntent = new Intent( context, OrderHomeActivity.class );
+
+                                }
+                                else if (from.equalsIgnoreCase( SelectItemActivity.class.getSimpleName() )) {
+                                    myIntent = new Intent( context, SelectItemActivity.class );
+
+                                }
+                                else if (from.equalsIgnoreCase( OrderSummaryActivity.class.getSimpleName() )) {
+                                    myIntent = new Intent( context, OrderSummaryActivity.class );
+
+                                }
+                                context.startActivity( myIntent );
                                 finish();
 
 

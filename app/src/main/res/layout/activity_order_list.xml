@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/colorBackgroundAss"
     android:orientation="vertical"
-    tools:context="com.example.mdjahirulislam.doobbi.view.order.OrderListActivity">
+    tools:context="com.example.mdjahirulislam.doobbi.view.orderList.OrderListActivity">
 
 
     <ScrollView
@@ -96,7 +96,7 @@
                     android:background="@color/transparent"
                     android:gravity="center"
                     android:lineSpacingExtra="@dimen/margin_16dp"
-                    android:text="Your next order is within \n2 hours 58 secend"
+                    android:text="Your next orderList is within \n2 hours 58 secend"
                     android:textColor="@color/colorWhite"
                     android:textSize="@dimen/regular_text_size"
                     android:paddingBottom="@dimen/margin_16dp"

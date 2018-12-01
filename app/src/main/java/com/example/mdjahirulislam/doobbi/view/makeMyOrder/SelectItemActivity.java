@@ -181,7 +181,7 @@ public class SelectItemActivity extends AppCompatActivity implements SelectedCat
 
     }
 
-    public void goToOrderListActivity(View view) {
+    public void goToOrderSummaryActivity(View view) {
 
         startActivity( new Intent( SelectItemActivity.this, OrderSummaryActivity.class ) );
     }
@@ -213,17 +213,8 @@ public class SelectItemActivity extends AppCompatActivity implements SelectedCat
     public void setPrice() {
 //                    totalPriceTV.setText( "Interface - Tk. "+ String.valueOf( DBFunctions.getAllOrderHistoryTotalPrice() ) );
 
-        startCountAnimation();
+        Functions.setAnimationNumber( totalPriceTV,"Total Tk. ",totalPrice,DBFunctions.getAllOrderHistoryTotalPrice(),"",1000 );
     }
 
-    private void startCountAnimation() {
-        ValueAnimator animator = ValueAnimator.ofInt( totalPrice, DBFunctions.getAllOrderHistoryTotalPrice() );
-        animator.setDuration( 1000 );
-        animator.addUpdateListener( new ValueAnimator.AnimatorUpdateListener() {
-            public void onAnimationUpdate(ValueAnimator animation) {
-                totalPriceTV.setText( "Animation Tk. " + animation.getAnimatedValue().toString() );
-            }
-        } );
-        animator.start();
-    }
+
 }

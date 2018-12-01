@@ -91,5 +91,17 @@ public interface ConnectionAPI {
 
     );
 
+    @Multipart
+    @POST("request")
+    Call<InsertUserResponseModel> submitOrder(
+            @Part("password") RequestBody password,
+            @Part("user") RequestBody user,
+            @Part("function") RequestBody function,
+            @Part("phone") RequestBody phone,
+            @Part("noofitem") RequestBody noOfItem,
+            @Part("order") RequestBody order
+
+            );
+
 
 }

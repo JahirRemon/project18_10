@@ -54,6 +54,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class Functions {
     private static final String TAG = Functions.class.getSimpleName();
 
+    public static final String _INTENT_FROM = "intentFrom";
     public static final String DEVELOPER_KEY = "AIzaSyAEDWZUfRgWp9s6mBy_MRZ5WNHudJneEn8";
     public static final String API_ACCESS_SUCCESS_CODE = "100";
     public static final String API_ACCESS_DENY_CODE = "000";
@@ -69,6 +70,7 @@ public class Functions {
     public static final String API_ACCESS_FUNCTION_GET_CATEGORY = "getcategory";
     public static final String API_ACCESS_FUNCTION_GET_CATEGORY_ITEMS = "getcategoryitem";
     public static final String API_ACCESS_FUNCTION_GET_CATEGORY_ITEMS_PRICE = "getitemwiseprise";
+    public static final String API_ACCESS_FUNCTION_INSERT_ORDER_LIST = "customerorder";
 
     public static String BASE_URL = "http://transparentgroup.net/services/services/";
 
@@ -403,6 +405,23 @@ public class Functions {
         editText.setError( null );
 
     }
+
+    public static void setAnimationNumber(final TextView textView, final String firstMessage, int startNumber,
+                                          int endNumber, final String secondMessage, int animationSpeed) {
+
+        ValueAnimator animator = ValueAnimator.ofInt( startNumber, endNumber );
+        animator.setDuration( animationSpeed );
+        animator.addUpdateListener( new ValueAnimator.AnimatorUpdateListener() {
+            public void onAnimationUpdate(ValueAnimator animation) {
+                textView.setText( firstMessage + animation.getAnimatedValue().toString() +secondMessage);
+            }
+        } );
+        animator.start();
+
+    }
+
+
+
 
 
 

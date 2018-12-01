@@ -63,6 +63,8 @@ public class PriceListActivity extends AppCompatActivity {
         connectionApi = Functions.getRetrofit().create( ConnectionAPI.class );
 
         getItemWisePriceThread = new Thread( new GetItemWisePriceThread() );
+        itemIdList = new ArrayList<>(  );
+        itemNameList = new ArrayList<>(  );
 
         try {
             getItemWisePriceThread.start();

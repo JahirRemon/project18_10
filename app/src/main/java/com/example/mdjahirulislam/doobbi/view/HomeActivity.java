@@ -54,6 +54,7 @@ import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.API_
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.API_ACCESS_PASSWORD;
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.API_ACCESS_SUCCESS_CODE;
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.NO_USER_FOUND_CODE;
+import static com.example.mdjahirulislam.doobbi.controller.helper.Functions._INTENT_FROM;
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.hideDialog;
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.progressBar;
 
@@ -425,7 +426,7 @@ public class HomeActivity extends AppCompatActivity
         } else if (id == R.id.nav_payment) {
 
         } else if (id == R.id.nav_signIn) {
-            startActivity( new Intent( HomeActivity.this, LoginActivity.class ) );
+            startActivity( new Intent( HomeActivity.this, LoginActivity.class ).putExtra( _INTENT_FROM,HomeActivity.class.getSimpleName()) );
 
         } else if (id == R.id.nav_log_out) {
             Log.d( TAG, "onNavigationItemSelected: log out " + user_id );
