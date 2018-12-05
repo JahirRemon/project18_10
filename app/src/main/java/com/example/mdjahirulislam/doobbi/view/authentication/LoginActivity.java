@@ -25,6 +25,7 @@ import com.example.mdjahirulislam.doobbi.view.HomeActivity;
 import com.example.mdjahirulislam.doobbi.view.makeMyOrder.OrderHomeActivity;
 import com.example.mdjahirulislam.doobbi.view.makeMyOrder.OrderSummaryActivity;
 import com.example.mdjahirulislam.doobbi.view.makeMyOrder.SelectItemActivity;
+import com.example.mdjahirulislam.doobbi.view.order.OrderListActivity;
 
 import io.realm.Realm;
 import okhttp3.MultipartBody;
@@ -218,6 +219,9 @@ public class LoginActivity extends AppCompatActivity {
                                 }
                                 else if (from.equalsIgnoreCase( OrderSummaryActivity.class.getSimpleName() )) {
                                     myIntent = new Intent( context, OrderSummaryActivity.class );
+
+                                }else if (from.equalsIgnoreCase( OrderListActivity.class.getSimpleName() )) {
+                                    myIntent = new Intent( context, OrderListActivity.class );
 
                                 }
                                 context.startActivity( myIntent );

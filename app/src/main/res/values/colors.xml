@@ -28,6 +28,14 @@
 
 
 
+    <color name="colorOrderStatusTemporary">#00c9bc</color>
+    <color name="colorOrderStatusConfirmed">#00C917</color>
+    <color name="colorOrderStatusProcessing">#FFEC00</color>
+    <color name="colorOrderStatusDelivered">#FF4646</color>
+
+
+
+
 
     <color name="fab_color_1">#5856d6</color>
     <color name="fab_color_2">#4cd964</color>

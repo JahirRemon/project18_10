@@ -31,6 +31,7 @@ import com.example.mdjahirulislam.doobbi.model.requestModel.InsertUserDataModel;
 import com.example.mdjahirulislam.doobbi.model.responseModel.GetTadItemResponseModel;
 import com.example.mdjahirulislam.doobbi.view.authentication.LoginActivity;
 import com.example.mdjahirulislam.doobbi.view.makeMyOrder.OrderHomeActivity;
+import com.example.mdjahirulislam.doobbi.view.makeMyOrder.SelectItemActivity;
 import com.example.mdjahirulislam.doobbi.view.offers.MyOfferActivity;
 import com.example.mdjahirulislam.doobbi.view.order.OrderListActivity;
 import com.example.mdjahirulislam.doobbi.view.pickUpMe.PickUpLocationActivity;

@@ -40,7 +40,6 @@ import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.API_
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.API_ACCESS_PASSWORD;
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.API_ACCESS_SUCCESS_CODE;
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.NO_USER_FOUND_CODE;
-import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.hideDialog;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -97,10 +96,8 @@ public class CategoryListFragment extends Fragment {
         getCategoryItemThread = new Thread( new GetCategoryItemThread() );
 
         try {
-            Functions.ProgressDialog( getActivity() );
-            Functions.showDialog();
             getCategoryItemThread.start();
-            Log.d( TAG, "onCreateView: show dialog" );
+//            Log.d( TAG, "onCreateView: show dialog" );
 
 
         } catch (Exception e) {
@@ -110,7 +107,7 @@ public class CategoryListFragment extends Fragment {
 
 //            getTabNameThread.interrupt();
             Log.d( TAG, "onCreate: finally " + Thread.currentThread().isAlive() );
-            hideDialog();
+//            hideDialog();
         }
     }
 
@@ -157,7 +154,7 @@ public class CategoryListFragment extends Fragment {
         mRecyclerView.addOnItemTouchListener( new ItemClickListener( getActivity(), mRecyclerView, new ItemClickListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
-                startActivity( new Intent( context, SelectItemActivity.class ).putExtra( "itemsModel",items ) );
+                startActivity( new Intent( context, SelectItemActivity.class ).putExtra( "itemsModel", items ).putExtra( "position", position ) );
                 getActivity().finish();
                 Log.d( TAG, "onClick: " + position );
             }
@@ -284,9 +281,9 @@ public class CategoryListFragment extends Fragment {
                                         String.valueOf( itemsModel.getImage() ) ) );
 //                                tabIdList.add( tadItemResponseModel.getCategory().get( i ).getId() );
                             }
-//                            hideDialog();
-                            mRecyclerView.setAdapter( new CategoryItemsAdapter( getContext(), items, currentPosition ) );
 
+                            mRecyclerView.setAdapter( new CategoryItemsAdapter( getContext(), items, currentPosition ) );
+//                            hideDialog();
                         }
                         // deny code is 101
                         else if (status.equalsIgnoreCase( NO_USER_FOUND_CODE )) {

@@ -17,15 +17,12 @@ import com.example.mdjahirulislam.doobbi.controller.connectionInterface.Connecti
 import com.example.mdjahirulislam.doobbi.controller.helper.DBFunctions;
 import com.example.mdjahirulislam.doobbi.controller.helper.Functions;
 import com.example.mdjahirulislam.doobbi.controller.helper.SessionManager;
-import com.example.mdjahirulislam.doobbi.model.requestModel.InsertOrderHistoryDBModel;
 import com.example.mdjahirulislam.doobbi.model.responseModel.GetTadItemResponseModel;
 import com.example.mdjahirulislam.doobbi.view.HomeActivity;
-import com.example.mdjahirulislam.doobbi.view.order.OrderListActivity;
 
 import java.util.ArrayList;
 
 import io.realm.Realm;
-import io.realm.RealmResults;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -33,16 +30,14 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.API_ACCESS_FUNCTION_GET_CATEGORY;
-import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.API_ACCESS_FUNCTION_LOGIN;
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.API_ACCESS_ID;
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.API_ACCESS_PASSWORD;
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.API_ACCESS_SUCCESS_CODE;
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.NO_USER_FOUND_CODE;
-import static com.example.mdjahirulislam.doobbi.controller.helper.Functions._INTENT_FROM;
+import static com.example.mdjahirulislam.doobbi.controller.helper.Functions._PROGRESS_TIME_IN_MILLISECOND;
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.hideDialog;
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.tabIconsAss;
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.tabIconsWhite;
-import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.tabNames;
 
 public class OrderHomeActivity extends AppCompatActivity {
 
@@ -76,18 +71,7 @@ public class OrderHomeActivity extends AppCompatActivity {
         totalPriceTV = findViewById( R.id.totalPriceTV );
 
 
-        try {
-            getTabNameThread.start();
-            Functions.ProgressDialog( OrderHomeActivity.this );
-            Functions.showDialog();
-//            getTabNameThread.interrupt();
-
-
-        } catch (Exception e) {
-            Log.d( TAG, "catch: " + e.getLocalizedMessage() );
-        }
-
-        totalPriceTV.setText( "Tk. "+DBFunctions.getAllOrderHistoryTotalPrice() );
+        totalPriceTV.setText( "Tk. "+DBFunctions.getAllOrderHistoryTotalPrice() +".00");
 
         viewPager = (ViewPager) findViewById( R.id.makeOrderViewPager );
         setupViewPager( viewPager );
@@ -96,7 +80,17 @@ public class OrderHomeActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager( viewPager );
         Log.d( TAG, "onCreate: " + tabNameList );
 
+        tabPageAdapter = new TabPageAdapter( OrderHomeActivity.this, getSupportFragmentManager(), tabNameList, tabIdList, 0 );
+        viewPager.setAdapter( tabPageAdapter );
 
+        try {
+            getTabNameThread.start();
+        } catch (Exception e) {
+            Log.d( TAG, "catch: " + e.getLocalizedMessage() );
+        }
+
+        Functions.ProgressDialog( this );
+        Functions.showDialog();
 
 
 //        tab text color change
@@ -243,11 +237,21 @@ public class OrderHomeActivity extends AppCompatActivity {
                                 tabNameList.add( tadItemResponseModel.getCategory().get( i ).getName() );
                                 tabIdList.add( tadItemResponseModel.getCategory().get( i ).getId() );
                             }
-                            hideDialog();
+//                            hideDialog();
+                            Thread progressThread = new Thread(new Functions.ProgressThread( ));
+                            progressThread.start();
 
                             tabPageAdapter = new TabPageAdapter( OrderHomeActivity.this, getSupportFragmentManager(), tabNameList, tabIdList, 0 );
                             viewPager.setAdapter( tabPageAdapter );
                             tabLayout.setupWithViewPager( viewPager );
+
+                            tabPageAdapter.notifyDataSetChanged();
+
+                            if (tabNameList.size()>4){
+                                tabLayout.setTabMode( TabLayout.MODE_SCROLLABLE );
+                            }else {
+                                tabLayout.setTabMode( TabLayout.MODE_FIXED );
+                            }
 
                         }
                         // deny code is 101
@@ -264,7 +268,7 @@ public class OrderHomeActivity extends AppCompatActivity {
                         Log.d( TAG, "onResponse: Server Error response.code ===> " + response.code() );
                     }
                     Log.d( TAG, "onResponse: " + response.body() + " \n\n" + response.raw() + " \n\n" + response.toString() + " \n\n" + response.errorBody() );
-                    hideDialog();
+//                    hideDialog();
 
 
                 }
@@ -275,7 +279,7 @@ public class OrderHomeActivity extends AppCompatActivity {
                     Log.d( TAG, "onFailure: " + t.getLocalizedMessage() );
                     Log.d( TAG, "onFailure: " + t.toString() );
                     Log.d( TAG, "onFailure: " + t.getMessage() );
-                    hideDialog();
+//                    hideDialog();
 
                 }
             } );

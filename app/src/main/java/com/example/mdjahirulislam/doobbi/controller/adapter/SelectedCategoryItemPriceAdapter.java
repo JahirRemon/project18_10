@@ -46,6 +46,7 @@ public class SelectedCategoryItemPriceAdapter extends RecyclerView.Adapter<Selec
     public class MyViewHolder extends RecyclerView.ViewHolder {
         private ImageView plusIV;
         private ImageView minusIV;
+        private ImageView zeroIV;
         private TextView quantityTV;
         private TextView priceTV;
         private TextView totalPriceTV;
@@ -61,6 +62,7 @@ public class SelectedCategoryItemPriceAdapter extends RecyclerView.Adapter<Selec
             priceTV = view.findViewById( R.id.singlePriceTV );
             totalPriceTV = view.findViewById( R.id.singleTotalPriceTV );
             itemType = view.findViewById( R.id.singleItemTypeTV );
+            zeroIV = view.findViewById( R.id.singleOrderItemCloseIV );
         }
     }
 
@@ -96,7 +98,7 @@ public class SelectedCategoryItemPriceAdapter extends RecyclerView.Adapter<Selec
         final int[] quantity = {0};
         final int[] totalPrice = {0};
         int regularPrice = 0;
-
+        Log.d( TAG, "onBindViewHolder: " +item.toString());
         regularPrice = Integer.parseInt( item.getSalesPrice() );
         totalPrice[0] = regularPrice * quantity[0];
 
@@ -171,7 +173,7 @@ public class SelectedCategoryItemPriceAdapter extends RecyclerView.Adapter<Selec
                                 insertOrderHistoryDBModel = new InsertOrderHistoryDBModel();
                                 insertOrderHistoryDBModel.setUserID( sessionManager.getUserId() );
                                 insertOrderHistoryDBModel.setItemID( item.getItemId() );
-//                                insertOrderHistoryDBModel.setItemName( item.get() );
+                                insertOrderHistoryDBModel.setItemName( item.getItemName() );
                                 insertOrderHistoryDBModel.setServiceID( item.getServiceId() );
                                 insertOrderHistoryDBModel.setServiceName( item.getServiceName() );
                                 insertOrderHistoryDBModel.setItemQuantity( String.valueOf( quantity[0] ) );
@@ -282,6 +284,87 @@ public class SelectedCategoryItemPriceAdapter extends RecyclerView.Adapter<Selec
                         break;
                     case MotionEvent.ACTION_MOVE:
                         holder.minusIV.setAlpha( 1.0f );
+                        break;
+                    default:
+                        break;
+                }
+                return true;
+            }
+        } );
+
+
+
+        holder.zeroIV.setOnTouchListener( new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                float width = holder.plusIV.getWidth();
+                float height = holder.plusIV.getHeight();
+//                Log.d( TAG, "onTouch 1: plusIV ---> " + event.getAction() );
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        holder.plusIV.setAlpha( 0.5f );
+//                        Log.d( TAG, "onTouch 2: plusIV ---> " + MotionEvent.ACTION_DOWN );
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        if (event.getX() < width && event.getY() < height && event.getY() > 0) {
+
+                            holder.plusIV.setAlpha( 1.0f );
+
+                            Log.d( TAG, "onTouch: is login? -->" + sessionManager.isLoggedIn() + "-----" +
+                                    ">>>>> " + sessionManager.getUserId() );
+//                            if (!sessionManager.isLoggedIn()) {
+//                                Intent intent = new Intent( mContext, LoginActivity.class );
+//                                mContext.startActivity( intent );
+//                            } else {
+                            quantity[0]=0;
+                            totalPrice[0] = finalRegularPrice * quantity[0];
+                            holder.quantityTV.setText( String.valueOf( quantity[0] ) );
+                            holder.totalPriceTV.setText( String.valueOf( totalPrice[0] ) );
+
+
+                            uniqueID = UUID.randomUUID().toString();
+
+                            RealmResults<InsertOrderHistoryDBModel> getResult = mRealm.where( InsertOrderHistoryDBModel.class )
+                                    .equalTo( "itemID", item.getItemId() )
+                                    .and().equalTo( "serviceID", item.getServiceId() )
+                                    .findAll();
+
+                            Log.d( TAG, "onResume: " + getResult.size() );
+
+
+                            insertOrderHistoryDBModel = new InsertOrderHistoryDBModel();
+                            insertOrderHistoryDBModel.setUserID( sessionManager.getUserId() );
+                            insertOrderHistoryDBModel.setItemID( item.getItemId() );
+                            insertOrderHistoryDBModel.setItemName( item.getItemName() );
+                            insertOrderHistoryDBModel.setServiceID( item.getServiceId() );
+                            insertOrderHistoryDBModel.setServiceName( item.getServiceName() );
+                            insertOrderHistoryDBModel.setItemQuantity( String.valueOf( quantity[0] ) );
+                            insertOrderHistoryDBModel.setTotalPrice( String.valueOf( totalPrice[0] ) );
+
+                            if (0 < getResult.size()) {
+                                DBFunctions.updateOrderHistory( insertOrderHistoryDBModel, getResult.get( 0 ).get_id() );
+                                Log.d( TAG, "onTouch: find serviceId----> update history---> " + insertOrderHistoryDBModel.toString() );
+
+                            } else {
+
+
+                                Log.d( TAG, "onResume: id--> " + uniqueID + " \nData not found new data inset " + insertOrderHistoryDBModel.toString() );
+                                DBFunctions.addOrderHistory( insertOrderHistoryDBModel, uniqueID );
+
+
+                            }
+
+                            totalPriceListener.setPrice();
+//                            }
+
+                        }
+                        break;
+                    case MotionEvent.ACTION_CANCEL:
+                        holder.plusIV.setAlpha( 1.0f );
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        holder.plusIV.setAlpha( 1.0f );
                         break;
                     default:
                         break;

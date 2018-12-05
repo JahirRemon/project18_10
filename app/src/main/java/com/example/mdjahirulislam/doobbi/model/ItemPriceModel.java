@@ -5,15 +5,17 @@ public class ItemPriceModel {
     private String itemId;
     private String serviceId;
     private String serviceName;
+    private String itemName;
     private String salesPrice;
     private String basePrice;
     private String discountPer;
 
-    public ItemPriceModel(String priceId, String itemId, String serviceId, String serviceName, String salesPrice, String basePrice, String discountPer) {
+    public ItemPriceModel(String priceId, String itemId, String serviceId, String serviceName, String itemName, String salesPrice, String basePrice, String discountPer) {
         this.priceId = priceId;
         this.itemId = itemId;
         this.serviceId = serviceId;
         this.serviceName = serviceName;
+        this.itemName = itemName;
         this.salesPrice = salesPrice;
         this.basePrice = basePrice;
         this.discountPer = discountPer;
@@ -51,6 +53,14 @@ public class ItemPriceModel {
         this.serviceName = serviceName;
     }
 
+    public String getItemName() {
+        return itemName;
+    }
+
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
+    }
+
     public String getSalesPrice() {
         return salesPrice;
     }
@@ -76,6 +86,17 @@ public class ItemPriceModel {
     }
 
 
-
-
+    @Override
+    public String toString() {
+        return "ItemPriceModel{" +
+                "priceId='" + priceId + '\'' +
+                ", itemId='" + itemId + '\'' +
+                ", serviceId='" + serviceId + '\'' +
+                ", serviceName='" + serviceName + '\'' +
+                ", itemName='" + itemName + '\'' +
+                ", salesPrice='" + salesPrice + '\'' +
+                ", basePrice='" + basePrice + '\'' +
+                ", discountPer='" + discountPer + '\'' +
+                '}';
+    }
 }

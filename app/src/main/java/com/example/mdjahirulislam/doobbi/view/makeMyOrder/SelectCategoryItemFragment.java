@@ -38,8 +38,6 @@ import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.API_
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.API_ACCESS_PASSWORD;
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.API_ACCESS_SUCCESS_CODE;
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.NO_USER_FOUND_CODE;
-import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.hideDialog;
-import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.showDialog;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -89,6 +87,12 @@ public class SelectCategoryItemFragment extends Fragment {
 
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.context = context; //when fragment is created, context will be initialised for use.
+    }
+
+    @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
@@ -105,7 +109,7 @@ public class SelectCategoryItemFragment extends Fragment {
         View view = inflater.inflate( R.layout.fragment_select_category_item, container, false );
 
         itemImageIV = view.findViewById( R.id.fragment_selected_item_image_IV );
-        regularPriceTV = view.findViewById( R.id.singleItemPriceTagTV );
+        regularPriceTV = view.findViewById( R.id.fragmentSelectedItemPriceTagTV );
         itemTitleTV = view.findViewById( R.id.fragment_selected_item_name_TV );
         context = getActivity().getApplicationContext();
         mRecyclerView = view.findViewById( R.id.selected_category_list_view_RV );
@@ -123,8 +127,6 @@ public class SelectCategoryItemFragment extends Fragment {
         getItemWisePriceThread = new Thread( new GetItemWisePriceThread());
 
         try {
-            Functions.ProgressDialog( getActivity() );
-            showDialog();
             getItemWisePriceThread.start();
 
             Log.d( TAG, "onCreateView: show dialog" );
@@ -137,7 +139,7 @@ public class SelectCategoryItemFragment extends Fragment {
 
 //            getTabNameThread.interrupt();
             Log.d( TAG, "onCreate: finally " + Thread.currentThread().isAlive() );
-            hideDialog();
+//            hideDialog();
         }
 
         return view;
@@ -185,19 +187,19 @@ public class SelectCategoryItemFragment extends Fragment {
                             for (int i = 0; i < priceResponseModel.getItem().size(); i++) {
                                 GetItemWisePriceResponseModel.Item items = priceResponseModel.getItem().get( i );
                                itemPriceModels.add( new ItemPriceModel( items.getPriceId(),
-                                       items.getItemId(),items.getServiceId(),items.getServiceName(),
+                                       items.getItemId(),items.getServiceId(),items.getServiceName(),priceResponseModel.getItemName(),
                                        items.getSalesPrice(),items.getBasePrice(),items.getDiscountPer()) );
                             }
 
                             itemTitleTV.setText( priceResponseModel.getItemName());
-                            regularPriceTV.setText( "Tk. "+priceResponseModel.getItem().get( 0 ).getSalesPrice() );
+                            regularPriceTV.setText( "Tk. "+priceResponseModel.getItem().get( 0 ).getSalesPrice()+".00" );
                             LinearLayoutManager mLayoutManager = new LinearLayoutManager(context);
                             mAdapter = new SelectedCategoryItemPriceAdapter( context, itemPriceModels,totalPriceListener );
                             mRecyclerView.setLayoutManager(mLayoutManager);
                             mRecyclerView.setAdapter(mAdapter);
 
 
-                            hideDialog();
+//                            hideDialog();
                         }
                         // deny code is 101
                         else if (status.equalsIgnoreCase( NO_USER_FOUND_CODE )) {
@@ -213,7 +215,7 @@ public class SelectCategoryItemFragment extends Fragment {
                         Log.d( TAG, "onResponse: Server Error response.code ===> " + response.code() );
                     }
                     Log.d( TAG, "onResponse: " + response.body() + " \n\n" + response.raw() + " \n\n" + response.toString() + " \n\n" + response.errorBody() );
-                    hideDialog();
+//                    hideDialog();
 
 
                 }
@@ -224,7 +226,7 @@ public class SelectCategoryItemFragment extends Fragment {
                     Log.d( TAG, "onFailure: " + t.getLocalizedMessage() );
                     Log.d( TAG, "onFailure: " + t.toString() );
                     Log.d( TAG, "onFailure: " + t.getMessage() );
-                    hideDialog();
+//                    hideDialog();
 
                 }
             } );

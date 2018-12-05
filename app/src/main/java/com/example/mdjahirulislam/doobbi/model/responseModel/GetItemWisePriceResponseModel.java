@@ -74,7 +74,7 @@ public class GetItemWisePriceResponseModel {
         this.item = item;
     }
 
-    public static class Item {
+    public class Item {
 
         @SerializedName("price_id")
         @Expose
@@ -94,6 +94,9 @@ public class GetItemWisePriceResponseModel {
         @SerializedName("base_price")
         @Expose
         private String basePrice;
+        @SerializedName("item_name")
+        @Expose
+        private String itemName;
         @SerializedName("discount_per")
         @Expose
         private String discountPer;
@@ -146,6 +149,14 @@ public class GetItemWisePriceResponseModel {
             this.basePrice = basePrice;
         }
 
+        public String getItemName() {
+            return itemName;
+        }
+
+        public void setItemName(String itemName) {
+            this.itemName = itemName;
+        }
+
         public String getDiscountPer() {
             return discountPer;
         }
@@ -163,10 +174,12 @@ public class GetItemWisePriceResponseModel {
                     ", serviceName='" + serviceName + '\'' +
                     ", salesPrice='" + salesPrice + '\'' +
                     ", basePrice='" + basePrice + '\'' +
+                    ", itemName='" + itemName + '\'' +
                     ", discountPer='" + discountPer + '\'' +
                     '}';
         }
     }
+
 
     @Override
     public String toString() {

@@ -2,19 +2,20 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <LinearLayout
+        android:id="@+id/SingleOrderItemMainLL"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="80dp"
+        android:background="@color/colorWhite"
         android:orientation="horizontal"
         android:showDividers="end"
-        android:background="@color/colorWhite"
         >
 
         <View
-            android:id="@+id/orderStatusView"
+            android:id="@+id/singleOrderItemStatusView"
             android:layout_width="3dp"
             android:layout_height="match_parent"
             android:background="@color/colorPlus"/>
@@ -34,26 +35,62 @@
                 android:orientation="horizontal"
                 >
 
-                <TextView
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="Date"/>
+                    android:layout_weight="1.5"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="match_parent"
+                        android:padding="@dimen/margin_2dp"
+                        android:src="@drawable/ic_date_range_grey_600_24dp"/>
+
+                    <TextView
+                        android:id="@+id/singleOrderItemDateTV"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1.6"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="@dimen/margin_2dp"
+                        android:text="Date"
+                        android:textSize="@dimen/small_text_size"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1.2"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="match_parent"
+                        android:padding="@dimen/margin_2dp"
+                        android:src="@drawable/ic_access_time_grey_600_24dp"/>
+
+                    <TextView
+                        android:id="@+id/singleOrderItemTimeTV"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1.5"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="@dimen/margin_2dp"
+                        android:text="Time"
+                        android:textSize="@dimen/small_text_size"/>
+                </LinearLayout>
 
                 <TextView
+                    android:id="@+id/singleOrderItemIDTV"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
+                    android:layout_weight=".8"
                     android:gravity="center"
-                    android:text="Time"/>
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="ID: 00000"/>
+                    android:paddingLeft="@dimen/margin_2dp"
+                    android:text="ID-0000"
+                    android:textSize="@dimen/small_text_size"/>
 
             </LinearLayout>
 
@@ -62,9 +99,11 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:orientation="horizontal"
+                android:background="@color/colorRegBackgroundAss"
                 >
 
                 <TextView
+                    android:id="@+id/singleOrderItemQuantityTV"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -72,6 +111,7 @@
                     android:text="00 Pcs"/>
 
                 <TextView
+                    android:id="@+id/singleOrderItemPriceTV"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -95,26 +135,31 @@
             android:orientation="vertical">
 
             <ImageView
+                android:id="@+id/singleOrderItemStatusIV"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1"
-                android:padding="@dimen/margin_8dp"
-                android:src="@drawable/process"
+                android:layout_gravity="center"
                 android:layout_marginTop="@dimen/margin_6dp"
-                android:layout_gravity="center"/>
+                android:layout_weight="1"
+                android:padding="@dimen/margin_6dp"
+                android:src="@drawable/order_status_process"/>
 
 
             <TextView
+                android:id="@+id/singleOrderItemStatusTV"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:ellipsize="end"
                 android:gravity="center"
                 android:maxLines="1"
+                android:textSize="@dimen/small_text_size"
+                android:textStyle="bold"
                 android:text="Processing"/>
 
         </LinearLayout>
     </LinearLayout>
+
     <View
         android:layout_width="match_parent"
         android:layout_height="6dp"

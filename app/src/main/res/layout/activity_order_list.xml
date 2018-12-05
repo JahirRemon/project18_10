@@ -7,106 +7,78 @@
     android:layout_height="match_parent"
     android:background="@color/colorBackgroundAss"
     android:orientation="vertical"
-    tools:context="com.example.mdjahirulislam.doobbi.view.orderList.OrderListActivity">
+    tools:context="com.example.mdjahirulislam.doobbi.view.order.OrderListActivity">
 
 
-    <ScrollView
+    <!--<ScrollView-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent">-->
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginTop="100dp"
+        android:orientation="vertical">
 
-        <LinearLayout
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/orderListRV"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="100dp"
-            android:orientation="vertical">
+            android:visibility="gone"
+            />
 
-            <include
-                layout="@layout/single_order_item_list_design"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="50dp"
-                />
+        <TextView
+            android:id="@+id/orderListLoginTV"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="Please Login !!!"
+            android:textSize="@dimen/large_text_size"
+            android:textColor="@color/holo_red_light"
+            />
 
-            <include
-                layout="@layout/single_order_item_list_design"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                />
+    </LinearLayout>
+    <!--</ScrollView>-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_marginTop="@dimen/margin_4dp"
+        android:orientation="vertical"
+        >
 
-            <include
-                layout="@layout/single_order_item_list_design"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                />
-
-            <include
-                layout="@layout/single_order_item_list_design"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                />
-
-            <include
-                layout="@layout/single_order_item_list_design"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                />
-
-            <include
-                layout="@layout/single_order_item_list_design"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/orderListRV"
+            <View
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:visibility="gone"
-                >
+                android:layout_marginTop="90dp"
+                android:background="@drawable/ic_bottom_shadow"/>
 
-
-            </android.support.v7.widget.RecyclerView>
-        </LinearLayout>
-    </ScrollView>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:layout_marginTop="@dimen/margin_4dp"
-            android:orientation="vertical"
-            >
-
-            <RelativeLayout
+            <View
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:background="@drawable/ic_shape_order_list"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/transparent"
+                android:gravity="center"
+                android:lineSpacingExtra="@dimen/margin_16dp"
+                android:paddingBottom="@dimen/margin_16dp"
+                android:text="Your next orderList is within \n2 hours 58 secend"
+                android:textColor="@color/colorWhite"
+                android:textSize="@dimen/regular_text_size"
+                android:textStyle="bold"/>
 
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="90dp"
-                    android:background="@drawable/ic_bottom_shadow"/>
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/ic_shape_order_list"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/transparent"
-                    android:gravity="center"
-                    android:lineSpacingExtra="@dimen/margin_16dp"
-                    android:text="Your next orderList is within \n2 hours 58 secend"
-                    android:textColor="@color/colorWhite"
-                    android:textSize="@dimen/regular_text_size"
-                    android:paddingBottom="@dimen/margin_16dp"
-                    android:textStyle="bold"/>
+        </RelativeLayout>
 
 
-
-            </RelativeLayout>
-
-
-        </LinearLayout>
+    </LinearLayout>
 
 </RelativeLayout>

@@ -9,30 +9,35 @@
     android:clipToPadding="false"
     tools:context="com.example.mdjahirulislam.doobbi.view.priceList.PriceListActivity">
 
-    <android.support.design.widget.TabLayout
-        android:id="@+id/price_list_tab_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/home_icon_margin"
-        android:textAlignment="center"
-        app:tabBackground="@color/colorBackgroundDarkAss"
-        app:tabGravity="fill"
-        app:tabIndicatorColor="@color/colorWhite"
-        app:tabIndicatorHeight="2dp"
-        app:tabMode="scrollable"
-        app:tabSelectedTextColor="@color/colorBlack"
-        app:tabTextColor="@color/colorBlack"
-        android:layout_marginBottom="@dimen/margin_6dp"
-        android:elevation="@dimen/margin_2dp"
-        />
+    <!--<android.support.design.widget.TabLayout-->
+        <!--android:id="@+id/price_list_tab_layout"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="@dimen/home_icon_margin"-->
+        <!--android:textAlignment="center"-->
+        <!--app:tabBackground="@color/colorBackgroundDarkAss"-->
+        <!--app:tabGravity="fill"-->
+        <!--app:tabIndicatorColor="@color/colorWhite"-->
+        <!--app:tabIndicatorHeight="2dp"-->
+        <!--app:tabMode="scrollable"-->
+        <!--app:tabSelectedTextColor="@color/colorBlack"-->
+        <!--app:tabTextColor="@color/colorBlack"-->
+        <!--android:layout_marginBottom="@dimen/margin_6dp"-->
+        <!--android:elevation="@dimen/margin_2dp"-->
+        <!--/>-->
 
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/itemPriceListVP"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <!--<android.support.v4.view.ViewPager-->
+        <!--android:id="@+id/itemPriceListVP"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent">-->
 
 
-    </android.support.v4.view.ViewPager>
+    <!--</android.support.v4.view.ViewPager>-->
+
+    <include layout="@layout/single_item_price_list_design"></include>
+    <include layout="@layout/single_item_price_list_design"></include>
+    <include layout="@layout/single_item_price_list_design"></include>
+    <include layout="@layout/single_item_price_list_design"></include>
 
 </LinearLayout>

@@ -55,6 +55,7 @@ public class Functions {
     private static final String TAG = Functions.class.getSimpleName();
 
     public static final String _INTENT_FROM = "intentFrom";
+    public static final long _PROGRESS_TIME_IN_MILLISECOND = 2500;
     public static final String DEVELOPER_KEY = "AIzaSyAEDWZUfRgWp9s6mBy_MRZ5WNHudJneEn8";
     public static final String API_ACCESS_SUCCESS_CODE = "100";
     public static final String API_ACCESS_DENY_CODE = "000";
@@ -71,8 +72,10 @@ public class Functions {
     public static final String API_ACCESS_FUNCTION_GET_CATEGORY_ITEMS = "getcategoryitem";
     public static final String API_ACCESS_FUNCTION_GET_CATEGORY_ITEMS_PRICE = "getitemwiseprise";
     public static final String API_ACCESS_FUNCTION_INSERT_ORDER_LIST = "customerorder";
+    public static final String API_ACCESS_FUNCTION_GET_TEMPORARY_ORDER_LIST = "getcustomerorder";
 
     public static String BASE_URL = "http://transparentgroup.net/services/services/";
+    public static String _IMAGE_BASE_URL = "http://transparentgroup.net/services/services/";
 
     public static final int[] tabIconsWhite = {
             R.drawable.ic_tab_man_white,
@@ -95,8 +98,8 @@ public class Functions {
     };
 
 
-//    public static final String[] tabNames = {"No Data"};
-    public static ArrayList<String> tabNames = new ArrayList<>(  );
+    //    public static final String[] tabNames = {"No Data"};
+    public static ArrayList<String> tabNames = new ArrayList<>();
 
 
     public static Retrofit getRetrofit() {
@@ -104,8 +107,8 @@ public class Functions {
 //        Gson gson = new GsonBuilder().setLenient().create();
 
         return new Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl( BASE_URL )
+                .addConverterFactory( GsonConverterFactory.create() )
                 .build();
     }
 
@@ -121,9 +124,9 @@ public class Functions {
     public static String convertDate(long inputDate) {
 //        SimpleDateFormat simpleDateFormat = new SimpleDateFormat( "yyyy-MM-dd hh:mm:ss" );
 
-        SimpleDateFormat convetDateFormat = new SimpleDateFormat( "dd MMMM, yyyy" );
+        SimpleDateFormat convertDateFormat = new SimpleDateFormat( "dd MMMM, yyyy" );
 
-        return convetDateFormat.format( inputDate );
+        return convertDateFormat.format( inputDate );
     }
 
 
@@ -150,6 +153,47 @@ public class Functions {
 
 
         return dayFromDate;
+    }
+
+    public static String getDateFromCreatedAt(String createAt) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat( "yyyy-MM-dd hh:mm:ss" );
+
+        Date date = null;
+        try {
+            date = simpleDateFormat.parse( createAt );
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
+        if (date == null) {
+            return "";
+        }
+
+        SimpleDateFormat convetDateFormat = new SimpleDateFormat( "dd MMM, yyyy" );
+
+        return convetDateFormat.format( date );
+
+    }
+
+    public static String getTimeFromCreatedAt(String createAt) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat( "yyyy-MM-dd hh:mm:ss" );
+
+        Date date = null;
+        try {
+            date = simpleDateFormat.parse( createAt );
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
+        if (date == null) {
+            return "";
+        }
+
+        SimpleDateFormat convertDateFormat = new SimpleDateFormat( "hh:mm a" );
+
+        return convertDateFormat.format( date );
     }
 
     public static String convertDayFromDMY(String inputDate) { // DMY= Day Month Year   2018-04-14
@@ -203,7 +247,7 @@ public class Functions {
                 Address obj = addresses.get( 0 );
                 String addressLine = obj.getAddressLine( 0 );
                 String add = obj.getCountryName();
-                add = add + "\n" + obj.getAddressLine(1);
+                add = add + "\n" + obj.getAddressLine( 1 );
                 add = add + "\n" + obj.getCountryCode();
                 add = add + "\n" + obj.getCountryCode();
                 add = add + "\n" + obj.getCountryCode();
@@ -290,7 +334,7 @@ public class Functions {
         alertDialogBuilder.setCancelable( false );
 
         alertDialog = alertDialogBuilder.create();
-        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.setCanceledOnTouchOutside( false );
 
 
         progressBar = (CircleProgressBar) promptsView.findViewById( R.id.custom_progress );
@@ -301,23 +345,28 @@ public class Functions {
         if (!alertDialog.isShowing()) {
             simulateProgress();
             Log.d( TAG, "showDialog: Yes" );
-        }else {
-            Log.d( TAG, "showDialog: No " +alertDialog.isShowing());
+        } else {
+            Log.d( TAG, "showDialog: No " + alertDialog.isShowing() );
         }
 
     }
 
     public static void hideDialog() {
-        if (alertDialog.isShowing()) {
-            alertDialog.dismiss();
-            Log.d( TAG, "hideDialog: Yes" );
-        }else {
-            Log.d( TAG, "hideDialog: No " +alertDialog.isShowing());
+        try {
+            if (alertDialog.isShowing()) {
+                alertDialog.dismiss();
+                Log.d( TAG, "hideDialog: Yes" );
+            } else {
+                Log.d( TAG, "hideDialog: No " + alertDialog.isShowing() );
+            }
+        }catch (Exception e){
+            Log.d( TAG, "hideDialog: " +e.getLocalizedMessage());
         }
+
     }
 
     public static void simulateProgress() {
-        Log.d( "Static_Function", "simulateProgress: " );
+        Log.d( TAG, "simulateProgress: " );
         alertDialog.show();
         progressBar.setVisibility( View.VISIBLE );
         ValueAnimator animator = ValueAnimator.ofInt( 0, 100 );
@@ -354,10 +403,10 @@ public class Functions {
         TelephonyManager tMgr = (TelephonyManager) context.getSystemService( Context.TELEPHONY_SERVICE );
         if (
                 ActivityCompat.checkSelfPermission( context, Manifest.permission.READ_PHONE_STATE ) != PackageManager.PERMISSION_GRANTED ||
-                ActivityCompat.checkSelfPermission( context, Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED ||
-                ActivityCompat.checkSelfPermission( context, Manifest.permission.CAMERA ) != MockPackageManager.PERMISSION_GRANTED ||
-                ActivityCompat.checkSelfPermission( context, Manifest.permission.READ_EXTERNAL_STORAGE ) != MockPackageManager.PERMISSION_GRANTED ||
-                ActivityCompat.checkSelfPermission( context, Manifest.permission.WRITE_EXTERNAL_STORAGE ) != MockPackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.checkSelfPermission( context, Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED ||
+                        ActivityCompat.checkSelfPermission( context, Manifest.permission.CAMERA ) != MockPackageManager.PERMISSION_GRANTED ||
+                        ActivityCompat.checkSelfPermission( context, Manifest.permission.READ_EXTERNAL_STORAGE ) != MockPackageManager.PERMISSION_GRANTED ||
+                        ActivityCompat.checkSelfPermission( context, Manifest.permission.WRITE_EXTERNAL_STORAGE ) != MockPackageManager.PERMISSION_GRANTED) {
             Log.d( TAG, "getMyPhoneNO: if " );
             ActivityCompat.requestPermissions( activity, new String[]{
                     Manifest.permission.READ_SMS,
@@ -366,10 +415,10 @@ public class Functions {
                     Manifest.permission.ACCESS_FINE_LOCATION,
                     Manifest.permission.CAMERA,
                     Manifest.permission.READ_EXTERNAL_STORAGE,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE},100 );
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE}, 100 );
             return " ";
 
-        }else {
+        } else {
             String mPhoneNumber = tMgr.getLine1Number();
 //            Log.d( TAG, "getMyPhoneNO: 0---> " +tMgr.getNetworkType());
 //            Log.d( TAG, "getMyPhoneNO: 1---> " +tMgr.getPhoneType());
@@ -379,7 +428,7 @@ public class Functions {
 //            Log.d( TAG, "getMyPhoneNO: 5---> " +tMgr.);
 //            Log.d( TAG, "getMyPhoneNO: 6---> " +tMgr.);
 
-            Log.d( TAG, "getMyPhoneNO: else"+mPhoneNumber );
+            Log.d( TAG, "getMyPhoneNO: else" + mPhoneNumber );
             return mPhoneNumber;
         }
 
@@ -413,7 +462,7 @@ public class Functions {
         animator.setDuration( animationSpeed );
         animator.addUpdateListener( new ValueAnimator.AnimatorUpdateListener() {
             public void onAnimationUpdate(ValueAnimator animation) {
-                textView.setText( firstMessage + animation.getAnimatedValue().toString() +secondMessage);
+                textView.setText( firstMessage + animation.getAnimatedValue().toString() + secondMessage );
             }
         } );
         animator.start();
@@ -421,9 +470,21 @@ public class Functions {
     }
 
 
+    public static class ProgressThread extends Thread {
 
+        public void run() {
 
+            try {
+                Log.d( TAG, "run: progress thread" );
+                Thread.sleep( _PROGRESS_TIME_IN_MILLISECOND );
+            } catch (InterruptedException e) {
 
+            } finally {
+                hideDialog();
+            }
+        }
+
+    }
 
 
 }

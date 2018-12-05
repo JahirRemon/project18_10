@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.mdjahirulislam.doobbi.R;
 import com.example.mdjahirulislam.doobbi.controller.adapter.SelectedCategoryItemPriceAdapter;
@@ -20,11 +21,12 @@ import com.example.mdjahirulislam.doobbi.controller.helper.DBFunctions;
 import com.example.mdjahirulislam.doobbi.controller.helper.Functions;
 import com.example.mdjahirulislam.doobbi.controller.helper.SessionManager;
 import com.example.mdjahirulislam.doobbi.model.CategoryItemsModel;
-import com.example.mdjahirulislam.doobbi.model.responseModel.GetTadItemResponseModel;
-
 import java.util.ArrayList;
 
 import io.realm.Realm;
+
+import static com.example.mdjahirulislam.doobbi.controller.helper.Functions._PROGRESS_TIME_IN_MILLISECOND;
+import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.hideDialog;
 
 public class SelectItemActivity extends AppCompatActivity implements SelectedCategoryItemPriceAdapter.OnTotalPriceListener {
 
@@ -39,7 +41,7 @@ public class SelectItemActivity extends AppCompatActivity implements SelectedCat
     private ConnectionAPI connectionApi;
     private ArrayList<String> tabNameList;
     private ArrayList<String> tabIdList;
-    private GetTadItemResponseModel tadItemResponseModel;
+    private int position;
     private ArrayList<CategoryItemsModel> items;
     private Realm mRealm;
 
@@ -69,9 +71,19 @@ public class SelectItemActivity extends AppCompatActivity implements SelectedCat
 
 
     @Override
+    protected void onResume() {
+        super.onResume();
+//        Functions.hideDialog();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_select_item );
+        Functions.ProgressDialog( this );
+        Functions.showDialog();
+        Thread progressThread = new Thread(new Functions.ProgressThread( ));
+        progressThread.start();
 
 //        for back button on action bar
         getSupportActionBar().setDisplayHomeAsUpEnabled( true );
@@ -79,7 +91,7 @@ public class SelectItemActivity extends AppCompatActivity implements SelectedCat
         connectionApi = Functions.getRetrofit().create( ConnectionAPI.class );
         tabNameList = new ArrayList<>();
         tabIdList = new ArrayList<>();
-
+        position = getIntent().getIntExtra( "position", 0 );
         items = (ArrayList<CategoryItemsModel>) getIntent().getSerializableExtra( "itemsModel" );
         mRealm = Realm.getDefaultInstance();
 
@@ -91,19 +103,26 @@ public class SelectItemActivity extends AppCompatActivity implements SelectedCat
 
         tabLayout = (TabLayout) findViewById( R.id.select_category_tab_layout );
         tabLayout.setupWithViewPager( viewPager );
+        if (items.size() > 4) {
+            tabLayout.setTabMode( TabLayout.MODE_SCROLLABLE );
+        } else {
+            tabLayout.setTabMode( TabLayout.MODE_FIXED );
+        }
         for (int i = 0; i < items.size(); i++) {
             tabNameList.add( items.get( i ).getItemName() );
             tabIdList.add( items.get( i ).getItemId() );
         }
-//        Functions.ProgressDialog( this );
-//        Functions.showDialog();
+
+
         tabPageAdapter = new TabPageAdapter( this, getSupportFragmentManager(), tabNameList, tabIdList, 1 );
         viewPager.setAdapter( tabPageAdapter );
 
-        tabLayout.setupWithViewPager( viewPager );
+//        tabLayout.setupWithViewPager( viewPager );
 
         totalPrice = DBFunctions.getAllOrderHistoryTotalPrice();
-        totalPriceTV.setText( String.valueOf( totalPrice ) );
+        totalPriceTV.setText( "Tk. " + String.valueOf( totalPrice ) + ".00" );
+
+        viewPager.setCurrentItem( position );
 
 
         tabLayout.setOnTabSelectedListener( new TabLayout.OnTabSelectedListener() {
@@ -213,8 +232,22 @@ public class SelectItemActivity extends AppCompatActivity implements SelectedCat
     public void setPrice() {
 //                    totalPriceTV.setText( "Interface - Tk. "+ String.valueOf( DBFunctions.getAllOrderHistoryTotalPrice() ) );
 
-        Functions.setAnimationNumber( totalPriceTV,"Total Tk. ",totalPrice,DBFunctions.getAllOrderHistoryTotalPrice(),"",1000 );
+        Functions.setAnimationNumber( totalPriceTV, "Total Tk. ", totalPrice, DBFunctions.getAllOrderHistoryTotalPrice(), ".00", 1000 );
     }
 
+    public static class ProgressThread extends Thread {
+        public void run() {
+
+            try {
+                Log.d( TAG, "run: progress thread" );
+                Thread.sleep( 2000 );
+            } catch (InterruptedException e) {
+
+            } finally {
+                hideDialog();
+            }
+        }
+
+    }
 
 }

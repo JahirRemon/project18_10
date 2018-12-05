@@ -62,7 +62,7 @@ public class PriceListActivity extends AppCompatActivity {
 
         connectionApi = Functions.getRetrofit().create( ConnectionAPI.class );
 
-        getItemWisePriceThread = new Thread( new GetItemWisePriceThread() );
+//        getItemWisePriceThread = new Thread( new GetItemWisePriceThread() );
         itemIdList = new ArrayList<>(  );
         itemNameList = new ArrayList<>(  );
 
@@ -83,16 +83,16 @@ public class PriceListActivity extends AppCompatActivity {
             Log.d( TAG, "onCreate: finally " + Thread.currentThread().isAlive() );
         }
 
-        viewPager = (ViewPager) findViewById( R.id.itemPriceListVP );
-        setupViewPager( viewPager );
-
-        tabLayout = (TabLayout) findViewById( R.id.price_list_tab_layout );
-        tabLayout.setupWithViewPager( viewPager );
+//        viewPager = (ViewPager) findViewById( R.id.itemPriceListVP );
+//        setupViewPager( viewPager );
+//
+//        tabLayout = (TabLayout) findViewById( R.id.price_list_tab_layout );
+//        tabLayout.setupWithViewPager( viewPager );
 
 //        tabPageAdapter = new TabPageAdapter( this, getSupportFragmentManager(),tabNames,2 );
 //        viewPager.setAdapter( tabPageAdapter );
 
-        tabLayout.setupWithViewPager( viewPager );
+//        tabLayout.setupWithViewPager( viewPager );
 
 //        tab text color change
 //        tabLayout.setTabTextColors(Color.parseColor("#000000"), Color.parseColor("#ffffff"));
@@ -104,65 +104,65 @@ public class PriceListActivity extends AppCompatActivity {
 //        tabIconsWhite = Functions.tabIconsWhite;
 //        tabIconsAss = Functions.tabIconsAss;
 
-        tabLayout.setOnTabSelectedListener( new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                int position = tab.getPosition();
-
-                switch (position) {
-                    case 0:
-                        tabLayout.getTabAt( position ).setIcon( tabIconsWhite[position] );
-//                        tabLayout.setTabTextColors(R.color.colorBlack,R.color.colorWhite);
-
-                        break;
-                    case 1:
-                        tabLayout.getTabAt( position ).setIcon( tabIconsWhite[position] );
-                        break;
-                    case 2:
-                        tabLayout.getTabAt( position ).setIcon( tabIconsWhite[position] );
-                        break;
-                    case 3:
-                        tabLayout.getTabAt( position ).setIcon( tabIconsWhite[position] );
-                        break;
-                    case 4:
-                        tabLayout.getTabAt( position ).setIcon( tabIconsWhite[position] );
-                        break;
-                }
-
-
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-                int position = tab.getPosition();
-
-                switch (position) {
-                    case 0:
-                        tabLayout.getTabAt( position ).setIcon( tabIconsAss[position] );
-                        break;
-                    case 1:
-                        tabLayout.getTabAt( position ).setIcon( tabIconsAss[position] );
-                        break;
-                    case 2:
-                        tabLayout.getTabAt( position ).setIcon( tabIconsAss[position] );
-                        break;
-                    case 3:
-                        tabLayout.getTabAt( position ).setIcon( tabIconsAss[position] );
-                        break;
-
-                    case 4:
-                        tabLayout.getTabAt( position ).setIcon( tabIconsAss[position] );
-                        break;
-                }
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        } );
+//        tabLayout.setOnTabSelectedListener( new TabLayout.OnTabSelectedListener() {
+//            @Override
+//            public void onTabSelected(TabLayout.Tab tab) {
+//                int position = tab.getPosition();
+//
+//                switch (position) {
+//                    case 0:
+//                        tabLayout.getTabAt( position ).setIcon( tabIconsWhite[position] );
+////                        tabLayout.setTabTextColors(R.color.colorBlack,R.color.colorWhite);
+//
+//                        break;
+//                    case 1:
+//                        tabLayout.getTabAt( position ).setIcon( tabIconsWhite[position] );
+//                        break;
+//                    case 2:
+//                        tabLayout.getTabAt( position ).setIcon( tabIconsWhite[position] );
+//                        break;
+//                    case 3:
+//                        tabLayout.getTabAt( position ).setIcon( tabIconsWhite[position] );
+//                        break;
+//                    case 4:
+//                        tabLayout.getTabAt( position ).setIcon( tabIconsWhite[position] );
+//                        break;
+//                }
+//
+//
+//            }
+//
+//            @Override
+//            public void onTabUnselected(TabLayout.Tab tab) {
+//
+//                int position = tab.getPosition();
+//
+//                switch (position) {
+//                    case 0:
+//                        tabLayout.getTabAt( position ).setIcon( tabIconsAss[position] );
+//                        break;
+//                    case 1:
+//                        tabLayout.getTabAt( position ).setIcon( tabIconsAss[position] );
+//                        break;
+//                    case 2:
+//                        tabLayout.getTabAt( position ).setIcon( tabIconsAss[position] );
+//                        break;
+//                    case 3:
+//                        tabLayout.getTabAt( position ).setIcon( tabIconsAss[position] );
+//                        break;
+//
+//                    case 4:
+//                        tabLayout.getTabAt( position ).setIcon( tabIconsAss[position] );
+//                        break;
+//                }
+//
+//            }
+//
+//            @Override
+//            public void onTabReselected(TabLayout.Tab tab) {
+//
+//            }
+//        } );
 
 
     }
@@ -204,74 +204,74 @@ public class PriceListActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    class GetItemWisePriceThread implements Runnable {
-        public void run() {
-            Log.d( TAG, "run: thread is running..." );
-            Log.d( TAG, "run: "+Thread.currentThread().isAlive() );
-
-            RequestBody password = RequestBody.create( MultipartBody.FORM, API_ACCESS_PASSWORD );
-            RequestBody user = RequestBody.create( MultipartBody.FORM, API_ACCESS_ID );
-            RequestBody itemID = RequestBody.create( MultipartBody.FORM, API_ACCESS_ID );
-            RequestBody function = RequestBody.create( MultipartBody.FORM, API_ACCESS_FUNCTION_GET_CATEGORY );
-
-//                Log.d( TAG, "run: data: " + phone + "\ndataModel: " + userPhone );
-
-            final Call<GetItemWisePriceResponseModel> insertUserResponseModelCallBack = connectionApi.getCategoryItemWisePrice( password, user,itemID,
-                    function );
-
-
-            itemNameList.clear();
-            itemIdList.clear();
-            insertUserResponseModelCallBack.enqueue( new Callback<GetItemWisePriceResponseModel>() {
-                @Override
-                public void onResponse(Call<GetItemWisePriceResponseModel> call, Response<GetItemWisePriceResponseModel> response) {
-                    if (response.code() == 200) {
-                        priceResponseModel = response.body();
-                        String status = priceResponseModel.getStatus();
-                        Log.d( TAG, "Status : " + priceResponseModel.toString() );
-                        // deny code is 100
-                        if (status.equalsIgnoreCase( API_ACCESS_SUCCESS_CODE )) { // Status success code = 100
-
-                            for (int i = 0; i < priceResponseModel.getItem().size(); i++) {
-                                itemNameList.add( priceResponseModel.getItem().get( i ).getServiceName() );
-                                itemIdList.add( priceResponseModel.getItem().get( i ).getPriceId() );
-                            }
-
-                            tabPageAdapter = new TabPageAdapter( PriceListActivity.this, getSupportFragmentManager(), itemNameList,itemIdList, 2 );
-                            viewPager.setAdapter( tabPageAdapter );
-
-                        }
-                        // deny code is 101
-                        else if (status.equalsIgnoreCase( NO_USER_FOUND_CODE )) {
-                            String error_msg = priceResponseModel.getDetail();
-                            Log.d( TAG, "onResponse: " + error_msg );
-                        } else {
-                            Log.d( TAG, "onResponse: Some Is Wrong" );
-                        }
-
-
-                    } else {
-//                    Toast.makeText(context, "Server Error", Toast.LENGTH_SHORT).show();
-                        Log.d( TAG, "onResponse: Server Error response.code ===> " + response.code() );
-                    }
-                    Log.d( TAG, "onResponse: " + response.body() + " \n\n" + response.raw() + " \n\n" + response.toString() + " \n\n" + response.errorBody() );
-                    hideDialog();
-
-
-                }
-
-                @Override
-                public void onFailure(Call<GetItemWisePriceResponseModel> call, Throwable t) {
-
-                    Log.d( TAG, "onFailure: " + t.getLocalizedMessage() );
-                    Log.d( TAG, "onFailure: " + t.toString() );
-                    Log.d( TAG, "onFailure: " + t.getMessage() );
-                    hideDialog();
-
-                }
-            } );
-
-        }
-    }
+//    class GetItemWisePriceThread implements Runnable {
+//        public void run() {
+//            Log.d( TAG, "run: thread is running..." );
+//            Log.d( TAG, "run: "+Thread.currentThread().isAlive() );
+//
+//            RequestBody password = RequestBody.create( MultipartBody.FORM, API_ACCESS_PASSWORD );
+//            RequestBody user = RequestBody.create( MultipartBody.FORM, API_ACCESS_ID );
+//            RequestBody itemID = RequestBody.create( MultipartBody.FORM, API_ACCESS_ID );
+//            RequestBody function = RequestBody.create( MultipartBody.FORM, API_ACCESS_FUNCTION_GET_CATEGORY );
+//
+////                Log.d( TAG, "run: data: " + phone + "\ndataModel: " + userPhone );
+//
+//            final Call<GetItemWisePriceResponseModel> insertUserResponseModelCallBack = connectionApi.getCategoryItemWisePrice( password, user,itemID,
+//                    function );
+//
+//
+//            itemNameList.clear();
+//            itemIdList.clear();
+//            insertUserResponseModelCallBack.enqueue( new Callback<GetItemWisePriceResponseModel>() {
+//                @Override
+//                public void onResponse(Call<GetItemWisePriceResponseModel> call, Response<GetItemWisePriceResponseModel> response) {
+//                    if (response.code() == 200) {
+//                        priceResponseModel = response.body();
+//                        String status = priceResponseModel.getStatus();
+//                        Log.d( TAG, "Status : " + priceResponseModel.toString() );
+//                        // deny code is 100
+//                        if (status.equalsIgnoreCase( API_ACCESS_SUCCESS_CODE )) { // Status success code = 100
+//
+//                            for (int i = 0; i < priceResponseModel.getItem().size(); i++) {
+//                                itemNameList.add( priceResponseModel.getItem().get( i ).getServiceName() );
+//                                itemIdList.add( priceResponseModel.getItem().get( i ).getPriceId() );
+//                            }
+//
+//                            tabPageAdapter = new TabPageAdapter( PriceListActivity.this, getSupportFragmentManager(), itemNameList,itemIdList, 2 );
+//                            viewPager.setAdapter( tabPageAdapter );
+//
+//                        }
+//                        // deny code is 101
+//                        else if (status.equalsIgnoreCase( NO_USER_FOUND_CODE )) {
+//                            String error_msg = priceResponseModel.getDetail();
+//                            Log.d( TAG, "onResponse: " + error_msg );
+//                        } else {
+//                            Log.d( TAG, "onResponse: Some Is Wrong" );
+//                        }
+//
+//
+//                    } else {
+////                    Toast.makeText(context, "Server Error", Toast.LENGTH_SHORT).show();
+//                        Log.d( TAG, "onResponse: Server Error response.code ===> " + response.code() );
+//                    }
+//                    Log.d( TAG, "onResponse: " + response.body() + " \n\n" + response.raw() + " \n\n" + response.toString() + " \n\n" + response.errorBody() );
+//                    hideDialog();
+//
+//
+//                }
+//
+//                @Override
+//                public void onFailure(Call<GetItemWisePriceResponseModel> call, Throwable t) {
+//
+//                    Log.d( TAG, "onFailure: " + t.getLocalizedMessage() );
+//                    Log.d( TAG, "onFailure: " + t.toString() );
+//                    Log.d( TAG, "onFailure: " + t.getMessage() );
+//                    hideDialog();
+//
+//                }
+//            } );
+//
+//        }
+//    }
 
 }

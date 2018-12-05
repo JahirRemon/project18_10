@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,6 +21,7 @@ import com.example.mdjahirulislam.doobbi.controller.requestThread.InsertOrderLis
 import com.example.mdjahirulislam.doobbi.model.requestModel.InsertOrderDataModel;
 import com.example.mdjahirulislam.doobbi.model.requestModel.InsertOrderHistoryDBModel;
 import com.example.mdjahirulislam.doobbi.model.requestModel.InsertUserDataModel;
+import com.example.mdjahirulislam.doobbi.view.HomeActivity;
 import com.example.mdjahirulislam.doobbi.view.authentication.LoginActivity;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
@@ -81,42 +83,39 @@ public class OrderSummaryActivity extends AppCompatActivity implements OrderList
         setContentView( R.layout.activity_order_summary );
         initialization();
         orderItemHistoryList.clear();
+        //        for back button on action bar
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         startPrice = DBFunctions.getAllOrderHistoryTotalPrice();
         startQuantity = DBFunctions.getAllOrderHistoryTotalItems();
 
         totalQuantityTV.setText( "Total " + String.valueOf( startQuantity ) + " Items" );
-        totalPriceTV.setText( "Total Tk. " + String.valueOf( startPrice ) );
+        totalPriceTV.setText( "Total Tk. " + String.valueOf( startPrice )+".00" );
 
         LinearLayoutManager mLayoutManager = new LinearLayoutManager( this );
 
 
         InsertUserDataModel getUserDetails = mRealm.where( InsertUserDataModel.class ).findFirst();
         RealmResults<InsertOrderHistoryDBModel> results = mRealm.where( InsertOrderHistoryDBModel.class ).findAll();
+        for (int i = 0; i < results.size(); i++) {
+            orderItemHistoryList.add( results.get( i ) );
+            Log.d( TAG, "onCreate: model--->" + results.toString() );
+            totalQuantity += Integer.parseInt( results.get( i ).getItemQuantity() );
 
+        }
         try {
-            if (results.size() > 0) {
-                if (Integer.parseInt( results.get( 0 ).getItemQuantity() ) > 0) {
+            if (totalQuantity > 0) {
                     orderListRV.setVisibility( View.VISIBLE );
                     orderListNotFoundTV.setVisibility( View.GONE );
                     mRealm.beginTransaction();
 
                     Log.d( TAG, "onCreate: size---> " + results.size() );
-                    for (int i = 0; i < results.size(); i++) {
-                        orderItemHistoryList.add( results.get( i ) );
-                        Log.d( TAG, "onCreate: model--->" + results.toString() );
-                        totalQuantity += Integer.parseInt( results.get( i ).getItemQuantity() );
 
-                    }
                     mRealm.commitTransaction();
 
                     mAdapter = new OrderListSummaryAdapter( this, orderItemHistoryList, this );
                     orderListRV.setLayoutManager( mLayoutManager );
                     orderListRV.setAdapter( mAdapter );
-                } else {
-                    orderListRV.setVisibility( View.GONE );
-                    orderListNotFoundTV.setVisibility( View.VISIBLE );
 
-                }
             } else {
                 orderListRV.setVisibility( View.GONE );
                 orderListNotFoundTV.setVisibility( View.VISIBLE );
@@ -168,7 +167,7 @@ public class OrderSummaryActivity extends AppCompatActivity implements OrderList
 
     @Override
     public void setPrice() {
-        Functions.setAnimationNumber( totalPriceTV, "Total Tk. ", startPrice, DBFunctions.getAllOrderHistoryTotalPrice(), "", 1000 );
+        Functions.setAnimationNumber( totalPriceTV, "Total Tk. ", startPrice, DBFunctions.getAllOrderHistoryTotalPrice(), ".00", 1000 );
 
     }
 
@@ -178,5 +177,14 @@ public class OrderSummaryActivity extends AppCompatActivity implements OrderList
         Functions.setAnimationNumber( totalQuantityTV, "Total ", startQuantity, lastQuantity, " Items", 100 );
 
 
+    }
+
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        // app icon in action bar clicked; goto parent activity.
+        this.finish();
+        return super.onOptionsItemSelected(item);
     }
 }

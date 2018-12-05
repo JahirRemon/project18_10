@@ -37,6 +37,7 @@ public  class DBFunctions {
         mRealm.beginTransaction();
         updateModel.setUserID( model.getUserID() );
         updateModel.setItemID( model.getItemID() );
+        updateModel.setItemName( model.getItemName() );
         updateModel.setServiceID( model.getServiceID() );
         updateModel.setServiceName( model.getServiceName() );
         updateModel.setItemQuantity( model.getItemQuantity() );

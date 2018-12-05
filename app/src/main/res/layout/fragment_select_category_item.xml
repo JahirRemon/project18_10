@@ -21,8 +21,8 @@
 
 
         <RelativeLayout
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="85dp"
+            android:layout_height="85dp"
             android:layout_alignParentRight="true">
 
             <ImageView
@@ -35,15 +35,15 @@
 
 
             <TextView
-                android:id="@+id/singleItemPriceTagTV"
+                android:id="@+id/fragmentSelectedItemPriceTagTV"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
-                android:paddingLeft="6dp"
+                android:paddingLeft="8dp"
                 android:paddingTop="0dp"
-                android:text="TK. 08"
+                android:text="TK.000.00"
                 android:textColor="@color/colorBlack"
-                android:textSize="14sp"
+                android:textSize="@dimen/regular_text_size"
                 android:textStyle="bold"/>
         </RelativeLayout>
 

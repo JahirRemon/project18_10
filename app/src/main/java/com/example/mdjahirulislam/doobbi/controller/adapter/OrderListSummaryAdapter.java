@@ -10,6 +10,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,6 +55,8 @@ public class OrderListSummaryAdapter extends RecyclerView.Adapter<OrderListSumma
         private TextView priceTV;
         private TextView totalPriceTV;
         private TextView itemType;
+        private LinearLayout mainView;
+        private ImageView zeroIV;
 
 
         public MyViewHolder(View view) {
@@ -65,6 +68,8 @@ public class OrderListSummaryAdapter extends RecyclerView.Adapter<OrderListSumma
             priceTV = view.findViewById( R.id.singlePriceTV );
             totalPriceTV = view.findViewById( R.id.singleTotalPriceTV );
             itemType = view.findViewById( R.id.singleItemTypeTV );
+            mainView = view.findViewById( R.id.singleOrderMainLL );
+            zeroIV = view.findViewById( R.id.singleOrderItemCloseIV );
         }
     }
 
@@ -102,12 +107,15 @@ public class OrderListSummaryAdapter extends RecyclerView.Adapter<OrderListSumma
         if (Integer.parseInt( item.getItemQuantity() ) != 0) {
             regularPrice = Integer.parseInt( item.getTotalPrice() ) / Integer.parseInt( item.getItemQuantity() );
             totalPrice[0] = regularPrice * quantity[0];
+            holder.mainView.setVisibility( View.VISIBLE );
+
         } else {
-            Toast.makeText( mContext, "No Item Selected", Toast.LENGTH_SHORT ).show();
+//            Toast.makeText( mContext, "No Item Selected", Toast.LENGTH_SHORT ).show();
+            holder.mainView.setVisibility( View.GONE );
         }
 
 
-        holder.itemType.setText( item.getServiceName() );
+        holder.itemType.setText( item.getItemName() + " - " + item.getServiceName() );
         holder.priceTV.setText( String.valueOf( regularPrice ) );
 
         mRealm.beginTransaction();
@@ -153,11 +161,7 @@ public class OrderListSummaryAdapter extends RecyclerView.Adapter<OrderListSumma
 
                             Log.d( TAG, "onTouch: is login? -->" + sessionManager.isLoggedIn() + "-----" +
                                     ">>>>> " + sessionManager.getUserId() );
-                            if (!sessionManager.isLoggedIn()) {
-                                Intent intent = new Intent( mContext, LoginActivity.class );
-                                intent.putExtra( _INTENT_FROM, OrderSummaryActivity.class.getSimpleName() );
-                                mContext.startActivity( intent );
-                            } else {
+
                                 quantity[0]++;
                                 totalPrice[0] = finalRegularPrice * quantity[0];
                                 holder.quantityTV.setText( String.valueOf( quantity[0] ) );
@@ -192,7 +196,7 @@ public class OrderListSummaryAdapter extends RecyclerView.Adapter<OrderListSumma
                                 }
                                 onTotalPriceAndQuantityListener.setPrice();
                                 onTotalPriceAndQuantityListener.setQuantity();
-                            }
+
 
                         }
                         break;
@@ -228,11 +232,6 @@ public class OrderListSummaryAdapter extends RecyclerView.Adapter<OrderListSumma
 
                             Log.d( TAG, "onTouch: is login? -->" + sessionManager.isLoggedIn() + "-----" +
                                     ">>>>> " + sessionManager.getUserId() );
-                            if (!sessionManager.isLoggedIn()) {
-                                Intent intent = new Intent( mContext, LoginActivity.class );
-                                intent.putExtra( _INTENT_FROM, OrderSummaryActivity.class.getSimpleName() );
-                                mContext.startActivity( intent );
-                            } else {
 
                                 if (quantity[0] > 0) {
                                     quantity[0]--;
@@ -271,7 +270,7 @@ public class OrderListSummaryAdapter extends RecyclerView.Adapter<OrderListSumma
                                 }
                                 onTotalPriceAndQuantityListener.setPrice();
                                 onTotalPriceAndQuantityListener.setQuantity();
-                            }
+
                         }
                         break;
                     case MotionEvent.ACTION_CANCEL:
@@ -286,6 +285,78 @@ public class OrderListSummaryAdapter extends RecyclerView.Adapter<OrderListSumma
                 return true;
             }
         } );
+
+
+        holder.zeroIV.setOnTouchListener( new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                float width = holder.zeroIV.getWidth();
+                float height = holder.zeroIV.getHeight();
+//                Log.d( TAG, "onTouch 1: classTimeLL ---> " + event.getAction() );
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        holder.zeroIV.setAlpha( 0.5f );
+//                        Log.d( TAG, "onTouch 2: classTimeLL ---> " + MotionEvent.ACTION_DOWN );
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        if (event.getX() < width && event.getY() < height && event.getY() > 0) {
+                            holder.zeroIV.setAlpha( 1.0f );
+
+                            Log.d( TAG, "onTouch: is login? -->" + sessionManager.isLoggedIn() + "-----" +
+                                    ">>>>> " + sessionManager.getUserId() );
+
+                                quantity[0] = 0;
+
+                                totalPrice[0] = finalRegularPrice * quantity[0];
+                                holder.quantityTV.setText( String.valueOf( quantity[0] ) );
+                                holder.totalPriceTV.setText( String.valueOf( totalPrice[0] ) );
+
+                                uniqueID = UUID.randomUUID().toString();
+
+                                RealmResults<InsertOrderHistoryDBModel> getResult = mRealm.where( InsertOrderHistoryDBModel.class )
+                                        .equalTo( "itemID", item.getItemID() )
+                                        .and().equalTo( "serviceID", item.getServiceID() )
+                                        .findAll();
+
+                                Log.d( TAG, "onResume: " + getResult.size() );
+
+
+                                insertOrderHistoryDBModel = new InsertOrderHistoryDBModel();
+                                insertOrderHistoryDBModel.setUserID( sessionManager.getUserId() );
+                                insertOrderHistoryDBModel.setItemID( item.getItemID() );
+                                insertOrderHistoryDBModel.setServiceID( item.getServiceID() );
+                                insertOrderHistoryDBModel.setItemQuantity( String.valueOf( quantity[0] ) );
+                                insertOrderHistoryDBModel.setTotalPrice( String.valueOf( totalPrice[0] ) );
+
+                                if (0 < getResult.size()) {
+                                    DBFunctions.updateOrderHistory( insertOrderHistoryDBModel, getResult.get( 0 ).get_id() );
+                                    Log.d( TAG, "onTouch: find serviceId----> update history---> " + insertOrderHistoryDBModel.toString() );
+
+                                } else {
+
+                                    Log.d( TAG, "onResume: id--> " + uniqueID + " \nData not found new data inset " + insertOrderHistoryDBModel.toString() );
+                                    DBFunctions.addOrderHistory( insertOrderHistoryDBModel, uniqueID );
+                                }
+                                onTotalPriceAndQuantityListener.setPrice();
+                                onTotalPriceAndQuantityListener.setQuantity();
+
+                        }
+                        break;
+                    case MotionEvent.ACTION_CANCEL:
+                        holder.zeroIV.setAlpha( 1.0f );
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        holder.zeroIV.setAlpha( 1.0f );
+                        break;
+                    default:
+                        break;
+                }
+                return true;
+            }
+        } );
+
+
     }
 
     @Override
