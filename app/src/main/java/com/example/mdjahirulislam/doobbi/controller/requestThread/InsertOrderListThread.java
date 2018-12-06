@@ -1,6 +1,7 @@
 package com.example.mdjahirulislam.doobbi.controller.requestThread;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -8,6 +9,7 @@ import com.example.mdjahirulislam.doobbi.controller.connectionInterface.Connecti
 import com.example.mdjahirulislam.doobbi.controller.helper.Functions;
 import com.example.mdjahirulislam.doobbi.model.requestModel.InsertOrderDataModel;
 import com.example.mdjahirulislam.doobbi.model.responseModel.InsertUserResponseModel;
+import com.example.mdjahirulislam.doobbi.view.schedule.ScheduleListActivity;
 
 import java.util.ArrayList;
 
@@ -72,8 +74,9 @@ public class InsertOrderListThread extends Thread {
                     String status = registrationResponseModel.getStatus().toString();
                     Log.d( TAG, "Status : " + status );
                     if (status.equalsIgnoreCase( API_ACCESS_SUCCESS_CODE )) {       //success code = 100
-//                        Intent myIntent = new Intent( context, HomeActivity.class );
-//                        context.startActivity( myIntent );
+                        Intent myIntent = new Intent( context, ScheduleListActivity.class );
+                        context.startActivity( myIntent );
+
                         Toast.makeText( context, "Order Insert Successful", Toast.LENGTH_SHORT ).show();
                     } else if (status.equalsIgnoreCase( API_ACCESS_DENY_CODE)) {
                         String error_msg = registrationResponseModel.getDetail();

@@ -105,6 +105,7 @@ public class SelectCategoryItemFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
         View view = inflater.inflate( R.layout.fragment_select_category_item, container, false );
 
@@ -155,6 +156,7 @@ public class SelectCategoryItemFragment extends Fragment {
 
 
     }
+
 
     class GetItemWisePriceThread implements Runnable {
         public void run() {
@@ -231,6 +233,17 @@ public class SelectCategoryItemFragment extends Fragment {
                 }
             } );
 
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (getItemWisePriceThread.isAlive()){
+            getItemWisePriceThread.interrupt();
+            Log.d( TAG,"threadIf" );
+        }else {
+            Log.d( TAG,"threadElse" );
         }
     }
 }

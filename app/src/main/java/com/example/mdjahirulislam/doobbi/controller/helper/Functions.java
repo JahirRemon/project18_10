@@ -54,6 +54,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class Functions {
     private static final String TAG = Functions.class.getSimpleName();
 
+    public static final int RESIZE_IMAGE_WIDTH = 600;
+    public static final int RESIZE_IMAGE_HEIGHT = 300;
     public static final String _INTENT_FROM = "intentFrom";
     public static final long _PROGRESS_TIME_IN_MILLISECOND = 2500;
     public static final String DEVELOPER_KEY = "AIzaSyAEDWZUfRgWp9s6mBy_MRZ5WNHudJneEn8";

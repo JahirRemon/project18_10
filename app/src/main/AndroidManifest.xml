@@ -4,12 +4,11 @@
           package="com.example.mdjahirulislam.doobbi">
 
     <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <uses-permission android:name="android.permission.READ_PHONE_NUMBERS"/>
     <uses-permission android:name="android.permission.READ_SMS"/>
-
 
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
@@ -119,13 +118,16 @@
             android:enabled="true"
             android:exported="true">
             <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
             </intent-filter>
         </receiver>
 
         <service
             android:name=".controller.helper.GPSTracker"
-            android:enabled="true" />
+            android:enabled="true"/>
+
+        <activity android:name=".view.order.OrderDetailsActivity">
+        </activity>
     </application>
 
 </manifest>

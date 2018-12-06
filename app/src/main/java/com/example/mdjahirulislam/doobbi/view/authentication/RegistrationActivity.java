@@ -67,6 +67,8 @@ import java.util.Calendar;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
+import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.RESIZE_IMAGE_HEIGHT;
+import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.RESIZE_IMAGE_WIDTH;
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.isEmpty;
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.setError;
 
@@ -79,8 +81,7 @@ public class RegistrationActivity extends AppCompatActivity implements OnMapRead
     private static final int REQUEST_CAMERA = 3;
     private static final int REQUEST_CODE_PERMISSION = 100;
     private static final String IMAGE_DIRECTORY = "/doobbi";
-    private static final int RESIZE_IMAGE_WIDTH = 600;
-    private static final int RESIZE_IMAGE_HEIGHT = 300;
+
 
     private boolean showPass = false;
     private boolean showRepeatPass = false;

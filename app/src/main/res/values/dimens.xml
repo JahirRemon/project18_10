@@ -11,7 +11,8 @@
     <dimen name="home_icon_margin">6dp</dimen>
     <dimen name="home_icon_margin_right">3dp</dimen>
     <dimen name="home_icon_margin_left">3dp</dimen>
-    <dimen name="regular_text_size" tools:ignore="MissingDefaultResource">18sp</dimen>
+    <dimen name="regular_text_size" tools:ignore="MissingDefaultResource">16sp</dimen>
+    <dimen name="semi_regular_text_size" tools:ignore="MissingDefaultResource">18sp</dimen>
     <dimen name="extra_large_text_size">36sp</dimen>
     <dimen name="large_text_size">22sp</dimen>
     <dimen name="small_text_size">14sp</dimen>
