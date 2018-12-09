@@ -6,9 +6,16 @@ import android.util.Log;
 
 import com.example.mdjahirulislam.doobbi.controller.connectionInterface.ConnectionAPI;
 import com.example.mdjahirulislam.doobbi.controller.helper.Functions;
+import com.example.mdjahirulislam.doobbi.controller.helper.SessionManager;
+import com.example.mdjahirulislam.doobbi.model.requestModel.InsertUserDataModel;
 import com.example.mdjahirulislam.doobbi.model.responseModel.GetUserDetailsResponseModel;
 import com.example.mdjahirulislam.doobbi.view.HomeActivity;
+import com.example.mdjahirulislam.doobbi.view.makeMyOrder.OrderHomeActivity;
+import com.example.mdjahirulislam.doobbi.view.makeMyOrder.OrderSummaryActivity;
+import com.example.mdjahirulislam.doobbi.view.makeMyOrder.SelectItemActivity;
+import com.example.mdjahirulislam.doobbi.view.order.OrderListActivity;
 
+import io.realm.Realm;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -24,18 +31,27 @@ import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.hide
 
 public class GetUserDetailsThread extends Thread {
 
-    private final String TAG = InsertNewUserThread.class.getSimpleName();
+    private final String TAG = GetUserDetailsThread.class.getSimpleName();
 
     private ConnectionAPI connectionApi;
     private Context context;
     private String userPhone;
     private GetUserDetailsResponseModel userDetailsResponseModel;
+    private SessionManager sessionManager;
+    private String from;
+    private Realm mRealm = null;
+    private InsertUserDataModel userDetailsModelDB;
 
 
-    public GetUserDetailsThread(Context context,String  userPhone) {
+
+
+    public GetUserDetailsThread(Context context,String  userPhone,String from) {
         this.context = context;
         connectionApi = Functions.getRetrofit().create( ConnectionAPI.class );
         this.userPhone  = userPhone;
+        sessionManager = new SessionManager(context);
+        this.from = from;
+        Log.d(TAG, "GetUserDetailsThread: phone: "+ userPhone);
     }
 
     @Override
@@ -61,8 +77,53 @@ public class GetUserDetailsThread extends Thread {
                     Log.d( TAG, "Status : " + status );
                     // deny code is 100
                     if (status.equalsIgnoreCase( API_ACCESS_SUCCESS_CODE )) {
-                        Intent myIntent = new Intent( context, HomeActivity.class );
-                        context.startActivity( myIntent );
+
+                        if (status.equalsIgnoreCase( API_ACCESS_SUCCESS_CODE )) { // Status success code = 100
+
+                            mRealm = Realm.getDefaultInstance();
+
+                            mRealm.beginTransaction();
+
+                            userDetailsModelDB = mRealm.createObject( InsertUserDataModel.class );
+                            userDetailsModelDB.setClint_id( userDetailsResponseModel.getCid() );
+                            userDetailsModelDB.setName( userDetailsResponseModel.getCustomerName() );
+                            userDetailsModelDB.setPhone( userDetailsResponseModel.getPhone() );
+                            userDetailsModelDB.setEmail( userDetailsResponseModel.getEmail() );
+                            userDetailsModelDB.setAddress( userDetailsResponseModel.getAddress() );
+                            userDetailsModelDB.setClint_image_path( userDetailsResponseModel.getFileLink() );
+
+                            mRealm.commitTransaction();
+
+
+                            sessionManager.setLogin( true );
+                            sessionManager.setUserID( userDetailsResponseModel.getCid() );
+
+
+                            Intent myIntent = new Intent();
+                            if (from.equalsIgnoreCase( HomeActivity.class.getSimpleName() )) {
+                                myIntent = new Intent( context, HomeActivity.class );
+
+                            }
+                            else if (from.equalsIgnoreCase( OrderHomeActivity.class.getSimpleName() )) {
+                                myIntent = new Intent( context, OrderHomeActivity.class );
+
+                            }
+                            else if (from.equalsIgnoreCase( SelectItemActivity.class.getSimpleName() )) {
+                                myIntent = new Intent( context, SelectItemActivity.class );
+
+                            }
+                            else if (from.equalsIgnoreCase( OrderSummaryActivity.class.getSimpleName() )) {
+                                myIntent = new Intent( context, OrderSummaryActivity.class );
+
+                            }else if (from.equalsIgnoreCase( OrderListActivity.class.getSimpleName() )) {
+                                myIntent = new Intent( context, OrderListActivity.class );
+
+                            }
+                            context.startActivity( myIntent );
+//                            finish();
+
+
+                        }
 
 
 

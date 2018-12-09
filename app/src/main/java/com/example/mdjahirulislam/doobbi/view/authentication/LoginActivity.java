@@ -72,9 +72,10 @@ public class LoginActivity extends AppCompatActivity {
         setContentView( R.layout.activity_login );
         initialization();
         from = getIntent().getStringExtra( _INTENT_FROM );
-        getUserDetailsThread = new GetUserDetailsThread( this, userPhone );
-
         userPhone = Functions.getMyPhoneNO( this );
+
+        getUserDetailsThread = new GetUserDetailsThread( this, userPhone,from );
+
         if (!userPhone.isEmpty()) {
             getUserDetailsThread.run();
             Functions.ProgressDialog( this );

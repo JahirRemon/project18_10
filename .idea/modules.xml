@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/IQ_Dhubi.iml" filepath="$PROJECT_DIR$/IQ_Dhubi.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/project18_10.iml" filepath="$PROJECT_DIR$/.idea/project18_10.iml" />
     </modules>
   </component>
 </project>
