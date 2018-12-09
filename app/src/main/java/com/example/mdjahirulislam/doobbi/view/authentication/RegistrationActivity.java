@@ -25,6 +25,7 @@ import android.test.mock.MockPackageManager;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -36,12 +37,15 @@ import android.widget.Toast;
 
 import com.example.mdjahirulislam.doobbi.R;
 import com.example.mdjahirulislam.doobbi.controller.helper.ConnectivityReceiver;
+import com.example.mdjahirulislam.doobbi.controller.helper.DBFunctions;
 import com.example.mdjahirulislam.doobbi.controller.helper.Functions;
 import com.example.mdjahirulislam.doobbi.controller.helper.GPSTracker;
 import com.example.mdjahirulislam.doobbi.controller.helper.MyApplication;
 import com.example.mdjahirulislam.doobbi.controller.requestThread.InsertNewUserPhotoThread;
 import com.example.mdjahirulislam.doobbi.controller.requestThread.InsertNewUserThread;
 import com.example.mdjahirulislam.doobbi.model.requestModel.InsertUserDataModel;
+import com.example.mdjahirulislam.doobbi.view.HomeActivity;
+import com.example.mdjahirulislam.doobbi.view.profile.ProfileViewActivity;
 import com.github.clans.fab.FloatingActionButton;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.AutocompleteFilter;
@@ -69,6 +73,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.RESIZE_IMAGE_HEIGHT;
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.RESIZE_IMAGE_WIDTH;
+import static com.example.mdjahirulislam.doobbi.controller.helper.Functions._INTENT_FROM;
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.isEmpty;
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.setError;
 
@@ -178,6 +183,15 @@ public class RegistrationActivity extends AppCompatActivity implements OnMapRead
 
             Log.d( TAG, "onCreate: " + Functions.getMyPhoneNO( this ) );
 
+            if (getIntent().getStringExtra(_INTENT_FROM).equalsIgnoreCase( ProfileViewActivity.class.getSimpleName()) ){
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                setUserInformation();
+                findViewById(R.id.reg_user_password_section).setVisibility(View.GONE);
+            }else {
+                findViewById(R.id.reg_user_password_section).setVisibility(View.VISIBLE);
+
+            }
+
 
             //test
 
@@ -188,6 +202,29 @@ public class RegistrationActivity extends AppCompatActivity implements OnMapRead
 
         }
 
+
+    }
+
+    private void setUserInformation() {
+        InsertUserDataModel userDataModel = DBFunctions.getUserInformation();
+
+        userNameET.setText(userDataModel.getName());
+        userMobileET.setText(userDataModel.getPhone());
+        userAnotherMobileET.setText(userDataModel.getAnother_phone());
+        userEmailET.setText(userDataModel.getEmail());
+        userAreaET.setText( userDataModel.getAddress());
+        userFlatET.setText( userDataModel.getFlat_no());
+        userHouseET.setText(userDataModel.getHouse_no());
+        userRoadNoET.setText(userDataModel.getRoad_no());
+        Picasso
+                .get()
+                .load(Functions._IMAGE_BASE_URL + userDataModel.getClint_image_path())
+                .resize(RESIZE_IMAGE_WIDTH, RESIZE_IMAGE_HEIGHT) // resizes the image to these dimensions (in pixel)
+                .centerCrop()
+                .placeholder(R.drawable.nobody)
+                .into(userProfilePictureIV);
+        latitude = Double.parseDouble(userDataModel.getLatitude());
+        longitude = Double.parseDouble(userDataModel.getLongitude());
 
     }
 
@@ -212,12 +249,10 @@ public class RegistrationActivity extends AppCompatActivity implements OnMapRead
             latitude = gps.getLatitude();
             longitude = gps.getLongitude();
             userAreaET.setText( String.valueOf( Functions.getAddress( RegistrationActivity.this, latitude, longitude ) ) );
+            userRoadNoET.setText( String.valueOf( Functions.getRoadNo( RegistrationActivity.this, latitude, longitude ) ) );
 
             mapFragment.getMapAsync( this );
 
-            // \n is for new line
-//            Toast.makeText(getApplicationContext(), "Your Location is - \nLat: "
-//                    + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
         } else {
             // can't get location
             // GPS or Network is not enabled
@@ -238,60 +273,67 @@ public class RegistrationActivity extends AppCompatActivity implements OnMapRead
 
     public void goToScheduleListActivityFromRegistrationActivity(View view) {
 
-        if (isEmpty( userNameET )) {
-            setError( userNameET, "Required Field" );
-        } else if (isEmpty( userMobileET )) {
-            setError( userMobileET, "Required Field" );
-        } else if (isEmpty( userEmailET )) {
-            setError( userEmailET, "Required Field" );
-        } else if (isEmpty( userAreaET )) {
-            setError( userAreaET, "Required Field" );
-        } else if (isEmpty( userFlatET )) {
-            setError( userFlatET, "Required Field" );
-        } else if (isEmpty( userHouseET )) {
-            setError( userHouseET, "Required Field" );
-        } else if (isEmpty( userRoadNoET )) {
-            setError( userRoadNoET, "Required Field" );
-        } else if (isEmpty( userPassword )) {
-            setError( userPassword, "Required Field" );
-        } else if (isEmpty( userRepeatPassword )) {
-            setError( userRepeatPassword, "Required Field" );
-        } else
+        if (isEmpty(userNameET)) {
+            setError(userNameET, "Required Field");
+        } else if (isEmpty(userMobileET)) {
+            setError(userMobileET, "Required Field");
+        } else if (isEmpty(userEmailET)) {
+            setError(userEmailET, "Required Field");
+        } else if (isEmpty(userAreaET)) {
+            setError(userAreaET, "Required Field");
+        } else if (isEmpty(userFlatET)) {
+            setError(userFlatET, "Required Field");
+        } else if (isEmpty(userHouseET)) {
+            setError(userHouseET, "Required Field");
+        } else if (isEmpty(userRoadNoET)) {
+            setError(userRoadNoET, "Required Field");
+        }
+        if (getIntent().getStringExtra(_INTENT_FROM).equalsIgnoreCase( ProfileViewActivity.class.getSimpleName()) ){
+            //todo implement update user api.
+            Toast.makeText(this, "Need Update Api", Toast.LENGTH_SHORT).show();
 
-        {
+        }else {
+            if (isEmpty(userPassword)) {
+                setError(userPassword, "Required Field");
+            } else if (isEmpty(userRepeatPassword)) {
+                setError(userRepeatPassword, "Required Field");
+            } else
+
+            {
 //            Toast.makeText( this, "it's Work Fine", Toast.LENGTH_SHORT ).show();
-            if (userPassword.getText().toString().equals( userRepeatPassword.getText().toString() )) {
+                if (userPassword.getText().toString().equals(userRepeatPassword.getText().toString())) {
 
-                insertUserDataModel = new InsertUserDataModel( userNameET.getText().toString(), userMobileET.getText().toString(),
-                        userAnotherMobileET.getText().toString(), userEmailET.getText().toString(),
-                        userAreaET.getText().toString(), userFlatET.getText().toString(), userRoadNoET.getText().toString(),
-                        userHouseET.getText().toString(), userAreaET.getText().toString(),
-                        String.valueOf( latitude ), String.valueOf( longitude ), userPassword.getText().toString() );
-
-
-                // convert java object to JSON format,
-                // and returned as JSON formatted string
-                Gson gson = new Gson();
-                String data = gson.toJson( insertUserDataModel );
-                Log.d( TAG, "goToScheduleListActivityFromRegistrationActivity: " + data );
+                    insertUserDataModel = new InsertUserDataModel(userNameET.getText().toString(), userMobileET.getText().toString(),
+                            userAnotherMobileET.getText().toString(), userEmailET.getText().toString(),
+                            userAreaET.getText().toString(), userFlatET.getText().toString(), userRoadNoET.getText().toString(),
+                            userHouseET.getText().toString(), userAreaET.getText().toString(),
+                            String.valueOf(latitude), String.valueOf(longitude), userPassword.getText().toString());
 
 
-                InsertNewUserThread insertEventThread = new InsertNewUserThread( this, data );
-                insertEventThread.start();
+                    // convert java object to JSON format,
+                    // and returned as JSON formatted string
+                    Gson gson = new Gson();
+                    String data = gson.toJson(insertUserDataModel);
+                    Log.d(TAG, "goToScheduleListActivityFromRegistrationActivity: " + data);
 
-                if (mediaPath.equalsIgnoreCase( "noImage" )) {
-                    Toast.makeText( this, "You will not choose your profile picture.", Toast.LENGTH_SHORT ).show();
-                    Functions.ProgressDialog( this );
-                    Functions.showDialog();
+
+                    InsertNewUserThread insertEventThread = new InsertNewUserThread(this, data);
+                    insertEventThread.start();
+
+                    if (mediaPath.equalsIgnoreCase("noImage")) {
+                        Toast.makeText(this, "You will not choose your profile picture.", Toast.LENGTH_SHORT).show();
+                        Functions.ProgressDialog(this);
+                        Functions.showDialog();
+                    } else {
+                        InsertNewUserPhotoThread insertNewUserPhotoThread = new InsertNewUserPhotoThread(this, mediaPath, insertUserDataModel.getPhone());
+                        insertNewUserPhotoThread.run();
+                        Functions.ProgressDialog(this);
+                        Functions.showDialog();
+                    }
+
                 } else {
-                    InsertNewUserPhotoThread insertNewUserPhotoThread = new InsertNewUserPhotoThread( this, mediaPath, insertUserDataModel.getPhone() );
-                    insertNewUserPhotoThread.run();
-                    Functions.ProgressDialog( this );
-                    Functions.showDialog();
+                    userRepeatPassword.setError("Password Not Match");
                 }
-
-            } else {
-                userRepeatPassword.setError( "Password Not Match" );
             }
         }
 
@@ -816,4 +858,20 @@ public class RegistrationActivity extends AppCompatActivity implements OnMapRead
         super.onBackPressed();
 
     }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            Intent intent = new Intent(this, ProfileViewActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+
+            finish();
+        }
+        // app icon in action bar clicked; goto parent activity.
+        this.finish();
+        return super.onOptionsItemSelected(item);
+    }
+
 }

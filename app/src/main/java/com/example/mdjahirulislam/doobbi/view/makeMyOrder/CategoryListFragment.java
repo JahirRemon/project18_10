@@ -97,15 +97,10 @@ public class CategoryListFragment extends Fragment {
 
         try {
             getCategoryItemThread.start();
-//            Log.d( TAG, "onCreateView: show dialog" );
-
-
         } catch (Exception e) {
             Log.d( TAG, "onCreate: " + e.getLocalizedMessage() );
         } finally {
             Log.d( TAG, "onCreate: finally" + getCategoryItemThread.isAlive() );
-
-//            getTabNameThread.interrupt();
             Log.d( TAG, "onCreate: finally " + Thread.currentThread().isAlive() );
 //            hideDialog();
         }
@@ -135,27 +130,13 @@ public class CategoryListFragment extends Fragment {
         mRecyclerView.setItemAnimator( new DefaultItemAnimator() );
         mRecyclerView.setHasFixedSize( true );
 
-
-//        items.add( new CategoryItemsModel( "Tk.10", "Only Iron", null ) );
-//        items.add( new CategoryItemsModel( "Tk.120", "Wash and Iron", null ) );
-//        items.add( new CategoryItemsModel( "30 Tk", "Wash and Clean", null ) );
-//        items.add( new CategoryItemsModel( "Tk.50", "Wash and Clean", null ) );
-//        items.add( new CategoryItemsModel( "Tk. 20", "Wash and Clean", null ) );
-
-//        items = Constants.loadAllData();
         currentPosition = getArguments().getInt( ARG_POSITION );
-
-//
-//        Log.d( "xxxxxx", "onViewCreated: " + currentPosition+"\t item is: "+items.get( currentPosition ).toString() );
-        //Use this now
-//        mRecyclerView.addItemDecoration( new MaterialViewPagerHeaderDecorator() );
-//        mRecyclerView.setAdapter( new CategoryItemsAdapter( getContext(), items, currentPosition ) );
 
         mRecyclerView.addOnItemTouchListener( new ItemClickListener( getActivity(), mRecyclerView, new ItemClickListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
                 startActivity( new Intent( context, SelectItemActivity.class ).putExtra( "itemsModel", items ).putExtra( "position", position ) );
-                getActivity().finish();
+                getActivity();
                 Log.d( TAG, "onClick: " + position );
             }
 
@@ -174,17 +155,6 @@ public class CategoryListFragment extends Fragment {
             mListener.onFragmentInteraction( uri );
         }
     }
-
-//    @Override
-//    public void onAttach(Context context) {
-//        super.onAttach( context );
-//        if (context instanceof OnFragmentInteractionListener) {
-//            mListener = (OnFragmentInteractionListener) context;
-//        } else {
-//            throw new RuntimeException( context.toString()
-//                    + " must implement OnFragmentInteractionListener" );
-//        }
-//    }
 
     @Override
     public void onDetach() {

@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.test.mock.MockPackageManager;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -20,7 +19,6 @@ import com.example.mdjahirulislam.doobbi.controller.helper.Functions;
 import com.example.mdjahirulislam.doobbi.controller.helper.GPSTracker;
 import com.example.mdjahirulislam.doobbi.controller.helper.MyApplication;
 import com.example.mdjahirulislam.doobbi.view.HomeActivity;
-import com.example.mdjahirulislam.doobbi.view.authentication.RegistrationActivity;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.gms.common.api.Status;
@@ -36,7 +34,6 @@ import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
 
 public class PickUpLocationActivity extends FragmentActivity implements OnMapReadyCallback,ConnectivityReceiver.ConnectivityReceiverListener {
 

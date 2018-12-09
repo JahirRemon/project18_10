@@ -1,0 +1,416 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorRegBackgroundAss"
+    android:orientation="vertical"
+    tools:context=".view.profile.ProfileViewActivity">
+
+    <ScrollView
+        android:id="@+id/profileScrollViewSV"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:elevation="4dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="110dp"
+                    android:layout_marginBottom="6dp"
+                    android:background="@color/colorWhite"
+                    android:orientation="vertical"
+                    android:paddingLeft="@dimen/activity_vertical_margin"
+                    android:paddingTop="70dp"
+                    android:paddingRight="@dimen/activity_horizontal_margin"
+                    >
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/input_text_bottom_margin"
+                        android:orientation="horizontal"
+                        >
+
+
+                        <TextView
+                            android:id="@+id/profileViewUserName"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:drawableLeft="@drawable/ic_perm_identity_blue_400_24dp"
+                            android:drawablePadding="6dp"
+                            android:hint="Name"
+                            android:inputType="text"
+                            android:gravity="center_vertical"
+                            android:textSize="@dimen/regular_text_size"
+                            />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/input_text_bottom_margin"
+                        android:orientation="horizontal"
+                        >
+
+
+                        <TextView
+                            android:id="@+id/profileViewUserMobile"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:layout_gravity="center"
+                            android:drawableLeft="@drawable/ic_call_blue_400_24dp"
+                            android:drawablePadding="6dp"
+                            android:hint="Mobile"
+                            android:inputType="number"
+                            android:gravity="center_vertical"
+                            android:textSize="@dimen/regular_text_size"
+                            />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="0dp"
+                        android:layout_marginBottom="@dimen/input_text_bottom_margin"
+                        android:orientation="horizontal"
+                        >
+
+                        <TextView
+                            android:id="@+id/profileViewUserAnotherMobile"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:layout_gravity="center"
+                            android:drawableLeft="@drawable/ic_call_blue_400_24dp"
+                            android:drawablePadding="6dp"
+                            android:hint="+88 01000 000 000"
+                            android:inputType="number"
+                            android:gravity="center_vertical"
+                            android:textSize="@dimen/regular_text_size"
+
+                            />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/input_text_bottom_margin"
+                        android:orientation="horizontal"
+                        >
+
+
+                        <TextView
+                            android:id="@+id/profileViewUserEmail"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:layout_gravity="center"
+                            android:drawableLeft="@drawable/ic_mail_outline_blue_400_24dp"
+                            android:drawablePadding="6dp"
+                            android:hint="Sample@gmail.com"
+                            android:inputType="textEmailAddress"
+                            android:textSize="@dimen/regular_text_size"
+                            android:gravity="center_vertical"
+
+                            />
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/input_text_bottom_margin"
+                        android:orientation="vertical"
+                        >
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:background="@color/colorRegBackgroundAss"
+                            >
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:layout_marginRight="@dimen/activity_vertical_margin"
+                                android:paddingLeft="4dp"
+                                app:srcCompat="@drawable/ic_map"/>
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp"
+                                android:layout_gravity="center"
+                                android:gravity="center_vertical"
+                                android:text="Address"
+                                android:textColor="@color/colorBlack"
+                                android:textSize="@dimen/regular_text_size"
+                                android:textStyle="bold"
+
+                                />
+
+
+                        </LinearLayout>
+
+
+                        <TextView
+                            android:id="@+id/profileViewUserAreaTV"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:layout_gravity="center"
+                            android:hint="Select Area"
+                            android:inputType="textEmailAddress"
+                            android:textSize="@dimen/regular_text_size"
+                            android:gravity="center_vertical"
+
+                            />
+
+
+                        <TextView
+                            android:id="@+id/profileViewUserFlatNo"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:layout_gravity="center"
+                            android:hint="Flat No."
+                            android:inputType="textEmailAddress"
+                            android:textSize="@dimen/regular_text_size"
+                            android:gravity="center_vertical"
+                            />
+
+                        <TextView
+                            android:id="@+id/profileViewUserHouseNo"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:layout_gravity="center"
+                            android:hint="House No."
+                            android:inputType="textEmailAddress"
+                            android:textSize="@dimen/regular_text_size"
+                            android:gravity="center_vertical"
+                            />
+
+                        <TextView
+                            android:id="@+id/profileViewUserRoadNo"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:layout_gravity="center"
+                            android:hint="Road No."
+                            android:inputType="textEmailAddress"
+                            android:textSize="@dimen/regular_text_size"
+                            android:gravity="center_vertical"
+                            />
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/input_text_bottom_margin"
+                        android:orientation="horizontal"
+                        >
+
+                        <!--<LinearLayout-->
+                            <!--android:layout_width="match_parent"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:orientation="vertical">-->
+
+                            <!--<RelativeLayout-->
+                                <!--android:layout_width="match_parent"-->
+                                <!--android:layout_height="40dp">-->
+
+                                <!--<EditText-->
+                                    <!--android:id="@+id/profileViewUser_user_password"-->
+                                    <!--android:layout_width="match_parent"-->
+                                    <!--android:layout_height="40dp"-->
+                                    <!--android:layout_gravity="center"-->
+                                    <!--android:drawableLeft="@drawable/ic_lock_outline_blue_24dp"-->
+                                    <!--android:drawablePadding="6dp"-->
+                                    <!--android:hint="Password"-->
+                                    <!--android:inputType="textPassword"-->
+
+                                    <!--/>-->
+
+                                <!--<ImageView-->
+                                    <!--android:id="@+id/profileViewUser_show_or_hidden_password_eye"-->
+                                    <!--android:layout_width="24dp"-->
+                                    <!--android:layout_height="24dp"-->
+                                    <!--android:layout_alignRight="@+id/profileViewUser_user_password"-->
+                                    <!--app:srcCompat="@drawable/ic_visibility_off_ass_24dp"-->
+                                    <!--android:layout_centerInParent="false"-->
+                                    <!--android:layout_marginTop="@dimen/margin_4dp"-->
+                                    <!--android:paddingRight="@dimen/margin_4dp"-->
+                                    <!--android:tag="1"-->
+                                    <!--android:onClick="profileShowPassword"/>-->
+                            <!--</RelativeLayout>-->
+
+
+
+                            <!--<RelativeLayout-->
+                                <!--android:layout_width="match_parent"-->
+                                <!--android:layout_height="40dp">-->
+
+
+                                <!--<EditText-->
+                                    <!--android:id="@+id/profileViewUser_user_repeat_password"-->
+                                    <!--android:layout_width="match_parent"-->
+                                    <!--android:layout_height="40dp"-->
+                                    <!--android:layout_gravity="center"-->
+                                    <!--android:drawableLeft="@drawable/ic_lock_outline_blue_24dp"-->
+                                    <!--android:drawablePadding="6dp"-->
+                                    <!--android:hint="Confirm Password"-->
+                                    <!--android:inputType="textPassword"-->
+                                    <!--/>-->
+                                <!--<ImageView-->
+                                    <!--android:id="@+id/profileShowPassword_show_or_hidden_repeat_password_eye"-->
+                                    <!--android:layout_width="24dp"-->
+                                    <!--android:layout_height="24dp"-->
+                                    <!--android:layout_alignRight="@+id/profileViewUser_user_repeat_password"-->
+                                    <!--app:srcCompat="@drawable/ic_visibility_off_ass_24dp"-->
+                                    <!--android:layout_centerInParent="false"-->
+                                    <!--android:layout_marginTop="@dimen/margin_4dp"-->
+                                    <!--android:paddingRight="@dimen/margin_4dp"-->
+                                    <!--android:tag="1"-->
+                                    <!--android:onClick="profileShowPassword"/>-->
+                            <!--</RelativeLayout>-->
+
+                        <!--</LinearLayout>-->
+
+
+                    </LinearLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/smallMapLL"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/activity_vertical_margin"
+                        >
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="100dp"
+                            android:foreground="@drawable/transparent_background"
+                            android:orientation="vertical"
+                            >
+
+                            <fragment
+                                xmlns:android="http://schemas.android.com/apk/res/android"
+                                xmlns:tools="http://schemas.android.com/tools"
+                                android:id="@+id/registrationMap"
+                                android:name="com.google.android.gms.maps.SupportMapFragment"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                tools:context=".MapsActivity"/>
+
+
+                        </LinearLayout>
+
+                    </RelativeLayout>
+
+                    <TextView
+                        android:id="@+id/profileViewUpdateTV"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/button_height"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginBottom="@dimen/activity_vertical_margin"
+                        android:background="@color/colorPrimary"
+                        android:gravity="center"
+                        android:onClick="goToRegistrationActivityFromProfileViewActivity"
+                        android:padding="6dp"
+                        android:text="Update Profile"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="@dimen/regular_text_size"
+
+                        />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/activity_vertical_margin"
+                        android:gravity="center"
+                        android:text=""
+                        android:textColor="@color/colorWhite"
+                        android:textSize="@dimen/large_text_size"/>
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        xmlns:app="http://schemas.android.com/apk/res-auto"
+                        android:id="@+id/profileViewProfileImage"
+                        android:layout_width="96dp"
+                        android:layout_height="96dp"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/activity_vertical_margin"
+                        android:layout_marginBottom="@dimen/activity_vertical_margin"
+                        android:padding="0dp"
+                        app:civ_border_color="#e6e6e6"
+                        app:civ_border_width="4dp"
+                        android:src="@drawable/nobody"
+                        />
+
+                </LinearLayout>
+            </RelativeLayout>
+
+
+        </LinearLayout>
+
+
+    </ScrollView>
+
+    <RelativeLayout
+        android:id="@+id/regMainNoInternetView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:background="@color/slack_background"
+
+        >
+
+        <pl.droidsonroids.gif.GifImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/slack"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:gravity="center"
+            android:paddingBottom="20dp"
+            android:text="No Internet Connection"
+            android:textColor="@color/colorBlack"/>
+
+    </RelativeLayout>
+
+
+</RelativeLayout>

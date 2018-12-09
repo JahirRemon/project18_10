@@ -26,6 +26,7 @@ import com.example.mdjahirulislam.doobbi.view.makeMyOrder.OrderHomeActivity;
 import com.example.mdjahirulislam.doobbi.view.makeMyOrder.OrderSummaryActivity;
 import com.example.mdjahirulislam.doobbi.view.makeMyOrder.SelectItemActivity;
 import com.example.mdjahirulislam.doobbi.view.order.OrderListActivity;
+import com.example.mdjahirulislam.doobbi.view.profile.ProfileViewActivity;
 
 import io.realm.Realm;
 import okhttp3.MultipartBody;
@@ -88,7 +89,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void goToRegistrationActivityFormLoginActivity(View view) {
-        startActivity( new Intent( this, RegistrationActivity.class ) );
+        startActivity( new Intent( this, RegistrationActivity.class ).putExtra(_INTENT_FROM,TAG) );
     }
 
     public void clickOnLogin(View view) {
@@ -197,6 +198,12 @@ public class LoginActivity extends AppCompatActivity {
                                 userDetailsModelDB.setEmail( userDetailsResponseModel.getEmail() );
                                 userDetailsModelDB.setAddress( userDetailsResponseModel.getAddress() );
                                 userDetailsModelDB.setClint_image_path( userDetailsResponseModel.getFileLink() );
+                                userDetailsModelDB.setFlat_no(userDetailsResponseModel.getFlatNo());
+                                userDetailsModelDB.setRoad_no(userDetailsResponseModel.getRoadNo());
+                                userDetailsModelDB.setHouse_no(userDetailsResponseModel.getHouseNo());
+                                userDetailsModelDB.setArea(userDetailsResponseModel.getArea());
+                                userDetailsModelDB.setLatitude(userDetailsResponseModel.getLatitude());
+                                userDetailsModelDB.setLongitude(userDetailsResponseModel.getLongitude());
 
                                 mRealm.commitTransaction();
 
@@ -223,6 +230,9 @@ public class LoginActivity extends AppCompatActivity {
 
                                 }else if (from.equalsIgnoreCase( OrderListActivity.class.getSimpleName() )) {
                                     myIntent = new Intent( context, OrderListActivity.class );
+
+                                }else if (from.equalsIgnoreCase( ProfileViewActivity.class.getSimpleName() )) {
+                                    myIntent = new Intent( context, ProfileViewActivity.class );
 
                                 }
                                 context.startActivity( myIntent );

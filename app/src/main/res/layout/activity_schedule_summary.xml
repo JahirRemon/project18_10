@@ -127,7 +127,7 @@
         android:layout_alignParentBottom="true"
         android:background="@color/colorPrimary"
         android:gravity="center"
-        android:onClick="goToScheduleListActivity"
+        android:onClick="goToScheduleListActivityFromScheduleSummary"
         android:padding="6dp"
         android:text="@string/schedule_confirm"
         android:textColor="@color/colorWhite"

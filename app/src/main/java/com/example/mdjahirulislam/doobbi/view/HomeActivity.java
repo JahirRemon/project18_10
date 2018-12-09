@@ -2,6 +2,7 @@ package com.example.mdjahirulislam.doobbi.view;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -36,6 +37,7 @@ import com.example.mdjahirulislam.doobbi.view.offers.MyOfferActivity;
 import com.example.mdjahirulislam.doobbi.view.order.OrderListActivity;
 import com.example.mdjahirulislam.doobbi.view.pickUpMe.PickUpLocationActivity;
 import com.example.mdjahirulislam.doobbi.view.priceList.PriceListActivity;
+import com.example.mdjahirulislam.doobbi.view.profile.ProfileViewActivity;
 import com.example.mdjahirulislam.doobbi.view.schedule.ScheduleListActivity;
 import com.smarteist.autoimageslider.SliderLayout;
 import com.smarteist.autoimageslider.SliderView;
@@ -422,12 +424,14 @@ public class HomeActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_payment) {
+        if (id == R.id.nav_profile) {
             // Handle the camera action
+            startActivity( new Intent( HomeActivity.this, ProfileViewActivity.class ).putExtra( _INTENT_FROM,TAG) );//HomeActivity.class.getSimpleName()
+
         } else if (id == R.id.nav_payment) {
 
         } else if (id == R.id.nav_signIn) {
-            startActivity( new Intent( HomeActivity.this, LoginActivity.class ).putExtra( _INTENT_FROM,HomeActivity.class.getSimpleName()) );
+            startActivity( new Intent( HomeActivity.this, LoginActivity.class ).putExtra( _INTENT_FROM,TAG) );//HomeActivity.class.getSimpleName()
 
         } else if (id == R.id.nav_log_out) {
             Log.d( TAG, "onNavigationItemSelected: log out " + user_id );

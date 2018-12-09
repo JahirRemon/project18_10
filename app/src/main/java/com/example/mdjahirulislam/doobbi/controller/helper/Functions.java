@@ -258,6 +258,7 @@ public class Functions {
                 add = add + "\n" + obj.getSubAdminArea();
                 add = add + "\n" + obj.getLocality();
                 add = add + "\n" + obj.getSubThoroughfare();
+                add = add + "\n" + obj.getThoroughfare();
 
                 Log.v( TAG, "Address" + addresses );
                 Log.v( TAG, "Address" + add );
@@ -277,6 +278,42 @@ public class Functions {
         }
     }
 
+
+    public static String getRoadNo(Context context, double lat, double lng) {
+        Geocoder geocoder = new Geocoder( context, Locale.getDefault() );
+        Log.d( TAG, "getAddress: lat: " + lat + " lng: " + lng );
+        if (lat != 0 && lng != 0) {
+            try {
+                List<Address> addresses = geocoder.getFromLocation( lat, lng, 1 );
+                Address obj = addresses.get( 0 );
+                String addressLine = obj.getAddressLine( 0 );
+                String add = obj.getCountryName();
+                add = add + "\n" + obj.getAddressLine( 1 );
+                add = add + "\n" + obj.getCountryCode();
+                add = add + "\n" + obj.getAdminArea();
+                add = add + "\n" + obj.getPostalCode();
+                add = add + "\n" + obj.getSubAdminArea();
+                add = add + "\n" + obj.getLocality();
+                add = add + "\n" + obj.getSubThoroughfare();
+                add = add + "\n" + obj.getThoroughfare();
+
+                Log.v( TAG, "Address" + addresses );
+                Log.v( TAG, "Address" + add );
+                // Toast.makeText(this, "Address=>" + add,
+                // Toast.LENGTH_SHORT).show();
+
+                return obj.getThoroughfare();
+                // TennisAppActivity.showDialog(add);
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+                Toast.makeText( context, e.getMessage(), Toast.LENGTH_SHORT ).show();
+                return e.getMessage();
+            }
+        } else {
+            return "Some Thing is Wrong";
+        }
+    }
 
     public static AnimationSet setTextAnimation() {
 

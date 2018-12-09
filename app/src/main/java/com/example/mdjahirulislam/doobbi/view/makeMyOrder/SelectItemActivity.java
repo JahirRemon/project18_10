@@ -206,13 +206,13 @@ public class SelectItemActivity extends AppCompatActivity implements SelectedCat
     }
 
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        Log.d( TAG, "onBackPressed: " );
-        startActivity( new Intent( SelectItemActivity.this, OrderHomeActivity.class ).setFlags( Intent.FLAG_ACTIVITY_CLEAR_TOP ) );
-        finish();
-    }
+//    @Override
+//    public void onBackPressed() {
+//        super.onBackPressed();
+//        Log.d( TAG, "onBackPressed: " );
+//        startActivity( new Intent( SelectItemActivity.this, OrderHomeActivity.class ).setFlags( Intent.FLAG_ACTIVITY_CLEAR_TOP ) );
+//        finish();
+//    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

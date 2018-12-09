@@ -48,8 +48,8 @@ public class ScheduleSummaryActivity extends AppCompatActivity {
 
     }
 
-    public void goToScheduleListActivity(View view) {
-        startActivity( new Intent( this, RegistrationActivity.class ));
+    public void goToScheduleListActivityFromScheduleSummary(View view) {
+//        startActivity( new Intent( this, RegistrationActivity.class ));
     }
 
     @Override

@@ -91,6 +91,12 @@ public class GetUserDetailsThread extends Thread {
                             userDetailsModelDB.setEmail( userDetailsResponseModel.getEmail() );
                             userDetailsModelDB.setAddress( userDetailsResponseModel.getAddress() );
                             userDetailsModelDB.setClint_image_path( userDetailsResponseModel.getFileLink() );
+                            userDetailsModelDB.setFlat_no(userDetailsResponseModel.getFlatNo());
+                            userDetailsModelDB.setRoad_no(userDetailsResponseModel.getRoadNo());
+                            userDetailsModelDB.setHouse_no(userDetailsResponseModel.getHouseNo());
+                            userDetailsModelDB.setArea(userDetailsResponseModel.getArea());
+                            userDetailsModelDB.setLatitude(userDetailsResponseModel.getLatitude());
+                            userDetailsModelDB.setLongitude(userDetailsResponseModel.getLongitude());
 
                             mRealm.commitTransaction();
 
