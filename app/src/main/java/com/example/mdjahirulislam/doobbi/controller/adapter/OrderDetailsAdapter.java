@@ -16,6 +16,7 @@ import com.example.mdjahirulislam.doobbi.R;
 import com.example.mdjahirulislam.doobbi.controller.helper.DBFunctions;
 import com.example.mdjahirulislam.doobbi.controller.helper.SessionManager;
 import com.example.mdjahirulislam.doobbi.model.requestModel.InsertOrderHistoryDBModel;
+import com.example.mdjahirulislam.doobbi.model.responseModel.GetOrderDetailsResponseModel;
 
 import java.util.List;
 import java.util.UUID;
@@ -27,7 +28,7 @@ public class OrderDetailsAdapter extends RecyclerView.Adapter<OrderDetailsAdapte
 
     private static final String TAG = OrderDetailsAdapter.class.getSimpleName();
 
-    private List<InsertOrderHistoryDBModel> mItemsList;
+    private List<GetOrderDetailsResponseModel.Item>  mItemsList;
     private Context mContext;
     private Realm mRealm;
     private InsertOrderHistoryDBModel insertOrderHistoryDBModel;
@@ -57,8 +58,8 @@ public class OrderDetailsAdapter extends RecyclerView.Adapter<OrderDetailsAdapte
     }
 
 
-    public OrderDetailsAdapter(Context context, List<InsertOrderHistoryDBModel> itemsList, OrderListSummaryAdapter.OnTotalPriceAndQuantityListener onTotalPriceAndQuantityListener) {
-        this.mItemsList = itemsList;
+    public OrderDetailsAdapter(Context context, List<GetOrderDetailsResponseModel.Item > orderDetailsList) {
+        this.mItemsList = orderDetailsList;
         this.mContext = context;
 //        this.mPosition = position;
         mRealm = Realm.getDefaultInstance();
@@ -77,24 +78,12 @@ public class OrderDetailsAdapter extends RecyclerView.Adapter<OrderDetailsAdapte
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onBindViewHolder(final OrderDetailsAdapter.MyViewHolder holder, int position) {
-//        final InsertOrderHistoryDBModel item = mItemsList.get( position );
-//        final int[] quantity = {0};
-//        final int[] totalPrice = {0};
-//        int regularPrice = 0;
-//
-//        if (Integer.parseInt( item.getItemQuantity() ) != 0) {
-//            regularPrice = Integer.parseInt( item.getTotalPrice() ) / Integer.parseInt( item.getItemQuantity() );
-//            totalPrice[0] = regularPrice * quantity[0];
-//            holder.mainView.setVisibility( View.VISIBLE );
+        final GetOrderDetailsResponseModel.Item item = mItemsList.get( position );
 
-//        } else {
-//            Toast.makeText( mContext, "No Item Selected", Toast.LENGTH_SHORT ).show();
-//            holder.mainView.setVisibility( View.GONE );
-//        }
-
-
-//        holder.itemType.setText( item.getItemName() + " - " + item.getServiceName() );
-//        holder.priceTV.setText( String.valueOf( regularPrice ) );
+        holder.itemType.setText( item.getItemName() + " - " + item.getServiceName() );
+        holder.priceTV.setText(String.valueOf( Integer.parseInt(item.getPerItemPrice())/Integer.parseInt(item.getItemCount()))) ;
+        holder.quantityTV.setText(item.getItemCount());
+        holder.totalPriceTV.setText(item.getPerItemPrice());
 
     }
 

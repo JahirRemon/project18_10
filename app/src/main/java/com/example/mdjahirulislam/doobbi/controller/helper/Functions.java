@@ -75,6 +75,8 @@ public class Functions {
     public static final String API_ACCESS_FUNCTION_GET_CATEGORY_ITEMS_PRICE = "getitemwiseprise";
     public static final String API_ACCESS_FUNCTION_INSERT_ORDER_LIST = "customerorder";
     public static final String API_ACCESS_FUNCTION_GET_TEMPORARY_ORDER_LIST = "getcustomerorder";
+    public static final String API_ACCESS_FUNCTION_GET_ORDER_LIST_DETAILS = "getorderdetail";
+    public static final String API_ACCESS_FUNCTION_GET_ITEMS_PRICE = "getitemprice";
 
     public static String BASE_URL = "http://transparentgroup.net/services/services/";
     public static String _IMAGE_BASE_URL = "http://transparentgroup.net/services/services/";

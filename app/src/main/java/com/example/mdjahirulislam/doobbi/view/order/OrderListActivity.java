@@ -109,8 +109,9 @@ public class OrderListActivity extends AppCompatActivity {
             orderListRV.addOnItemTouchListener( new ItemClickListener( this, orderListRV, new ItemClickListener.ClickListener() {
                 @Override
                 public void onClick(View view, int position) {
-                    startActivity( new Intent( OrderListActivity.this, OrderDetailsActivity.class ).putExtra( "position", position ) );
+                    startActivity( new Intent( OrderListActivity.this, OrderDetailsActivity.class ).putExtra( "position", orderList.get(position).getOrderId() ) );
                     Log.d( TAG, "onClick: " + position );
+
                 }
 
                 @Override

@@ -3,6 +3,7 @@ package com.example.mdjahirulislam.doobbi.controller.connectionInterface;
 import com.example.mdjahirulislam.doobbi.model.requestModel.InsertUserDataModel;
 import com.example.mdjahirulislam.doobbi.model.responseModel.GetCategoryItemResponseModel;
 import com.example.mdjahirulislam.doobbi.model.responseModel.GetItemWisePriceResponseModel;
+import com.example.mdjahirulislam.doobbi.model.responseModel.GetOrderDetailsResponseModel;
 import com.example.mdjahirulislam.doobbi.model.responseModel.GetOrderListResponseModel;
 import com.example.mdjahirulislam.doobbi.model.responseModel.GetTadItemResponseModel;
 import com.example.mdjahirulislam.doobbi.model.responseModel.GetUserDetailsResponseModel;
@@ -116,7 +117,7 @@ public interface ConnectionAPI {
 
     @Multipart
     @POST("request")
-    Call<GetOrderListResponseModel> getSingleOrderDetails(
+    Call<GetOrderDetailsResponseModel> getSingleOrderDetails(
             @Part("password") RequestBody password,
             @Part("user") RequestBody user,
             @Part("function") RequestBody function,
