@@ -21,6 +21,7 @@ public class DBFunctions {
         InsertOrderHistoryDBModel insertOrderHistoryDBModel = mRealm.createObject(InsertOrderHistoryDBModel.class, uniqueID);
         insertOrderHistoryDBModel.setUserID(model.getUserID());
         insertOrderHistoryDBModel.setItemID(model.getItemID());
+        insertOrderHistoryDBModel.setItemName(model.getItemName());
         insertOrderHistoryDBModel.setServiceID(model.getServiceID());
         insertOrderHistoryDBModel.setServiceName(model.getServiceName());
         insertOrderHistoryDBModel.setItemQuantity(model.getItemQuantity());
@@ -108,5 +109,23 @@ public class DBFunctions {
         }
         mRealm.commitTransaction();
         return userDataModel;
+    }
+
+    public static boolean DeleteTempOrderTsble() {
+
+        boolean status;
+
+        mRealm.beginTransaction();
+        RealmResults<InsertOrderHistoryDBModel> result = mRealm.where( InsertOrderHistoryDBModel.class ).findAll();
+        status = result.deleteAllFromRealm();
+
+
+        mRealm.commitTransaction();
+        if (status){
+            return status;
+        }else {
+            return status;
+        }
+
     }
 }

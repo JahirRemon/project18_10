@@ -56,7 +56,6 @@
                     android:layout_height="match_parent"
                     android:ellipsize="end"
                     android:gravity="center|left"
-                    android:hint="Md. User Name"
                     android:maxLines="1"
                     android:textSize="@dimen/regular_text_size"/>
 
@@ -81,7 +80,6 @@
                     android:layout_height="match_parent"
                     android:ellipsize="end"
                     android:gravity="center|left"
-                    android:hint="01300000000"
                     android:maxLines="1"
                     android:textSize="@dimen/regular_text_size"/>
 
@@ -106,7 +104,6 @@
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
                     android:gravity="left"
-                    android:hint="Address"
                     android:maxLines="3"
                     android:textSize="@dimen/regular_text_size"/>
 

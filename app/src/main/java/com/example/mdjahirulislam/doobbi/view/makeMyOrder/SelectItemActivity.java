@@ -25,6 +25,7 @@ import java.util.ArrayList;
 
 import io.realm.Realm;
 
+import static com.example.mdjahirulislam.doobbi.controller.helper.Functions._INTENT_FROM;
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions._PROGRESS_TIME_IN_MILLISECOND;
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.hideDialog;
 
@@ -202,17 +203,17 @@ public class SelectItemActivity extends AppCompatActivity implements SelectedCat
 
     public void goToOrderSummaryActivity(View view) {
 
-        startActivity( new Intent( SelectItemActivity.this, OrderSummaryActivity.class ) );
+        startActivity( new Intent( SelectItemActivity.this, OrderSummaryActivity.class ).putExtra(_INTENT_FROM,TAG) );
     }
 
 
-//    @Override
-//    public void onBackPressed() {
-//        super.onBackPressed();
-//        Log.d( TAG, "onBackPressed: " );
-//        startActivity( new Intent( SelectItemActivity.this, OrderHomeActivity.class ).setFlags( Intent.FLAG_ACTIVITY_CLEAR_TOP ) );
-//        finish();
-//    }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Log.d( TAG, "onBackPressed: " );
+        startActivity( new Intent( SelectItemActivity.this, OrderHomeActivity.class ).setFlags( Intent.FLAG_ACTIVITY_CLEAR_TOP ) );
+        finish();
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

@@ -136,7 +136,7 @@ public class CategoryListFragment extends Fragment {
             @Override
             public void onClick(View view, int position) {
                 startActivity( new Intent( context, SelectItemActivity.class ).putExtra( "itemsModel", items ).putExtra( "position", position ) );
-                getActivity();
+                getActivity().finish();
                 Log.d( TAG, "onClick: " + position );
             }
 

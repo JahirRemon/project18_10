@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.mdjahirulislam.doobbi.R;
+import com.example.mdjahirulislam.doobbi.controller.adapter.SelectedCategoryItemPriceAdapter;
 import com.example.mdjahirulislam.doobbi.controller.adapter.TabPageAdapter;
 import com.example.mdjahirulislam.doobbi.controller.adapter.ViewPagerAdapter;
 import com.example.mdjahirulislam.doobbi.controller.connectionInterface.ConnectionAPI;
@@ -34,12 +35,13 @@ import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.API_
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.API_ACCESS_PASSWORD;
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.API_ACCESS_SUCCESS_CODE;
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.NO_USER_FOUND_CODE;
+import static com.example.mdjahirulislam.doobbi.controller.helper.Functions._INTENT_FROM;
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions._PROGRESS_TIME_IN_MILLISECOND;
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.hideDialog;
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.tabIconsAss;
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.tabIconsWhite;
 
-public class OrderHomeActivity extends AppCompatActivity {
+public class OrderHomeActivity extends AppCompatActivity implements SelectedCategoryItemPriceAdapter.OnTotalPriceListener{
 
     private static final String TAG = OrderHomeActivity.class.getSimpleName();
     private TabLayout tabLayout;
@@ -71,7 +73,7 @@ public class OrderHomeActivity extends AppCompatActivity {
         totalPriceTV = findViewById( R.id.totalPriceTV );
 
 
-        totalPriceTV.setText( "Tk. "+DBFunctions.getAllOrderHistoryTotalPrice() +".00");
+        totalPriceTV.setText( "Total Tk. "+DBFunctions.getAllOrderHistoryTotalPrice() +".00");
 
         viewPager = (ViewPager) findViewById( R.id.makeOrderViewPager );
         setupViewPager( viewPager );
@@ -178,8 +180,8 @@ public class OrderHomeActivity extends AppCompatActivity {
     public void goToOrderSummaryActivityFromOrderHomeActivity(View view) {
         Log.d( TAG, "goToOrderSummaryActivityFromOrderHomeActivity: "+OrderHomeActivity.class.getSimpleName() );
 
-        startActivity( new Intent( OrderHomeActivity.this, OrderSummaryActivity.class ) );
-//        finish();
+        startActivity( new Intent( OrderHomeActivity.this, OrderSummaryActivity.class ).putExtra(_INTENT_FROM,TAG) );
+        finish();
     }
 
 
@@ -203,6 +205,13 @@ public class OrderHomeActivity extends AppCompatActivity {
         // app icon in action bar clicked; goto parent activity.
         this.finish();
         return super.onOptionsItemSelected( item );
+    }
+
+    @Override
+    public void setPrice() {
+        Log.d(TAG, "setPrice: Implement Interface");
+        Functions.setAnimationNumber( totalPriceTV, "Total Tk. ", totalPrice, DBFunctions.getAllOrderHistoryTotalPrice(), ".00", 1000 );
+
     }
 
 

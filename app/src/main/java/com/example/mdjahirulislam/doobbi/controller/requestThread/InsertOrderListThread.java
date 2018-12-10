@@ -6,6 +6,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.example.mdjahirulislam.doobbi.controller.connectionInterface.ConnectionAPI;
+import com.example.mdjahirulislam.doobbi.controller.helper.DBFunctions;
 import com.example.mdjahirulislam.doobbi.controller.helper.Functions;
 import com.example.mdjahirulislam.doobbi.model.requestModel.InsertOrderDataModel;
 import com.example.mdjahirulislam.doobbi.model.responseModel.InsertUserResponseModel;
@@ -76,6 +77,8 @@ public class InsertOrderListThread extends Thread {
                     if (status.equalsIgnoreCase( API_ACCESS_SUCCESS_CODE )) {       //success code = 100
                         Intent myIntent = new Intent( context, ScheduleListActivity.class );
                         context.startActivity( myIntent );
+
+                        DBFunctions.DeleteTempOrderTsble();
 
                         Toast.makeText( context, "Order Insert Successful", Toast.LENGTH_SHORT ).show();
                     } else if (status.equalsIgnoreCase( API_ACCESS_DENY_CODE)) {

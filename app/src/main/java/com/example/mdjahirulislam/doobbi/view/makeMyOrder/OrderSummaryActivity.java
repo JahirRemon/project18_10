@@ -160,7 +160,7 @@ public class OrderSummaryActivity extends AppCompatActivity implements OrderList
                 Toast.makeText( this, "Select Item First!!", Toast.LENGTH_SHORT ).show();
             }
         } else {
-            startActivity( new Intent( this, LoginActivity.class ).putExtra( _INTENT_FROM,OrderSummaryActivity.class.getSimpleName() ) );
+            startActivity( new Intent( this, LoginActivity.class ).putExtra( _INTENT_FROM,TAG ) );
             finish();
         }
     }
@@ -186,5 +186,29 @@ public class OrderSummaryActivity extends AppCompatActivity implements OrderList
         // app icon in action bar clicked; goto parent activity.
         this.finish();
         return super.onOptionsItemSelected(item);
+    }
+
+
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = null;
+        if (getIntent().getStringExtra(_INTENT_FROM).equalsIgnoreCase(OrderHomeActivity.class.getSimpleName())){
+            intent = new Intent( this, OrderHomeActivity.class );
+            intent.setFlags( Intent.FLAG_ACTIVITY_CLEAR_TOP );
+            startActivity( intent );
+            finish();
+        }else if (getIntent().getStringExtra(_INTENT_FROM).equalsIgnoreCase(SelectItemActivity.class.getSimpleName())){
+//            intent = new Intent( this, SelectItemActivity.class );
+
+            this.finish();
+        }
+        else {
+            intent = new Intent( this, HomeActivity.class );
+//            intent.setFlags( Intent.FLAG_ACTIVITY_CLEAR_TOP );
+            startActivity( intent );
+            finish();
+        }
+
     }
 }
