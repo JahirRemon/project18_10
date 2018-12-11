@@ -178,7 +178,7 @@ public class CategoryListFragment extends Fragment {
     }
 
 
-    public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
+    public static class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
 
         private int spanCount;
         private int spacing;

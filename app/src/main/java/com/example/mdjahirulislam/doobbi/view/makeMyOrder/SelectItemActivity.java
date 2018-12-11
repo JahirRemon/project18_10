@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mdjahirulislam.doobbi.R;
+import com.example.mdjahirulislam.doobbi.controller.adapter.OrderListSummaryAdapter;
 import com.example.mdjahirulislam.doobbi.controller.adapter.SelectedCategoryItemPriceAdapter;
 import com.example.mdjahirulislam.doobbi.controller.adapter.TabPageAdapter;
 import com.example.mdjahirulislam.doobbi.controller.adapter.ViewPagerAdapter;
@@ -29,7 +30,7 @@ import static com.example.mdjahirulislam.doobbi.controller.helper.Functions._INT
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions._PROGRESS_TIME_IN_MILLISECOND;
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.hideDialog;
 
-public class SelectItemActivity extends AppCompatActivity implements SelectedCategoryItemPriceAdapter.OnTotalPriceListener {
+public class SelectItemActivity extends AppCompatActivity implements SelectedCategoryItemPriceAdapter.OnTotalPriceListener,OrderListSummaryAdapter.OnTotalPriceAndQuantityListener {
 
     private static final String TAG = SelectItemActivity.class.getSimpleName();
     private TabLayout tabLayout;
@@ -234,6 +235,11 @@ public class SelectItemActivity extends AppCompatActivity implements SelectedCat
 //                    totalPriceTV.setText( "Interface - Tk. "+ String.valueOf( DBFunctions.getAllOrderHistoryTotalPrice() ) );
 
         Functions.setAnimationNumber( totalPriceTV, "Total Tk. ", totalPrice, DBFunctions.getAllOrderHistoryTotalPrice(), ".00", 1000 );
+    }
+
+    @Override
+    public void setQuantity() {
+        Log.d(TAG, "setQuantity: ");
     }
 
     public static class ProgressThread extends Thread {

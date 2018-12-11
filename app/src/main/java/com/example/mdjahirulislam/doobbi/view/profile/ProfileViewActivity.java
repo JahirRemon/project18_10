@@ -162,6 +162,16 @@ public class ProfileViewActivity extends AppCompatActivity implements OnMapReady
 
 
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(this, HomeActivity.class);
+        startActivity(intent);
+
+        finish();
+
+    }
+
+    @Override
     public void onMapReady(final GoogleMap googleMap) {
         mMap = googleMap;
 

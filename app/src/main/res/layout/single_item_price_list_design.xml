@@ -10,14 +10,11 @@
 
 
     <LinearLayout
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:layout_marginRight="@dimen/margin_8dp"
         android:background="@drawable/price_list_background"
         android:orientation="horizontal"
         android:elevation="@dimen/margin_2dp"
-        android:layout_marginBottom="@dimen/margin_4dp"
 
         >
 
@@ -28,20 +25,22 @@
 
 
             <ImageView
+                android:id="@+id/singleItemPriceListRegularItemImageIV"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:src="@drawable/no_dress"
+                android:src="@drawable/default_image"
                 android:scaleType="centerCrop"
                 android:padding="@dimen/margin_6dp"
                 />
 
             <TextView
+                android:id="@+id/singleItemPriceListRegularItemNameTV"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:background="@drawable/transparent_background"
-                android:text="Shirt"
+                android:text=""
                 android:maxLines="2"
                 android:ellipsize="end"
                 android:textSize="@dimen/regular_text_size"
@@ -64,7 +63,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Iron"
-                android:gravity="center"/>
+                android:gravity="center"
+                android:textColor="@color/colorBlack"/>
 
             <View
                 android:layout_width="match_parent"
@@ -72,13 +72,15 @@
                 android:background="@color/colorBlack"/>
 
             <TextView
+                android:id="@+id/singleItemPriceListRegularItemIronPriceTV"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="Tk. 10"
+                android:text=""
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:gravity="center"
-                android:layout_marginTop="@dimen/margin_6dp"/>
+                android:layout_marginTop="@dimen/margin_6dp"
+                android:textColor="@color/colorBlack"/>
 
 
         </LinearLayout>
@@ -98,177 +100,25 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Wash"
-                android:gravity="center"/>
+                android:gravity="center"
+                android:textColor="@color/colorBlack"/>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@color/colorBlack"/>
             <TextView
+                android:id="@+id/singleItemPriceListRegularItemWashPriceTV"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="Tk. 20"
+                android:text=""
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:gravity="center"
-                android:layout_marginTop="@dimen/margin_6dp"/>
+                android:layout_marginTop="@dimen/margin_6dp"
+                android:textColor="@color/colorBlack"/>
 
 
         </LinearLayout>
     </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:layout_marginLeft="@dimen/margin_8dp"
-        android:orientation="horizontal"
-        android:background="@drawable/price_list_background"
-        android:elevation="@dimen/margin_2dp"
-        android:layout_marginBottom="@dimen/margin_4dp"
-        >
-
-        <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
-
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:src="@drawable/no_dress"
-                android:scaleType="centerCrop"
-                android:padding="@dimen/margin_6dp"
-                />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:background="@drawable/transparent_background"
-                android:text="Panjabi/sharidd"
-                android:maxLines="2"
-                android:ellipsize="end"
-                android:textSize="@dimen/regular_text_size"
-                android:textColor="@color/colorWhite"
-                android:textStyle="bold"/>
-
-
-
-        </RelativeLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Iron"
-                android:gravity="center"/>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/colorBlack"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="Tk. 20"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:gravity="center"
-                android:layout_marginTop="@dimen/margin_6dp"/>
-
-
-        </LinearLayout>
-
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="@color/colorBlack"/>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Wash"
-                android:gravity="center"/>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/colorBlack"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="Tk. 30"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:gravity="center"
-                android:layout_marginTop="@dimen/margin_6dp"/>
-
-
-        </LinearLayout>
-    </LinearLayout>
-
-    <!--<LinearLayout-->
-        <!--android:layout_width="0dp"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:layout_weight="2.5"-->
-        <!--android:orientation="horizontal">-->
-
-
-        <!--<ImageView-->
-            <!--android:layout_width="50dp"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_marginRight="@dimen/margin_8dp"-->
-            <!--android:src="@drawable/nobody"/>-->
-
-        <!---->
-
-        <!--<TextView-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:gravity="center"-->
-            <!--android:paddingRight="@dimen/margin_8dp"-->
-            <!--android:text="Item Name"-->
-            <!--android:textSize="@dimen/regular_text_size"/>-->
-
-    <!--</LinearLayout>-->
-
-    <!--<TextView-->
-        <!--android:layout_width="0dp"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:layout_weight="1"-->
-        <!--android:gravity="center"-->
-        <!--android:paddingRight="@dimen/margin_8dp"-->
-        <!--android:text="Tk. 10"-->
-        <!--android:textSize="@dimen/regular_text_size"/>-->
-
-    <!--<View-->
-        <!--android:layout_width="1dp"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:background="@color/colorBlack"/>-->
-
-    <!--<TextView-->
-        <!--android:layout_width="0dp"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:layout_weight="1"-->
-        <!--android:gravity="center"-->
-        <!--android:paddingRight="@dimen/margin_8dp"-->
-        <!--android:text="Tk. 20"-->
-        <!--android:textSize="@dimen/regular_text_size"/>-->
-
-
 </LinearLayout>

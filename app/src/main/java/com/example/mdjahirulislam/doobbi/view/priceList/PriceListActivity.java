@@ -13,6 +13,7 @@ import com.example.mdjahirulislam.doobbi.controller.adapter.TabPageAdapter;
 import com.example.mdjahirulislam.doobbi.controller.adapter.ViewPagerAdapter;
 import com.example.mdjahirulislam.doobbi.controller.connectionInterface.ConnectionAPI;
 import com.example.mdjahirulislam.doobbi.controller.helper.Functions;
+import com.example.mdjahirulislam.doobbi.controller.helper.SessionManager;
 import com.example.mdjahirulislam.doobbi.model.responseModel.GetItemWisePriceResponseModel;
 import com.example.mdjahirulislam.doobbi.model.responseModel.GetTadItemResponseModel;
 import com.example.mdjahirulislam.doobbi.view.HomeActivity;
@@ -20,6 +21,7 @@ import com.example.mdjahirulislam.doobbi.view.makeMyOrder.OrderHomeActivity;
 
 import java.util.ArrayList;
 
+import io.realm.Realm;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -43,13 +45,26 @@ public class PriceListActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     private TabPageAdapter tabPageAdapter;
     private ViewPager viewPager;
-
     private ConnectionAPI connectionApi;
-    private ArrayList<String> itemNameList;
-    private ArrayList<String> itemIdList;
-    private GetItemWisePriceResponseModel priceResponseModel;
+    private GetTadItemResponseModel tadItemResponseModel;
 
-    private Thread getItemWisePriceThread;
+
+    private ArrayList<String> tabNameList;
+    private ArrayList<String> tabIdList;
+
+
+    private void initialization() {
+        //        for back button on action bar
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        connectionApi = Functions.getRetrofit().create(ConnectionAPI.class);
+        viewPager = (ViewPager) findViewById( R.id.itemPriceListVP );
+        tabLayout = (TabLayout) findViewById( R.id.price_list_tab_layout );
+        tabNameList = new ArrayList<>();
+        tabIdList = new ArrayList<>();
+        Functions.ProgressDialog( this );
+        Functions.showDialog();
+    }
 
 
     @Override
@@ -57,112 +72,81 @@ public class PriceListActivity extends AppCompatActivity {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_price_list );
 
-        //        for back button on action bar
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        initialization();
 
-        connectionApi = Functions.getRetrofit().create( ConnectionAPI.class );
+        setupViewPager( viewPager );
+        tabLayout.setupWithViewPager( viewPager );
 
-//        getItemWisePriceThread = new Thread( new GetItemWisePriceThread() );
-        itemIdList = new ArrayList<>(  );
-        itemNameList = new ArrayList<>(  );
+        tabPageAdapter = new TabPageAdapter( this, getSupportFragmentManager(),tabNames,tabIdList,2 );
+        viewPager.setAdapter( tabPageAdapter );
 
-        try {
-            getItemWisePriceThread.start();
-            Functions.ProgressDialog( this );
-            Functions.showDialog();
-//            Log.d( TAG, "onCreate: try" + getCategoryItemThread.isAlive() );
-//            getCategoryItemThread.interrupt();
-
-
-        } catch (Exception e) {
-            Log.d( TAG, "onCreate: " + e.getLocalizedMessage() );
-        } finally {
-            Log.d( TAG, "onCreate: finally" + getItemWisePriceThread.isAlive() );
-
-//            getTabNameThread.interrupt();
-            Log.d( TAG, "onCreate: finally " + Thread.currentThread().isAlive() );
-        }
-
-//        viewPager = (ViewPager) findViewById( R.id.itemPriceListVP );
-//        setupViewPager( viewPager );
-//
-//        tabLayout = (TabLayout) findViewById( R.id.price_list_tab_layout );
-//        tabLayout.setupWithViewPager( viewPager );
-
-//        tabPageAdapter = new TabPageAdapter( this, getSupportFragmentManager(),tabNames,2 );
-//        viewPager.setAdapter( tabPageAdapter );
-
-//        tabLayout.setupWithViewPager( viewPager );
-
-//        tab text color change
-//        tabLayout.setTabTextColors(Color.parseColor("#000000"), Color.parseColor("#ffffff"));
-
+        tabLayout.setupWithViewPager( viewPager );
 
 //        setupTabIcons();
-//        tabIconsWhite = new int[Functions.tabIconsWhite.length];
-//        tabIconsAss = new int[Functions.tabIconsAss.length];
-//        tabIconsWhite = Functions.tabIconsWhite;
-//        tabIconsAss = Functions.tabIconsAss;
 
-//        tabLayout.setOnTabSelectedListener( new TabLayout.OnTabSelectedListener() {
-//            @Override
-//            public void onTabSelected(TabLayout.Tab tab) {
-//                int position = tab.getPosition();
-//
-//                switch (position) {
-//                    case 0:
-//                        tabLayout.getTabAt( position ).setIcon( tabIconsWhite[position] );
-////                        tabLayout.setTabTextColors(R.color.colorBlack,R.color.colorWhite);
-//
-//                        break;
-//                    case 1:
-//                        tabLayout.getTabAt( position ).setIcon( tabIconsWhite[position] );
-//                        break;
-//                    case 2:
-//                        tabLayout.getTabAt( position ).setIcon( tabIconsWhite[position] );
-//                        break;
-//                    case 3:
-//                        tabLayout.getTabAt( position ).setIcon( tabIconsWhite[position] );
-//                        break;
-//                    case 4:
-//                        tabLayout.getTabAt( position ).setIcon( tabIconsWhite[position] );
-//                        break;
-//                }
-//
-//
-//            }
-//
-//            @Override
-//            public void onTabUnselected(TabLayout.Tab tab) {
-//
-//                int position = tab.getPosition();
-//
-//                switch (position) {
-//                    case 0:
-//                        tabLayout.getTabAt( position ).setIcon( tabIconsAss[position] );
-//                        break;
-//                    case 1:
-//                        tabLayout.getTabAt( position ).setIcon( tabIconsAss[position] );
-//                        break;
-//                    case 2:
-//                        tabLayout.getTabAt( position ).setIcon( tabIconsAss[position] );
-//                        break;
-//                    case 3:
-//                        tabLayout.getTabAt( position ).setIcon( tabIconsAss[position] );
-//                        break;
-//
-//                    case 4:
-//                        tabLayout.getTabAt( position ).setIcon( tabIconsAss[position] );
-//                        break;
-//                }
-//
-//            }
-//
-//            @Override
-//            public void onTabReselected(TabLayout.Tab tab) {
-//
-//            }
-//        } );
+        Thread getTabNameThread = new Thread( new GetTabNameThread() );
+        getTabNameThread.start();
+
+
+        tabLayout.setOnTabSelectedListener( new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                int position = tab.getPosition();
+
+                switch (position) {
+                    case 0:
+                        tabLayout.getTabAt( position ).setIcon( tabIconsWhite[position] );
+//                        tabLayout.setTabTextColors(R.color.colorBlack,R.color.colorWhite);
+
+                        break;
+                    case 1:
+                        tabLayout.getTabAt( position ).setIcon( tabIconsWhite[position] );
+                        break;
+                    case 2:
+                        tabLayout.getTabAt( position ).setIcon( tabIconsWhite[position] );
+                        break;
+                    case 3:
+                        tabLayout.getTabAt( position ).setIcon( tabIconsWhite[position] );
+                        break;
+                    case 4:
+                        tabLayout.getTabAt( position ).setIcon( tabIconsWhite[position] );
+                        break;
+                }
+
+
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+                int position = tab.getPosition();
+
+                switch (position) {
+                    case 0:
+                        tabLayout.getTabAt( position ).setIcon( tabIconsAss[position] );
+                        break;
+                    case 1:
+                        tabLayout.getTabAt( position ).setIcon( tabIconsAss[position] );
+                        break;
+                    case 2:
+                        tabLayout.getTabAt( position ).setIcon( tabIconsAss[position] );
+                        break;
+                    case 3:
+                        tabLayout.getTabAt( position ).setIcon( tabIconsAss[position] );
+                        break;
+
+                    case 4:
+                        tabLayout.getTabAt( position ).setIcon( tabIconsAss[position] );
+                        break;
+                }
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        } );
 
 
     }
@@ -204,74 +188,85 @@ public class PriceListActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-//    class GetItemWisePriceThread implements Runnable {
-//        public void run() {
+    class GetTabNameThread implements Runnable {
+        public void run() {
 //            Log.d( TAG, "run: thread is running..." );
-//            Log.d( TAG, "run: "+Thread.currentThread().isAlive() );
-//
-//            RequestBody password = RequestBody.create( MultipartBody.FORM, API_ACCESS_PASSWORD );
-//            RequestBody user = RequestBody.create( MultipartBody.FORM, API_ACCESS_ID );
-//            RequestBody itemID = RequestBody.create( MultipartBody.FORM, API_ACCESS_ID );
-//            RequestBody function = RequestBody.create( MultipartBody.FORM, API_ACCESS_FUNCTION_GET_CATEGORY );
-//
-////                Log.d( TAG, "run: data: " + phone + "\ndataModel: " + userPhone );
-//
-//            final Call<GetItemWisePriceResponseModel> insertUserResponseModelCallBack = connectionApi.getCategoryItemWisePrice( password, user,itemID,
-//                    function );
-//
-//
-//            itemNameList.clear();
-//            itemIdList.clear();
-//            insertUserResponseModelCallBack.enqueue( new Callback<GetItemWisePriceResponseModel>() {
-//                @Override
-//                public void onResponse(Call<GetItemWisePriceResponseModel> call, Response<GetItemWisePriceResponseModel> response) {
-//                    if (response.code() == 200) {
-//                        priceResponseModel = response.body();
-//                        String status = priceResponseModel.getStatus();
-//                        Log.d( TAG, "Status : " + priceResponseModel.toString() );
-//                        // deny code is 100
-//                        if (status.equalsIgnoreCase( API_ACCESS_SUCCESS_CODE )) { // Status success code = 100
-//
-//                            for (int i = 0; i < priceResponseModel.getItem().size(); i++) {
-//                                itemNameList.add( priceResponseModel.getItem().get( i ).getServiceName() );
-//                                itemIdList.add( priceResponseModel.getItem().get( i ).getPriceId() );
-//                            }
-//
-//                            tabPageAdapter = new TabPageAdapter( PriceListActivity.this, getSupportFragmentManager(), itemNameList,itemIdList, 2 );
-//                            viewPager.setAdapter( tabPageAdapter );
-//
-//                        }
-//                        // deny code is 101
-//                        else if (status.equalsIgnoreCase( NO_USER_FOUND_CODE )) {
-//                            String error_msg = priceResponseModel.getDetail();
-//                            Log.d( TAG, "onResponse: " + error_msg );
-//                        } else {
-//                            Log.d( TAG, "onResponse: Some Is Wrong" );
-//                        }
-//
-//
-//                    } else {
-////                    Toast.makeText(context, "Server Error", Toast.LENGTH_SHORT).show();
-//                        Log.d( TAG, "onResponse: Server Error response.code ===> " + response.code() );
-//                    }
-//                    Log.d( TAG, "onResponse: " + response.body() + " \n\n" + response.raw() + " \n\n" + response.toString() + " \n\n" + response.errorBody() );
+//            Log.d( TAG, "run: " + Thread.currentThread().isAlive() );
+
+            RequestBody password = RequestBody.create( MultipartBody.FORM, API_ACCESS_PASSWORD );
+            RequestBody user = RequestBody.create( MultipartBody.FORM, API_ACCESS_ID );
+            RequestBody function = RequestBody.create( MultipartBody.FORM, API_ACCESS_FUNCTION_GET_CATEGORY );
+
+//                Log.d( TAG, "run: data: " + phone + "\ndataModel: " + userPhone );
+
+            final Call<GetTadItemResponseModel> insertUserResponseModelCallBack = connectionApi.getTabItem( password, user,
+                    function );
+
+
+            tabNameList.clear();
+            tabIdList.clear();
+            insertUserResponseModelCallBack.enqueue( new Callback<GetTadItemResponseModel>() {
+                @Override
+                public void onResponse(Call<GetTadItemResponseModel> call, Response<GetTadItemResponseModel> response) {
+                    if (response.code() == 200) {
+                        tadItemResponseModel = response.body();
+                        String status = tadItemResponseModel.getStatus();
+                        Log.d( TAG, "Status : " + tadItemResponseModel.toString() );
+                        // deny code is 100
+                        if (status.equalsIgnoreCase( API_ACCESS_SUCCESS_CODE )) { // Status success code = 100
+
+                            for (int i = 0; i < tadItemResponseModel.getCategory().size(); i++) {
+                                tabNameList.add( tadItemResponseModel.getCategory().get( i ).getName() );
+                                tabIdList.add( tadItemResponseModel.getCategory().get( i ).getId() );
+                            }
+//                            hideDialog();
+                            Thread progressThread = new Thread(new Functions.ProgressThread( ));
+                            progressThread.start();
+
+                            tabPageAdapter = new TabPageAdapter( PriceListActivity.this, getSupportFragmentManager(), tabNameList, tabIdList, 2 );
+                            viewPager.setAdapter( tabPageAdapter );
+                            tabLayout.setupWithViewPager( viewPager );
+
+                            tabPageAdapter.notifyDataSetChanged();
+
+                            if (tabNameList.size()>4){
+                                tabLayout.setTabMode( TabLayout.MODE_SCROLLABLE );
+                            }else {
+                                tabLayout.setTabMode( TabLayout.MODE_FIXED );
+                            }
+
+                        }
+                        // deny code is 101
+                        else if (status.equalsIgnoreCase( NO_USER_FOUND_CODE )) {
+                            String error_msg = tadItemResponseModel.getDetail();
+                            Log.d( TAG, "onResponse: " + error_msg );
+                        } else {
+                            Log.d( TAG, "onResponse: Some Is Wrong" );
+                        }
+
+
+                    } else {
+//                    Toast.makeText(context, "Server Error", Toast.LENGTH_SHORT).show();
+                        Log.d( TAG, "onResponse: Server Error response.code ===> " + response.code() );
+                    }
+                    Log.d( TAG, "onResponse: " + response.body() + " \n\n" + response.raw() + " \n\n" + response.toString() + " \n\n" + response.errorBody() );
 //                    hideDialog();
-//
-//
-//                }
-//
-//                @Override
-//                public void onFailure(Call<GetItemWisePriceResponseModel> call, Throwable t) {
-//
-//                    Log.d( TAG, "onFailure: " + t.getLocalizedMessage() );
-//                    Log.d( TAG, "onFailure: " + t.toString() );
-//                    Log.d( TAG, "onFailure: " + t.getMessage() );
-//                    hideDialog();
-//
-//                }
-//            } );
-//
-//        }
-//    }
+
+
+                }
+
+                @Override
+                public void onFailure(Call<GetTadItemResponseModel> call, Throwable t) {
+
+                    Log.d( TAG, "onFailure: " + t.getLocalizedMessage() );
+                    Log.d( TAG, "onFailure: " + t.toString() );
+                    Log.d( TAG, "onFailure: " + t.getMessage() );
+                    hideDialog();
+
+                }
+            } );
+
+        }
+    }
 
 }

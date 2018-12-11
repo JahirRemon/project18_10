@@ -182,72 +182,78 @@ public class LoginActivity extends AppCompatActivity {
                     public void onResponse(Call<GetUserDetailsResponseModel> call, Response<GetUserDetailsResponseModel> response) {
                         if (response.code() == 200) {
                             userDetailsResponseModel = response.body();
-                            String status = userDetailsResponseModel.getStatus();
-                            Log.d( TAG, "Status : " + userDetailsResponseModel.toString() );
-                            // deny code is 100
-                            if (status.equalsIgnoreCase( API_ACCESS_SUCCESS_CODE )) { // Status success code = 100
+                            if (userDetailsResponseModel!=null) {
+                                String status = userDetailsResponseModel.getStatus();
+                                Log.d(TAG, "Status : " + userDetailsResponseModel.toString());
+                                // deny code is 100
+                                if (status.equalsIgnoreCase(API_ACCESS_SUCCESS_CODE)) { // Status success code = 100
 
-                                mRealm = Realm.getDefaultInstance();
+                                    mRealm = Realm.getDefaultInstance();
 
-                                mRealm.beginTransaction();
+                                    mRealm.beginTransaction();
 
-                                userDetailsModelDB = mRealm.createObject( InsertUserDataModel.class );
-                                userDetailsModelDB.setClint_id( userDetailsResponseModel.getCid() );
-                                userDetailsModelDB.setName( userDetailsResponseModel.getCustomerName() );
-                                userDetailsModelDB.setPhone( userDetailsResponseModel.getPhone() );
-                                userDetailsModelDB.setEmail( userDetailsResponseModel.getEmail() );
-                                userDetailsModelDB.setAddress( userDetailsResponseModel.getAddress() );
-                                userDetailsModelDB.setClint_image_path( userDetailsResponseModel.getFileLink() );
-                                userDetailsModelDB.setFlat_no(userDetailsResponseModel.getFlatNo());
-                                userDetailsModelDB.setRoad_no(userDetailsResponseModel.getRoadNo());
-                                userDetailsModelDB.setHouse_no(userDetailsResponseModel.getHouseNo());
-                                userDetailsModelDB.setArea(userDetailsResponseModel.getArea());
-                                userDetailsModelDB.setLatitude(userDetailsResponseModel.getLatitude());
-                                userDetailsModelDB.setLongitude(userDetailsResponseModel.getLongitude());
+                                    userDetailsModelDB = mRealm.createObject(InsertUserDataModel.class);
+                                    userDetailsModelDB.setClint_id(userDetailsResponseModel.getCid());
+                                    userDetailsModelDB.setName(userDetailsResponseModel.getCustomerName());
+                                    userDetailsModelDB.setPhone(userDetailsResponseModel.getPhone());
+                                    userDetailsModelDB.setEmail(userDetailsResponseModel.getEmail());
+                                    userDetailsModelDB.setAddress(userDetailsResponseModel.getAddress());
+                                    userDetailsModelDB.setClint_image_path(userDetailsResponseModel.getFileLink());
+                                    userDetailsModelDB.setFlat_no(userDetailsResponseModel.getFlatNo());
+                                    userDetailsModelDB.setRoad_no(userDetailsResponseModel.getRoadNo());
+                                    userDetailsModelDB.setHouse_no(userDetailsResponseModel.getHouseNo());
+                                    userDetailsModelDB.setArea(userDetailsResponseModel.getArea());
+                                    userDetailsModelDB.setLatitude(userDetailsResponseModel.getLatitude());
+                                    userDetailsModelDB.setLongitude(userDetailsResponseModel.getLongitude());
 
-                                mRealm.commitTransaction();
-
-
-                                sessionManager.setLogin( true );
-                                sessionManager.setUserID( userDetailsResponseModel.getCid() );
+                                    mRealm.commitTransaction();
 
 
-                                Intent myIntent = new Intent();
-                                if (from.equalsIgnoreCase( HomeActivity.class.getSimpleName() )) {
-                                    myIntent = new Intent( context, HomeActivity.class );
+                                    sessionManager.setLogin(true);
+                                    sessionManager.setUserID(userDetailsResponseModel.getCid());
+
+
+                                    Intent myIntent = new Intent();
+                                    if (from.equalsIgnoreCase(HomeActivity.class.getSimpleName())) {
+                                        myIntent = new Intent(context, HomeActivity.class);
+
+                                    } else if (from.equalsIgnoreCase(OrderHomeActivity.class.getSimpleName())) {
+                                        myIntent = new Intent(context, OrderHomeActivity.class);
+
+                                    } else if (from.equalsIgnoreCase(SelectItemActivity.class.getSimpleName())) {
+                                        myIntent = new Intent(context, SelectItemActivity.class);
+
+                                    } else if (from.equalsIgnoreCase(OrderSummaryActivity.class.getSimpleName())) {
+                                        myIntent = new Intent(context, OrderSummaryActivity.class);
+
+                                    } else if (from.equalsIgnoreCase(OrderListActivity.class.getSimpleName())) {
+                                        myIntent = new Intent(context, OrderListActivity.class);
+
+                                    } else if (from.equalsIgnoreCase(ProfileViewActivity.class.getSimpleName())) {
+                                        myIntent = new Intent(context, ProfileViewActivity.class);
+
+                                    }
+                                    context.startActivity(myIntent);
+                                    finish();
+
 
                                 }
-                                else if (from.equalsIgnoreCase( OrderHomeActivity.class.getSimpleName() )) {
-                                    myIntent = new Intent( context, OrderHomeActivity.class );
+                                // deny code is 101
+                                else if (status.equalsIgnoreCase(NO_USER_FOUND_CODE)) {
+                                    String error_msg = userDetailsResponseModel.getDetail();
+                                    Log.d(TAG, "onResponse: " + error_msg);
+                                } else if (status.equalsIgnoreCase("102")) {
+                                    Log.d(TAG, "onResponse: " + userDetailsResponseModel.getStatus());
+                                    Toast.makeText(context, "" + userDetailsResponseModel.getDetail(), Toast.LENGTH_SHORT).show();
+                                    userPasswordET.setText("");
+                                    userPasswordET.setFocusable(true);
+                                } else {
+                                    Log.d(TAG, "onResponse: Some Is Wrong");
 
                                 }
-                                else if (from.equalsIgnoreCase( SelectItemActivity.class.getSimpleName() )) {
-                                    myIntent = new Intent( context, SelectItemActivity.class );
-
-                                }
-                                else if (from.equalsIgnoreCase( OrderSummaryActivity.class.getSimpleName() )) {
-                                    myIntent = new Intent( context, OrderSummaryActivity.class );
-
-                                }else if (from.equalsIgnoreCase( OrderListActivity.class.getSimpleName() )) {
-                                    myIntent = new Intent( context, OrderListActivity.class );
-
-                                }else if (from.equalsIgnoreCase( ProfileViewActivity.class.getSimpleName() )) {
-                                    myIntent = new Intent( context, ProfileViewActivity.class );
-
-                                }
-                                context.startActivity( myIntent );
-                                finish();
-
-
+                            }else {
+                                Toast.makeText(context, "Please Try again something is wrong!!!", Toast.LENGTH_SHORT).show();
                             }
-                            // deny code is 101
-                            else if (status.equalsIgnoreCase( NO_USER_FOUND_CODE )) {
-                                String error_msg = userDetailsResponseModel.getDetail();
-                                Log.d( TAG, "onResponse: " + error_msg );
-                            } else {
-                                Log.d( TAG, "onResponse: Some Is Wrong" );
-                            }
-
 
                         } else {
 //                    Toast.makeText(context, "Server Error", Toast.LENGTH_SHORT).show();

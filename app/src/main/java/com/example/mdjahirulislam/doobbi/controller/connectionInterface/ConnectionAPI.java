@@ -1,6 +1,7 @@
 package com.example.mdjahirulislam.doobbi.controller.connectionInterface;
 
 import com.example.mdjahirulislam.doobbi.model.requestModel.InsertUserDataModel;
+import com.example.mdjahirulislam.doobbi.model.responseModel.GetAllItemsPriceResponseModel;
 import com.example.mdjahirulislam.doobbi.model.responseModel.GetCategoryItemResponseModel;
 import com.example.mdjahirulislam.doobbi.model.responseModel.GetItemWisePriceResponseModel;
 import com.example.mdjahirulislam.doobbi.model.responseModel.GetOrderDetailsResponseModel;
@@ -123,6 +124,16 @@ public interface ConnectionAPI {
             @Part("function") RequestBody function,
             @Part("phone") RequestBody phone,
             @Part("orderid") RequestBody orderID
+
+    );
+
+    @Multipart
+    @POST("request")
+    Call<GetAllItemsPriceResponseModel> getAllItemsPrice(
+            @Part("password") RequestBody password,
+            @Part("user") RequestBody user,
+            @Part("function") RequestBody function
+
 
     );
 

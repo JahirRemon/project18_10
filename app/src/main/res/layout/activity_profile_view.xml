@@ -102,7 +102,7 @@
                             android:layout_gravity="center"
                             android:drawableLeft="@drawable/ic_call_blue_400_24dp"
                             android:drawablePadding="6dp"
-                            android:hint="+88 01000 000 000"
+                            android:hint=""
                             android:inputType="number"
                             android:gravity="center_vertical"
                             android:textSize="@dimen/regular_text_size"

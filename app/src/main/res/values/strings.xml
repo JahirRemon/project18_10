@@ -44,7 +44,7 @@
     <string name="activity_product">Product List</string>
     <string name="activity_make_order">Make Order</string>
     <string name="activity_order_summary">Order Summary</string>
-    <string name="activity_Price">Price</string>
+    <string name="activity_Price">Price List</string>
     <string name="activity_order_list">Order List</string>
     <string name="activity_offer">Offer</string>
     <string name="activity_pick_up">Location</string>

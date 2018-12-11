@@ -200,7 +200,8 @@ public class OrderSummaryActivity extends AppCompatActivity implements OrderList
             finish();
         }else if (getIntent().getStringExtra(_INTENT_FROM).equalsIgnoreCase(SelectItemActivity.class.getSimpleName())){
 //            intent = new Intent( this, SelectItemActivity.class );
-
+//      todo can't apply intent because when SelectItemActivity is open its need an itemList
+//      todo from previous OrderHome activity. Which is not provide from this activity :)
             this.finish();
         }
         else {
