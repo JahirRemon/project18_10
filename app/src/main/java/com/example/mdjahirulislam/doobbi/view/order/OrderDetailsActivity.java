@@ -164,8 +164,12 @@ public class OrderDetailsActivity extends AppCompatActivity {
                                 totalQuantityTV.setText("Total " + responseModel.getTotalItem() + " Items");
                             }
                             totalPriceTV.setText("Total Tk. "+responseModel.getTotalPayableAmount()+".00");
-                            mAdapter = new OrderDetailsAdapter( OrderDetailsActivity.this, orderDetailsList );
-                            orderListRV.setAdapter( mAdapter );
+                            if (orderDetailsList!=null) {
+                                mAdapter = new OrderDetailsAdapter(OrderDetailsActivity.this, orderDetailsList);
+                                orderListRV.setAdapter(mAdapter);
+                            }else {
+                                Toast.makeText(OrderDetailsActivity.this, "Something is wrong!!!", Toast.LENGTH_SHORT).show();
+                            }
                             hideDialog();
                         }
                         // deny code is 101
@@ -189,6 +193,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
                 @Override
                 public void onFailure(Call<GetOrderDetailsResponseModel> call, Throwable t) {
                     Log.d( TAG, "onFailure: " + t.getLocalizedMessage() );
+                    Toast.makeText(OrderDetailsActivity.this, "Something is Wrong. Please Try Again!!!", Toast.LENGTH_SHORT).show();
                     hideDialog();
                 }
             });
