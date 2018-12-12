@@ -60,16 +60,16 @@ public class OrderListSummaryAdapter extends RecyclerView.Adapter<OrderListSumma
 
 
         public MyViewHolder(View view) {
-            super( view );
+            super(view);
 
-            plusIV = view.findViewById( R.id.singlePlusIV );
-            minusIV = view.findViewById( R.id.singleMinusIV );
-            quantityTV = view.findViewById( R.id.singleQuantityTV );
-            priceTV = view.findViewById( R.id.singlePriceTV );
-            totalPriceTV = view.findViewById( R.id.singleTotalPriceTV );
-            itemType = view.findViewById( R.id.singleItemTypeTV );
-            mainView = view.findViewById( R.id.singleOrderMainLL );
-            zeroIV = view.findViewById( R.id.singleOrderItemCloseIV );
+            plusIV = view.findViewById(R.id.singlePlusIV);
+            minusIV = view.findViewById(R.id.singleMinusIV);
+            quantityTV = view.findViewById(R.id.singleQuantityTV);
+            priceTV = view.findViewById(R.id.singlePriceTV);
+            totalPriceTV = view.findViewById(R.id.singleTotalPriceTV);
+            itemType = view.findViewById(R.id.singleItemTypeTV);
+            mainView = view.findViewById(R.id.singleOrderMainLL);
+            zeroIV = view.findViewById(R.id.singleOrderItemCloseIV);
         }
     }
 
@@ -79,70 +79,70 @@ public class OrderListSummaryAdapter extends RecyclerView.Adapter<OrderListSumma
         this.mContext = context;
 //        this.mPosition = position;
         mRealm = Realm.getDefaultInstance();
-        sessionManager = new SessionManager( context );
+        sessionManager = new SessionManager(context);
         try {
             this.onTotalPriceAndQuantityListener = onTotalPriceAndQuantityListener;
         } catch (ClassCastException e) {
-            Log.d( TAG, "SelectedCategoryItemPriceAdapter: " + e.getLocalizedMessage() );
-            throw new ClassCastException( context.toString() + " must implement onSomeEventListener" );
+            Log.d(TAG, "SelectedCategoryItemPriceAdapter: " + e.getLocalizedMessage());
+            throw new ClassCastException(context.toString() + " must implement onSomeEventListener");
         }
     }
 
     @Override
     public OrderListSummaryAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from( parent.getContext() )
-                .inflate( R.layout.single_oder_list_design, parent, false );
+        View itemView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.single_oder_list_design, parent, false);
 
-        return new OrderListSummaryAdapter.MyViewHolder( itemView );
+        return new OrderListSummaryAdapter.MyViewHolder(itemView);
     }
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onBindViewHolder(final OrderListSummaryAdapter.MyViewHolder holder, int position) {
-        final InsertOrderHistoryDBModel item = mItemsList.get( position );
+        final InsertOrderHistoryDBModel item = mItemsList.get(position);
         final int[] quantity = {0};
         final int[] totalPrice = {0};
         int regularPrice = 0;
 
-        if (Integer.parseInt( item.getItemQuantity() ) != 0) {
-            regularPrice = Integer.parseInt( item.getTotalPrice() ) / Integer.parseInt( item.getItemQuantity() );
+        if (Integer.parseInt(item.getItemQuantity()) != 0) {
+            regularPrice = Integer.parseInt(item.getTotalPrice()) / Integer.parseInt(item.getItemQuantity());
             totalPrice[0] = regularPrice * quantity[0];
-            holder.mainView.setVisibility( View.VISIBLE );
+            holder.mainView.setVisibility(View.VISIBLE);
 
         } else {
 //            Toast.makeText( mContext, "No Item Selected", Toast.LENGTH_SHORT ).show();
-            holder.mainView.setVisibility( View.GONE );
+            holder.mainView.setVisibility(View.GONE);
         }
 
 
-        holder.itemType.setText( item.getItemName() + " - " + item.getServiceName() );
-        holder.priceTV.setText( String.valueOf( regularPrice ) );
+        holder.itemType.setText(item.getItemName() + " - " + item.getServiceName());
+        holder.priceTV.setText(String.valueOf(regularPrice));
 
         mRealm.beginTransaction();
 
-        InsertOrderHistoryDBModel getQuantity = mRealm.where( InsertOrderHistoryDBModel.class )
-                .equalTo( "itemID", item.getItemID() )
+        InsertOrderHistoryDBModel getQuantity = mRealm.where(InsertOrderHistoryDBModel.class)
+                .equalTo("itemID", item.getItemID())
                 .and()
-                .equalTo( "serviceID", item.getServiceID() )
+                .equalTo("serviceID", item.getServiceID())
                 .findFirst();
         try {
 
             if (getQuantity != null) {
-                quantity[0] = Integer.parseInt( getQuantity.getItemQuantity() );
-                totalPrice[0] = Integer.parseInt( getQuantity.getTotalPrice() );
+                quantity[0] = Integer.parseInt(getQuantity.getItemQuantity());
+                totalPrice[0] = Integer.parseInt(getQuantity.getTotalPrice());
 
             }
 
         } finally {
-            holder.quantityTV.setText( String.valueOf( quantity[0] ) );
-            holder.totalPriceTV.setText( String.valueOf( totalPrice[0] ) );
+            holder.quantityTV.setText(String.valueOf(quantity[0]));
+            holder.totalPriceTV.setText(String.valueOf(totalPrice[0]));
         }
 
         mRealm.commitTransaction();
 
 
         final int finalRegularPrice = regularPrice;
-        holder.plusIV.setOnTouchListener( new View.OnTouchListener() {
+        holder.plusIV.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
 
@@ -151,70 +151,72 @@ public class OrderListSummaryAdapter extends RecyclerView.Adapter<OrderListSumma
 //                Log.d( TAG, "onTouch 1: plusIV ---> " + event.getAction() );
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
-                        holder.plusIV.setAlpha( 0.5f );
+                        holder.plusIV.setAlpha(0.5f);
 //                        Log.d( TAG, "onTouch 2: plusIV ---> " + MotionEvent.ACTION_DOWN );
                         break;
                     case MotionEvent.ACTION_UP:
                         if (event.getX() < width && event.getY() < height && event.getY() > 0) {
 
-                            holder.plusIV.setAlpha( 1.0f );
+                            holder.plusIV.setAlpha(1.0f);
 
-                            Log.d( TAG, "onTouch: is login? -->" + sessionManager.isLoggedIn() + "-----" +
-                                    ">>>>> " + sessionManager.getUserId() );
+                            Log.d(TAG, "onTouch: is login? -->" + sessionManager.isLoggedIn() + "-----" +
+                                    ">>>>> " + sessionManager.getUserId());
 
-                                quantity[0]++;
-                                totalPrice[0] = finalRegularPrice * quantity[0];
-                                holder.quantityTV.setText( String.valueOf( quantity[0] ) );
-                                holder.totalPriceTV.setText( String.valueOf( totalPrice[0] ) );
-
-
-                                uniqueID = UUID.randomUUID().toString();
-
-                                RealmResults<InsertOrderHistoryDBModel> getResult = mRealm.where( InsertOrderHistoryDBModel.class )
-                                        .equalTo( "itemID", item.getItemID() )
-                                        .and().equalTo( "serviceID", item.getServiceID() )
-                                        .findAll();
-
-                                Log.d( TAG, "onResume: " + getResult.size() );
+                            quantity[0]++;
+                            totalPrice[0] = finalRegularPrice * quantity[0];
+                            holder.quantityTV.setText(String.valueOf(quantity[0]));
+                            holder.totalPriceTV.setText(String.valueOf(totalPrice[0]));
 
 
-                                insertOrderHistoryDBModel = new InsertOrderHistoryDBModel();
-                                insertOrderHistoryDBModel.setUserID( sessionManager.getUserId() );
-                                insertOrderHistoryDBModel.setItemID( item.getItemID() );
-                                insertOrderHistoryDBModel.setServiceID( item.getServiceID() );
-                                insertOrderHistoryDBModel.setItemQuantity( String.valueOf( quantity[0] ) );
-                                insertOrderHistoryDBModel.setTotalPrice( String.valueOf( totalPrice[0] ) );
+                            uniqueID = UUID.randomUUID().toString();
 
-                                if (0 < getResult.size()) {
-                                    DBFunctions.updateOrderHistory( insertOrderHistoryDBModel, getResult.get( 0 ).get_id() );
-                                    Log.d( TAG, "onTouch: find serviceId----> update history---> " + insertOrderHistoryDBModel.toString() );
+                            RealmResults<InsertOrderHistoryDBModel> getResult = mRealm.where(InsertOrderHistoryDBModel.class)
+                                    .equalTo("itemID", item.getItemID())
+                                    .and().equalTo("serviceID", item.getServiceID())
+                                    .findAll();
 
-                                } else {
+                            Log.d(TAG, "onResume: " + getResult.size());
 
-                                    Log.d( TAG, "onResume: id--> " + uniqueID + " \nData not found new data inset " + insertOrderHistoryDBModel.toString() );
-                                    DBFunctions.addOrderHistory( insertOrderHistoryDBModel, uniqueID );
-                                }
-                                onTotalPriceAndQuantityListener.setPrice();
-                                onTotalPriceAndQuantityListener.setQuantity();
+
+                            insertOrderHistoryDBModel = new InsertOrderHistoryDBModel();
+                            insertOrderHistoryDBModel.setUserID(sessionManager.getUserId());
+                            insertOrderHistoryDBModel.setItemID(item.getItemID());
+                            insertOrderHistoryDBModel.setItemName(item.getItemName());
+                            insertOrderHistoryDBModel.setServiceID(item.getServiceID());
+                            insertOrderHistoryDBModel.setItemQuantity(String.valueOf(quantity[0]));
+                            insertOrderHistoryDBModel.setServiceName(item.getServiceName());
+                            insertOrderHistoryDBModel.setTotalPrice(String.valueOf(totalPrice[0]));
+
+                            if (0 < getResult.size()) {
+                                DBFunctions.updateOrderHistory(insertOrderHistoryDBModel, getResult.get(0).get_id());
+                                Log.d(TAG, "onTouch: find serviceId----> update history---> " + insertOrderHistoryDBModel.toString());
+
+                            } else {
+
+                                Log.d(TAG, "onResume: id--> " + uniqueID + " \nData not found new data inset " + insertOrderHistoryDBModel.toString());
+                                DBFunctions.addOrderHistory(insertOrderHistoryDBModel, uniqueID);
+                            }
+                            onTotalPriceAndQuantityListener.setPrice();
+                            onTotalPriceAndQuantityListener.setQuantity();
 
 
                         }
                         break;
                     case MotionEvent.ACTION_CANCEL:
-                        holder.plusIV.setAlpha( 1.0f );
+                        holder.plusIV.setAlpha(1.0f);
                         break;
                     case MotionEvent.ACTION_MOVE:
-                        holder.plusIV.setAlpha( 1.0f );
+                        holder.plusIV.setAlpha(1.0f);
                         break;
                     default:
                         break;
                 }
                 return true;
             }
-        } );
+        });
 
         final int finalRegularPrice1 = regularPrice;
-        holder.minusIV.setOnTouchListener( new View.OnTouchListener() {
+        holder.minusIV.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
 
@@ -223,71 +225,73 @@ public class OrderListSummaryAdapter extends RecyclerView.Adapter<OrderListSumma
 //                Log.d( TAG, "onTouch 1: classTimeLL ---> " + event.getAction() );
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
-                        holder.minusIV.setAlpha( 0.5f );
+                        holder.minusIV.setAlpha(0.5f);
 //                        Log.d( TAG, "onTouch 2: classTimeLL ---> " + MotionEvent.ACTION_DOWN );
                         break;
                     case MotionEvent.ACTION_UP:
                         if (event.getX() < width && event.getY() < height && event.getY() > 0) {
-                            holder.minusIV.setAlpha( 1.0f );
+                            holder.minusIV.setAlpha(1.0f);
 
-                            Log.d( TAG, "onTouch: is login? -->" + sessionManager.isLoggedIn() + "-----" +
-                                    ">>>>> " + sessionManager.getUserId() );
+                            Log.d(TAG, "onTouch: is login? -->" + sessionManager.isLoggedIn() + "-----" +
+                                    ">>>>> " + sessionManager.getUserId());
 
-                                if (quantity[0] > 0) {
-                                    quantity[0]--;
-                                } else {
-                                    quantity[0] = 0;
-                                }
-                                totalPrice[0] = finalRegularPrice * quantity[0];
-                                holder.quantityTV.setText( String.valueOf( quantity[0] ) );
-                                holder.totalPriceTV.setText( String.valueOf( totalPrice[0] ) );
+                            if (quantity[0] > 0) {
+                                quantity[0]--;
+                            } else {
+                                quantity[0] = 0;
+                            }
+                            totalPrice[0] = finalRegularPrice * quantity[0];
+                            holder.quantityTV.setText(String.valueOf(quantity[0]));
+                            holder.totalPriceTV.setText(String.valueOf(totalPrice[0]));
 
-                                uniqueID = UUID.randomUUID().toString();
+                            uniqueID = UUID.randomUUID().toString();
 
-                                RealmResults<InsertOrderHistoryDBModel> getResult = mRealm.where( InsertOrderHistoryDBModel.class )
-                                        .equalTo( "itemID", item.getItemID() )
-                                        .and().equalTo( "serviceID", item.getServiceID() )
-                                        .findAll();
+                            RealmResults<InsertOrderHistoryDBModel> getResult = mRealm.where(InsertOrderHistoryDBModel.class)
+                                    .equalTo("itemID", item.getItemID())
+                                    .and().equalTo("serviceID", item.getServiceID())
+                                    .findAll();
 
-                                Log.d( TAG, "onResume: " + getResult.size() );
+                            Log.d(TAG, "onResume: " + getResult.size());
 
 
-                                insertOrderHistoryDBModel = new InsertOrderHistoryDBModel();
-                                insertOrderHistoryDBModel.setUserID( sessionManager.getUserId() );
-                                insertOrderHistoryDBModel.setItemID( item.getItemID() );
-                                insertOrderHistoryDBModel.setServiceID( item.getServiceID() );
-                                insertOrderHistoryDBModel.setItemQuantity( String.valueOf( quantity[0] ) );
-                                insertOrderHistoryDBModel.setTotalPrice( String.valueOf( totalPrice[0] ) );
+                            insertOrderHistoryDBModel = new InsertOrderHistoryDBModel();
+                            insertOrderHistoryDBModel.setUserID(sessionManager.getUserId());
+                            insertOrderHistoryDBModel.setItemID(item.getItemID());
+                            insertOrderHistoryDBModel.setItemName(item.getItemName());
+                            insertOrderHistoryDBModel.setServiceID(item.getServiceID());
+                            insertOrderHistoryDBModel.setItemQuantity(String.valueOf(quantity[0]));
+                            insertOrderHistoryDBModel.setServiceName(item.getServiceName());
+                            insertOrderHistoryDBModel.setTotalPrice(String.valueOf(totalPrice[0]));
 
-                                if (0 < getResult.size()) {
-                                    DBFunctions.updateOrderHistory( insertOrderHistoryDBModel, getResult.get( 0 ).get_id() );
-                                    Log.d( TAG, "onTouch: find serviceId----> update history---> " + insertOrderHistoryDBModel.toString() );
+                            if (0 < getResult.size()) {
+                                DBFunctions.updateOrderHistory(insertOrderHistoryDBModel, getResult.get(0).get_id());
+                                Log.d(TAG, "onTouch: find serviceId----> update history---> " + insertOrderHistoryDBModel.toString());
 
-                                } else {
+                            } else {
 
-                                    Log.d( TAG, "onResume: id--> " + uniqueID + " \nData not found new data inset " + insertOrderHistoryDBModel.toString() );
-                                    DBFunctions.addOrderHistory( insertOrderHistoryDBModel, uniqueID );
-                                }
-                                onTotalPriceAndQuantityListener.setPrice();
-                                onTotalPriceAndQuantityListener.setQuantity();
+                                Log.d(TAG, "onResume: id--> " + uniqueID + " \nData not found new data inset " + insertOrderHistoryDBModel.toString());
+                                DBFunctions.addOrderHistory(insertOrderHistoryDBModel, uniqueID);
+                            }
+                            onTotalPriceAndQuantityListener.setPrice();
+                            onTotalPriceAndQuantityListener.setQuantity();
 
                         }
                         break;
                     case MotionEvent.ACTION_CANCEL:
-                        holder.minusIV.setAlpha( 1.0f );
+                        holder.minusIV.setAlpha(1.0f);
                         break;
                     case MotionEvent.ACTION_MOVE:
-                        holder.minusIV.setAlpha( 1.0f );
+                        holder.minusIV.setAlpha(1.0f);
                         break;
                     default:
                         break;
                 }
                 return true;
             }
-        } );
+        });
 
 
-        holder.zeroIV.setOnTouchListener( new View.OnTouchListener() {
+        holder.zeroIV.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
 
@@ -296,65 +300,67 @@ public class OrderListSummaryAdapter extends RecyclerView.Adapter<OrderListSumma
 //                Log.d( TAG, "onTouch 1: classTimeLL ---> " + event.getAction() );
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
-                        holder.zeroIV.setAlpha( 0.5f );
+                        holder.zeroIV.setAlpha(0.5f);
 //                        Log.d( TAG, "onTouch 2: classTimeLL ---> " + MotionEvent.ACTION_DOWN );
                         break;
                     case MotionEvent.ACTION_UP:
                         if (event.getX() < width && event.getY() < height && event.getY() > 0) {
-                            holder.zeroIV.setAlpha( 1.0f );
+                            holder.zeroIV.setAlpha(1.0f);
 
-                            Log.d( TAG, "onTouch: is login? -->" + sessionManager.isLoggedIn() + "-----" +
-                                    ">>>>> " + sessionManager.getUserId() );
+                            Log.d(TAG, "onTouch: is login? -->" + sessionManager.isLoggedIn() + "-----" +
+                                    ">>>>> " + sessionManager.getUserId());
 
-                                quantity[0] = 0;
+                            quantity[0] = 0;
 
-                                totalPrice[0] = finalRegularPrice * quantity[0];
-                                holder.quantityTV.setText( String.valueOf( quantity[0] ) );
-                                holder.totalPriceTV.setText( String.valueOf( totalPrice[0] ) );
+                            totalPrice[0] = finalRegularPrice * quantity[0];
+                            holder.quantityTV.setText(String.valueOf(quantity[0]));
+                            holder.totalPriceTV.setText(String.valueOf(totalPrice[0]));
 
-                                uniqueID = UUID.randomUUID().toString();
+                            uniqueID = UUID.randomUUID().toString();
 
-                                RealmResults<InsertOrderHistoryDBModel> getResult = mRealm.where( InsertOrderHistoryDBModel.class )
-                                        .equalTo( "itemID", item.getItemID() )
-                                        .and().equalTo( "serviceID", item.getServiceID() )
-                                        .findAll();
+                            RealmResults<InsertOrderHistoryDBModel> getResult = mRealm.where(InsertOrderHistoryDBModel.class)
+                                    .equalTo("itemID", item.getItemID())
+                                    .and().equalTo("serviceID", item.getServiceID())
+                                    .findAll();
 
-                                Log.d( TAG, "onResume: " + getResult.size() );
+                            Log.d(TAG, "onResume: " + getResult.size());
 
 
-                                insertOrderHistoryDBModel = new InsertOrderHistoryDBModel();
-                                insertOrderHistoryDBModel.setUserID( sessionManager.getUserId() );
-                                insertOrderHistoryDBModel.setItemID( item.getItemID() );
-                                insertOrderHistoryDBModel.setServiceID( item.getServiceID() );
-                                insertOrderHistoryDBModel.setItemQuantity( String.valueOf( quantity[0] ) );
-                                insertOrderHistoryDBModel.setTotalPrice( String.valueOf( totalPrice[0] ) );
+                            insertOrderHistoryDBModel = new InsertOrderHistoryDBModel();
+                            insertOrderHistoryDBModel.setUserID(sessionManager.getUserId());
+                            insertOrderHistoryDBModel.setItemID(item.getItemID());
+                            insertOrderHistoryDBModel.setItemName(item.getItemName());
+                            insertOrderHistoryDBModel.setServiceID(item.getServiceID());
+                            insertOrderHistoryDBModel.setItemQuantity(String.valueOf(quantity[0]));
+                            insertOrderHistoryDBModel.setServiceName(item.getServiceName());
+                            insertOrderHistoryDBModel.setTotalPrice(String.valueOf(totalPrice[0]));
 
-                                if (0 < getResult.size()) {
-                                    DBFunctions.updateOrderHistory( insertOrderHistoryDBModel, getResult.get( 0 ).get_id() );
-                                    Log.d( TAG, "onTouch: find serviceId----> update history---> " + insertOrderHistoryDBModel.toString() );
+                            if (0 < getResult.size()) {
+                                DBFunctions.updateOrderHistory(insertOrderHistoryDBModel, getResult.get(0).get_id());
+                                Log.d(TAG, "onTouch: find serviceId----> update history---> " + insertOrderHistoryDBModel.toString());
 
-                                } else {
+                            } else {
 
-                                    Log.d( TAG, "onResume: id--> " + uniqueID + " \nData not found new data inset " + insertOrderHistoryDBModel.toString() );
-                                    DBFunctions.addOrderHistory( insertOrderHistoryDBModel, uniqueID );
-                                }
-                                onTotalPriceAndQuantityListener.setPrice();
-                                onTotalPriceAndQuantityListener.setQuantity();
+                                Log.d(TAG, "onResume: id--> " + uniqueID + " \nData not found new data inset " + insertOrderHistoryDBModel.toString());
+                                DBFunctions.addOrderHistory(insertOrderHistoryDBModel, uniqueID);
+                            }
+                            onTotalPriceAndQuantityListener.setPrice();
+                            onTotalPriceAndQuantityListener.setQuantity();
 
                         }
                         break;
                     case MotionEvent.ACTION_CANCEL:
-                        holder.zeroIV.setAlpha( 1.0f );
+                        holder.zeroIV.setAlpha(1.0f);
                         break;
                     case MotionEvent.ACTION_MOVE:
-                        holder.zeroIV.setAlpha( 1.0f );
+                        holder.zeroIV.setAlpha(1.0f);
                         break;
                     default:
                         break;
                 }
                 return true;
             }
-        } );
+        });
 
 
     }

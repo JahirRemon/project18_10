@@ -288,7 +288,7 @@ public class OrderHomeActivity extends AppCompatActivity implements SelectedCate
                     Log.d( TAG, "onFailure: " + t.getLocalizedMessage() );
                     Log.d( TAG, "onFailure: " + t.toString() );
                     Log.d( TAG, "onFailure: " + t.getMessage() );
-//                    hideDialog();
+                    hideDialog();
 
                 }
             } );

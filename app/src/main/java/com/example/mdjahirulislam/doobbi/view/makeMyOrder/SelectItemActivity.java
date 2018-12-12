@@ -76,6 +76,15 @@ public class SelectItemActivity extends AppCompatActivity implements SelectedCat
     protected void onResume() {
         super.onResume();
 //        Functions.hideDialog();
+        Log.d(TAG, "onResume: ");
+        Functions.setAnimationNumber( totalPriceTV, "Total Tk. ", totalPrice, DBFunctions.getAllOrderHistoryTotalPrice(), ".00", 1000 );
+
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.d(TAG, "onRestart: ");
     }
 
     @Override
@@ -122,7 +131,7 @@ public class SelectItemActivity extends AppCompatActivity implements SelectedCat
 //        tabLayout.setupWithViewPager( viewPager );
 
         totalPrice = DBFunctions.getAllOrderHistoryTotalPrice();
-        totalPriceTV.setText( "Tk. " + String.valueOf( totalPrice ) + ".00" );
+//        totalPriceTV.setText( "Tk. " + String.valueOf( totalPrice ) + ".00" );
 
         viewPager.setCurrentItem( position );
 
@@ -256,5 +265,7 @@ public class SelectItemActivity extends AppCompatActivity implements SelectedCat
         }
 
     }
+    
+    
 
 }

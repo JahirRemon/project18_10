@@ -37,7 +37,7 @@ import static com.example.mdjahirulislam.doobbi.controller.helper.Functions._INT
 
 public class OrderSummaryActivity extends AppCompatActivity implements OrderListSummaryAdapter.OnTotalPriceAndQuantityListener {
 
-    private static final String TAG = OrderListSummaryAdapter.class.getSimpleName();
+    private static final String TAG = OrderSummaryActivity.class.getSimpleName();
 
     private CircleImageView userProfilePictureIV;
     private TextView userNameTV;
@@ -168,11 +168,14 @@ public class OrderSummaryActivity extends AppCompatActivity implements OrderList
     @Override
     public void setPrice() {
         Functions.setAnimationNumber( totalPriceTV, "Total Tk. ", startPrice, DBFunctions.getAllOrderHistoryTotalPrice(), ".00", 1000 );
+        Log.d(TAG, "setPrice: ");
 
     }
 
     @Override
     public void setQuantity() {
+        Log.d(TAG, "setQuantity: ");
+
         int lastQuantity = DBFunctions.getAllOrderHistoryTotalItems();
         Functions.setAnimationNumber( totalQuantityTV, "Total ", startQuantity, lastQuantity, " Items", 100 );
 

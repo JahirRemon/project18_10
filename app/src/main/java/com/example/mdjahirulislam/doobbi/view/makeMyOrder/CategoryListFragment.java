@@ -40,6 +40,7 @@ import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.API_
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.API_ACCESS_PASSWORD;
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.API_ACCESS_SUCCESS_CODE;
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.NO_USER_FOUND_CODE;
+import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.hideDialog;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -280,7 +281,7 @@ public class CategoryListFragment extends Fragment {
                     Log.d( TAG, "onFailure: " + t.getLocalizedMessage() );
                     Log.d( TAG, "onFailure: " + t.toString() );
                     Log.d( TAG, "onFailure: " + t.getMessage() );
-//                    hideDialog();
+                    hideDialog();
 
                 }
             } );
