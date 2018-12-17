@@ -19,7 +19,7 @@
         <de.hdodenhof.circleimageview.CircleImageView
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/orderDetailsUserProfilePictureIV"
-            android:layout_width="96dp"
+            android:layout_width="76dp"
             android:layout_height="96dp"
             android:layout_gravity="center|top"
             android:layout_marginTop="@dimen/activity_vertical_margin"
@@ -31,7 +31,8 @@
             />
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="4"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:orientation="vertical"
@@ -113,6 +114,14 @@
 
 
         </LinearLayout>
+
+        <ImageView
+            android:id="@+id/orderDetailsQRIV"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            />
 
 
     </LinearLayout>

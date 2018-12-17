@@ -1,6 +1,7 @@
 package com.example.mdjahirulislam.doobbi.view.order;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,6 +23,11 @@ import com.example.mdjahirulislam.doobbi.model.requestModel.InsertUserDataModel;
 import com.example.mdjahirulislam.doobbi.model.responseModel.GetOrderDetailsResponseModel;
 import com.example.mdjahirulislam.doobbi.model.responseModel.GetOrderListResponseModel;
 import com.example.mdjahirulislam.doobbi.view.HomeActivity;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.journeyapps.barcodescanner.BarcodeEncoder;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -57,6 +63,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
     private TextView totalPriceTV;
     private TextView totalQuantityTV;
     private RecyclerView orderListRV;
+    private ImageView qrIV;
 
     private InsertUserDataModel userDataModel;
     private LinearLayoutManager mLayoutManager;
@@ -81,6 +88,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
         totalQuantityTV = findViewById( R.id.orderDetailsTotalQuantityTV );
         userDataModel = new InsertUserDataModel(  );
         connectionApi = Functions.getRetrofit().create( ConnectionAPI.class );
+        qrIV = findViewById(R.id.orderDetailsQRIV);
 
         Functions.ProgressDialog(this);
         Functions.showDialog();
@@ -113,12 +121,28 @@ public class OrderDetailsActivity extends AppCompatActivity {
                 .centerCrop()
                 .into( userProfilePictureIV );
 
+
+        String text= getOrderID; // Whatever you need to encode in the QR code
+        MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
+        try {
+            BitMatrix bitMatrix = multiFormatWriter.encode(text, BarcodeFormat.QR_CODE,200,200);
+            BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
+            Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
+            qrIV.setImageBitmap(bitmap);
+
+
+//            Picasso.get().load(String.valueOf(bitmap))
+//                    .into( qrIV );
+
+        } catch (WriterException e) {
+            e.printStackTrace();
+        }
 //        todo next work
         userPhone = userDataModel.getPhone();
 
         mLayoutManager = new LinearLayoutManager( this );
-        mAdapter = new OrderDetailsAdapter( this, orderDetailsList );
-        orderListRV.setAdapter( mAdapter );
+//        mAdapter = new OrderDetailsAdapter( this, orderDetailsList );
+//        orderListRV.setAdapter( mAdapter );
 
         orderListRV.setLayoutManager( mLayoutManager );
 
@@ -127,6 +151,11 @@ public class OrderDetailsActivity extends AppCompatActivity {
         orderThread.start();
 
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     public class OrderDetailsThread implements Runnable{
