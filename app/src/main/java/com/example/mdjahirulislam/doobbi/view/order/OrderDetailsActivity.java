@@ -125,15 +125,10 @@ public class OrderDetailsActivity extends AppCompatActivity {
         String text= getOrderID; // Whatever you need to encode in the QR code
         MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
         try {
-            BitMatrix bitMatrix = multiFormatWriter.encode(text, BarcodeFormat.QR_CODE,200,200);
+            BitMatrix bitMatrix = multiFormatWriter.encode(text, BarcodeFormat.QR_CODE,400,400);
             BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
             Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
             qrIV.setImageBitmap(bitmap);
-
-
-//            Picasso.get().load(String.valueOf(bitmap))
-//                    .into( qrIV );
-
         } catch (WriterException e) {
             e.printStackTrace();
         }

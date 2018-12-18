@@ -66,5 +66,9 @@ dependencies {
     implementation 'com.google.zxing:core:3.2.1'
     implementation 'com.journeyapps:zxing-android-embedded:3.2.0@aar'
 
+    // For Swipe Recycler view to show menu
+    implementation "com.daimajia.swipelayout:library:1.2.0@aar"
+
+
 
 }

@@ -134,6 +134,30 @@ public class SelectItemActivity extends AppCompatActivity implements SelectedCat
 //        totalPriceTV.setText( "Tk. " + String.valueOf( totalPrice ) + ".00" );
 
         viewPager.setCurrentItem( position );
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                Log.d(TAG, "onPageScrolled: pos--> "+position);
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+                Log.d(TAG, "onPageSelected: position----> "+position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+                Log.d(TAG, "onPageScrollStateChanged: state----> "+state);
+                if (state == 1 || state == 2 ){
+//                    Functions.ProgressDialog(this);
+                    Functions.showDialog();
+
+                }else if (state == 0){
+                    Functions.hideDialog();
+                }
+            }
+        });
 
 
         tabLayout.setOnTabSelectedListener( new TabLayout.OnTabSelectedListener() {

@@ -106,19 +106,20 @@ public class OrderListActivity extends AppCompatActivity {
             Functions.showDialog();
 
 
-            orderListRV.addOnItemTouchListener( new ItemClickListener( this, orderListRV, new ItemClickListener.ClickListener() {
-                @Override
-                public void onClick(View view, int position) {
-                    startActivity( new Intent( OrderListActivity.this, OrderDetailsActivity.class ).putExtra( "position", orderList.get(position).getOrderId() ) );
-                    Log.d( TAG, "onClick: " + position );
-
-                }
-
-                @Override
-                public void onLongClick(View view, int position) {
-
-                }
-            } ) );
+//            orderListRV.addOnItemTouchListener( new ItemClickListener( this, orderListRV, new ItemClickListener.ClickListener() {
+//                @Override
+//                public void onClick(View view, int position) {
+//                    Log.d(TAG, "onClick: view id --> "+view.getId());
+//                    startActivity( new Intent( OrderListActivity.this, OrderDetailsActivity.class ).putExtra( "position", orderList.get(position).getOrderId() ) );
+//                    Log.d( TAG, "onClick: " + position );
+//
+//                }
+//
+//                @Override
+//                public void onLongClick(View view, int position) {
+//
+//                }
+//            } ) );
 
         }
 
