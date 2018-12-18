@@ -6,7 +6,7 @@ import android.widget.Toast;
 
 import com.example.mdjahirulislam.doobbi.controller.connectionInterface.ConnectionAPI;
 import com.example.mdjahirulislam.doobbi.controller.helper.Functions;
-import com.example.mdjahirulislam.doobbi.model.responseModel.InsertUserResponseModel;
+import com.example.mdjahirulislam.doobbi.model.responseModel.InsertResponseModel;
 
 import java.io.File;
 
@@ -34,7 +34,7 @@ public class InsertNewUserPhotoThread extends Thread {
     private String imagePath;
     private String mPhone;
     private File file;
-    private InsertUserResponseModel registrationResponseModel;
+    private InsertResponseModel registrationResponseModel;
 
 
     public InsertNewUserPhotoThread(Context context,String imagePath,String phone) {
@@ -58,16 +58,16 @@ public class InsertNewUserPhotoThread extends Thread {
         RequestBody requestBody = RequestBody.create(MediaType.parse("*/*"), file);
         MultipartBody.Part image = MultipartBody.Part.createFormData("image",file.getName(),requestBody);
 
-//        final Call<InsertUserResponseModel> insertUserResponseModelCallBack = connectionApi.image(  API_ACCESS_ID,
+//        final Call<InsertResponseModel> insertUserResponseModelCallBack = connectionApi.image(  API_ACCESS_ID,
 //                API_ACCESS_FUNCTION_ADD_USER_IMAGE );
 
-        final Call<InsertUserResponseModel> insertUserResponseModelCallBack = connectionApi.uploadNewUserPhoto( password , user,
+        final Call<InsertResponseModel> insertUserResponseModelCallBack = connectionApi.uploadNewUserPhoto( password , user,
                 function ,phone, image);
 
         Log.d( TAG, "run: " +insertUserResponseModelCallBack.toString());
-        insertUserResponseModelCallBack.enqueue( new Callback<InsertUserResponseModel>() {
+        insertUserResponseModelCallBack.enqueue( new Callback<InsertResponseModel>() {
             @Override
-            public void onResponse(Call<InsertUserResponseModel> call, Response<InsertUserResponseModel> response) {
+            public void onResponse(Call<InsertResponseModel> call, Response<InsertResponseModel> response) {
                 if (response.code() == 200) {
                     registrationResponseModel = response.body();
                     String status = registrationResponseModel.getStatus().toString();
@@ -94,7 +94,7 @@ public class InsertNewUserPhotoThread extends Thread {
             }
 
             @Override
-            public void onFailure(Call<InsertUserResponseModel> call, Throwable t) {
+            public void onFailure(Call<InsertResponseModel> call, Throwable t) {
 
                 Log.d( TAG, "onFailure: "+t.getLocalizedMessage() );
                 Log.d( TAG, "onFailure: "+t.toString());

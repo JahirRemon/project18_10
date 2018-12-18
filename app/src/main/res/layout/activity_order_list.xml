@@ -70,7 +70,7 @@
                 android:gravity="center"
                 android:lineSpacingExtra="@dimen/margin_16dp"
                 android:paddingBottom="@dimen/margin_16dp"
-                android:text="Your next orderList is within \n2 hours 58 secend"
+                android:text="Your next scheduleList is within \n2 hours 58 secend"
                 android:textColor="@color/colorWhite"
                 android:textSize="@dimen/regular_text_size"
                 android:textStyle="bold"/>

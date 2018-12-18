@@ -7,7 +7,7 @@ import android.util.Log;
 
 import com.example.mdjahirulislam.doobbi.controller.connectionInterface.ConnectionAPI;
 import com.example.mdjahirulislam.doobbi.controller.helper.Functions;
-import com.example.mdjahirulislam.doobbi.model.responseModel.InsertUserResponseModel;
+import com.example.mdjahirulislam.doobbi.model.responseModel.InsertResponseModel;
 import com.example.mdjahirulislam.doobbi.view.HomeActivity;
 
 import java.io.File;
@@ -38,7 +38,7 @@ public class InsertNewUserThread extends Thread {
     private Context context;
     private String dataModel;
     private File file;
-    private InsertUserResponseModel registrationResponseModel;
+    private InsertResponseModel registrationResponseModel;
 
 
     public InsertNewUserThread(Context context,String  dataModel) {
@@ -57,13 +57,13 @@ public class InsertNewUserThread extends Thread {
 
         Log.d( TAG, "run: data: "+data+"\ndataModel: " +dataModel);
 
-        final Call<InsertUserResponseModel> insertUserResponseModelCallBack = connectionApi.registration(  password,user,
+        final Call<InsertResponseModel> insertUserResponseModelCallBack = connectionApi.registration(  password,user,
                 function,data);
 
 
-        insertUserResponseModelCallBack.enqueue( new Callback<InsertUserResponseModel>() {
+        insertUserResponseModelCallBack.enqueue( new Callback<InsertResponseModel>() {
             @Override
-            public void onResponse(Call<InsertUserResponseModel> call, Response<InsertUserResponseModel> response) {
+            public void onResponse(Call<InsertResponseModel> call, Response<InsertResponseModel> response) {
                 if (response.code() == 200) {
                     registrationResponseModel = response.body();
                     String status = registrationResponseModel.getStatus().toString();
@@ -89,7 +89,7 @@ public class InsertNewUserThread extends Thread {
             }
 
             @Override
-            public void onFailure(Call<InsertUserResponseModel> call, Throwable t) {
+            public void onFailure(Call<InsertResponseModel> call, Throwable t) {
 
                 Log.d( TAG, "onFailure: "+t.getLocalizedMessage() );
                 Log.d( TAG, "onFailure: "+t.toString());

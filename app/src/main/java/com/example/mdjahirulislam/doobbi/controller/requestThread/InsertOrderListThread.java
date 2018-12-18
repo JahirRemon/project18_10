@@ -8,11 +8,8 @@ import android.widget.Toast;
 import com.example.mdjahirulislam.doobbi.controller.connectionInterface.ConnectionAPI;
 import com.example.mdjahirulislam.doobbi.controller.helper.DBFunctions;
 import com.example.mdjahirulislam.doobbi.controller.helper.Functions;
-import com.example.mdjahirulislam.doobbi.model.requestModel.InsertOrderDataModel;
-import com.example.mdjahirulislam.doobbi.model.responseModel.InsertUserResponseModel;
+import com.example.mdjahirulislam.doobbi.model.responseModel.InsertResponseModel;
 import com.example.mdjahirulislam.doobbi.view.schedule.ScheduleListActivity;
-
-import java.util.ArrayList;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -21,7 +18,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.API_ACCESS_DENY_CODE;
-import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.API_ACCESS_FUNCTION_ADD_USER;
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.API_ACCESS_FUNCTION_INSERT_ORDER_LIST;
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.API_ACCESS_ID;
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.API_ACCESS_PASSWORD;
@@ -37,7 +33,7 @@ public class InsertOrderListThread extends Thread {
     private String  orderList;
     private String noOfOrder;
     private String phoneNo;
-    private InsertUserResponseModel registrationResponseModel;
+    private InsertResponseModel registrationResponseModel;
 
 
     public InsertOrderListThread(Context context, String orderList, String noOfOrder, String phoneNo) {
@@ -63,13 +59,13 @@ public class InsertOrderListThread extends Thread {
 
         Log.d( TAG, "run: data: "+data.toString()+"\norderList: " + orderList.toString() );
 
-        final Call<InsertUserResponseModel> insertUserResponseModelCallBack = connectionApi.submitOrder(  password,user,
+        final Call<InsertResponseModel> insertUserResponseModelCallBack = connectionApi.submitOrder(  password,user,
                 function,phone,noOfItems,data);
 
 
-        insertUserResponseModelCallBack.enqueue( new Callback<InsertUserResponseModel>() {
+        insertUserResponseModelCallBack.enqueue( new Callback<InsertResponseModel>() {
             @Override
-            public void onResponse(Call<InsertUserResponseModel> call, Response<InsertUserResponseModel> response) {
+            public void onResponse(Call<InsertResponseModel> call, Response<InsertResponseModel> response) {
                 if (response.code() == 200) {
                     registrationResponseModel = response.body();
                     String status = registrationResponseModel.getStatus().toString();
@@ -99,7 +95,7 @@ public class InsertOrderListThread extends Thread {
             }
 
             @Override
-            public void onFailure(Call<InsertUserResponseModel> call, Throwable t) {
+            public void onFailure(Call<InsertResponseModel> call, Throwable t) {
 
                 Log.d( TAG, "onFailure: "+t.getLocalizedMessage() );
                 Log.d( TAG, "onFailure: "+t.toString());

@@ -12,9 +12,9 @@ public class GetScheduleListResponseModel {
     @SerializedName("detail")
     @Expose
     private String detail;
-    @SerializedName("orders")
+    @SerializedName("schedule")
     @Expose
-    private List<GetOrderListResponseModel.Order> orders = null;
+    private List<Schedule> schedule = null;
 
     public String getStatus() {
         return status;
@@ -32,69 +32,49 @@ public class GetScheduleListResponseModel {
         this.detail = detail;
     }
 
-    public List<GetOrderListResponseModel.Order> getOrders() {
-        return orders;
+    public List<Schedule> getSchedule() {
+        return schedule;
     }
 
-    public void setOrders(List<GetOrderListResponseModel.Order> orders) {
-        this.orders = orders;
+    public void setSchedule(List<Schedule> schedule) {
+        this.schedule = schedule;
     }
 
+    public static class Schedule {
 
-    public class Order {
-
-        @SerializedName("order_id")
+        @SerializedName("sid")
         @Expose
-        private String orderId;
-        @SerializedName("total_item")
-        @Expose
-        private String totalItem;
-        @SerializedName("total_payable_amount")
-        @Expose
-        private String totalPayableAmount;
-        @SerializedName("create_date")
-        @Expose
-        private String createDate;
-        @SerializedName("customer_name")
-        @Expose
-        private String customerName;
+        private String sid;
         @SerializedName("phone")
         @Expose
         private String phone;
+        @SerializedName("customer_name")
+        @Expose
+        private String customerName;
+        @SerializedName("sc_date")
+        @Expose
+        private String scDate;
+        @SerializedName("sc_time")
+        @Expose
+        private String scTime;
         @SerializedName("status_detial")
         @Expose
         private String statusDetial;
 
-        public String getOrderId() {
-            return orderId;
+        public String getSid() {
+            return sid;
         }
 
-        public void setOrderId(String orderId) {
-            this.orderId = orderId;
+        public void setSid(String sid) {
+            this.sid = sid;
         }
 
-        public String getTotalItem() {
-            return totalItem;
+        public String getPhone() {
+            return phone;
         }
 
-        public void setTotalItem(String totalItem) {
-            this.totalItem = totalItem;
-        }
-
-        public String getTotalPayableAmount() {
-            return totalPayableAmount;
-        }
-
-        public void setTotalPayableAmount(String totalPayableAmount) {
-            this.totalPayableAmount = totalPayableAmount;
-        }
-
-        public String getCreateDate() {
-            return createDate;
-        }
-
-        public void setCreateDate(String createDate) {
-            this.createDate = createDate;
+        public void setPhone(String phone) {
+            this.phone = phone;
         }
 
         public String getCustomerName() {
@@ -105,12 +85,20 @@ public class GetScheduleListResponseModel {
             this.customerName = customerName;
         }
 
-        public String getPhone() {
-            return phone;
+        public String getScDate() {
+            return scDate;
         }
 
-        public void setPhone(String phone) {
-            this.phone = phone;
+        public void setScDate(String scDate) {
+            this.scDate = scDate;
+        }
+
+        public String getScTime() {
+            return scTime;
+        }
+
+        public void setScTime(String scTime) {
+            this.scTime = scTime;
         }
 
         public String getStatusDetial() {
@@ -123,13 +111,12 @@ public class GetScheduleListResponseModel {
 
         @Override
         public String toString() {
-            return "Order{" +
-                    "orderId='" + orderId + '\'' +
-                    ", totalItem='" + totalItem + '\'' +
-                    ", totalPayableAmount='" + totalPayableAmount + '\'' +
-                    ", createDate='" + createDate + '\'' +
-                    ", customerName='" + customerName + '\'' +
+            return "Schedule{" +
+                    "sid='" + sid + '\'' +
                     ", phone='" + phone + '\'' +
+                    ", customerName='" + customerName + '\'' +
+                    ", scDate='" + scDate + '\'' +
+                    ", scTime='" + scTime + '\'' +
                     ", statusDetial='" + statusDetial + '\'' +
                     '}';
         }
@@ -137,10 +124,10 @@ public class GetScheduleListResponseModel {
 
     @Override
     public String toString() {
-        return "GetOrderListResponseModel{" +
+        return "GetScheduleListResponseModel{" +
                 "status='" + status + '\'' +
                 ", detail='" + detail + '\'' +
-                ", orders=" + orders +
+                ", schedule=" + schedule +
                 '}';
     }
 }

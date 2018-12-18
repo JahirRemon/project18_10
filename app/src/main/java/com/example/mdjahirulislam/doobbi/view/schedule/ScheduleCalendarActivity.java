@@ -35,48 +35,48 @@ public class ScheduleCalendarActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate( savedInstanceState );
-        setContentView( R.layout.activity_schedule_calendar );
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_schedule_calendar);
 
 //        for back button on action bar
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-        scheduleCalendarCV = findViewById( R.id.scheduleCalendarCV );
-        selectedDateTV = findViewById( R.id.selectedDateTV );
-        selectedTimeTV = findViewById( R.id.selectedTimeTV );
-        scheduleDoneTV = findViewById( R.id.scheduleDoneTV );
+        scheduleCalendarCV = findViewById(R.id.scheduleCalendarCV);
+        selectedDateTV = findViewById(R.id.selectedDateTV);
+        selectedTimeTV = findViewById(R.id.selectedTimeTV);
+        scheduleDoneTV = findViewById(R.id.scheduleDoneTV);
 
         calendar = Calendar.getInstance();
         nextMonth = 60 * 60 * 24 * 60;
 
-        selectedDateTV.setText( calendar.get( Calendar.DAY_OF_MONTH ) + "." + (calendar.get( Calendar.MONTH ) + 1) + "." + calendar.get( Calendar.YEAR ) );
+        selectedDateTV.setText(calendar.get(Calendar.DAY_OF_MONTH) + "-" + (calendar.get(Calendar.MONTH) + 1) + "-" + calendar.get(Calendar.YEAR));
         selectedTimeInMills = calendar.getTimeInMillis();
-        Log.d( TAG, "onCreate: " + selectedTimeInMills );
-        scheduleCalendarCV.setMaxDate( calendar.getTimeInMillis() + nextMonth * 1000 );
-        scheduleCalendarCV.setMinDate( calendar.getTimeInMillis() );
-        scheduleCalendarCV.setOnDateChangeListener( new CalendarView.OnDateChangeListener() {
+        Log.d(TAG, "onCreate: " + selectedTimeInMills);
+        scheduleCalendarCV.setMaxDate(calendar.getTimeInMillis() + nextMonth * 1000);
+        scheduleCalendarCV.setMinDate(calendar.getTimeInMillis());
+        scheduleCalendarCV.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
-            public void onSelectedDayChange(@NonNull CalendarView calendarView, int i, int i1, int i2) {
-                selectedDateTV.setText( i2 + "." + (i1 + 1) + "." + i );
+            public void onSelectedDayChange(@NonNull CalendarView calendarView, int year, int month, int day) {
+                selectedDateTV.setText(String.format("%02d", day) + "-" + String.format("%02d", (month + 1)) + "-" + String.format("%04d", year));
 //                Toast.makeText( ScheduleCalendarActivity.this, "" + calendarView.getDate(), Toast.LENGTH_SHORT ).show();
-                Log.d( TAG, "onSelectedDayChange: " + calendarView.getDate() );
-                selectedTimeInMills = Functions.convertMillsFromDMY( String.valueOf( selectedDateTV.getText() ) );
+                Log.d(TAG, "onSelectedDayChange: " + calendarView.getDate());
+                selectedTimeInMills = Functions.convertMillsFromDMY(String.valueOf(selectedDateTV.getText()));
             }
-        } );
+        });
 
 
     }
 
     public void goToScheduleTimeActivity(View view) {
 
-        if (selectedTimeTV.getText().equals( "Select Time" )) {
+        if (selectedTimeTV.getText().equals("Select Time")) {
 
             timePickerDialog();
         } else {
-            startActivity( new Intent( this, ScheduleSummaryActivity.class )
-                    .putExtra( "dateTimeMills", selectedTimeInMills )
-                    .putExtra("time",selectedTimeTV.getText()) );
+            startActivity(new Intent(this, ScheduleSummaryActivity.class)
+                    .putExtra("dateTimeMills", selectedTimeInMills)
+                    .putExtra("time", selectedTimeTV.getText()));
         }
 
 
@@ -90,44 +90,44 @@ public class ScheduleCalendarActivity extends AppCompatActivity {
 
 
         Calendar mcurrentTime = Calendar.getInstance();
-        int hour = mcurrentTime.get( Calendar.HOUR_OF_DAY );
-        int minute = mcurrentTime.get( Calendar.MINUTE );
+        int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
+        int minute = mcurrentTime.get(Calendar.MINUTE);
         TimePickerDialog mTimePicker;
-        mTimePicker = new TimePickerDialog( this, new TimePickerDialog.OnTimeSetListener() {
+        mTimePicker = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
 
                 if (selectedHour < 12) {
-                    selectedTimeTV.setText( selectedHour + ":" + selectedMinute + " AM" );
+                    selectedTimeTV.setText(String.format("%02d", selectedHour) + ":" + String.format("%02d", selectedMinute) + " AM");
                 } else if (selectedHour <= 12) {
-                    selectedTimeTV.setText( selectedHour + ":" + selectedMinute + " PM" );
+                    selectedTimeTV.setText(String.format("%02d", selectedHour) + ":" + String.format("%02d", selectedMinute) + " PM");
                 } else {
-                    selectedTimeTV.setText( selectedHour - 12 + ":" + selectedMinute + " PM" );
+                    selectedTimeTV.setText(String.format("%02d", selectedHour - 12) + ":" + String.format("%02d", selectedMinute) + " PM");
                 }
-                scheduleDoneTV.setText( "Done" );
+                scheduleDoneTV.setText("Done");
             }
-        }, hour, minute, false );//Yes 24 hour time
-        mTimePicker.setTitle( "Select Time" );
+        }, hour, minute, false);//Yes 24 hour time
+        mTimePicker.setTitle("Select Time");
         mTimePicker.show();
 
     }
 
-    @Override
-    public void onBackPressed() {
-        Intent intent = new Intent(this,HomeActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
-        finish();
-    }
+    //    @Override
+//    public void onBackPressed() {
+//        Intent intent = new Intent(this,ScheduleListActivity.class);
+//        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//        startActivity(intent);
+//        finish();
+//    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            Intent intent = new Intent(this,HomeActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
-
-            finish();
-        }
+//        if (item.getItemId() == android.R.id.home) {
+//            Intent intent = new Intent(this,ScheduleListActivity.class);
+//            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//            startActivity(intent);
+//
+//            finish();
+//        }
         // app icon in action bar clicked; goto parent activity.
         this.finish();
         return super.onOptionsItemSelected(item);

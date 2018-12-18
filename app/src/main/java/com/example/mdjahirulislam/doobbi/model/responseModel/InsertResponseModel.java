@@ -3,7 +3,7 @@ package com.example.mdjahirulislam.doobbi.model.responseModel;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class InsertUserResponseModel {
+public class InsertResponseModel {
     @SerializedName("status")
     @Expose
     private String status;

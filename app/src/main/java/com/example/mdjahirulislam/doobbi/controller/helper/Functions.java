@@ -77,6 +77,8 @@ public class Functions {
     public static final String API_ACCESS_FUNCTION_GET_TEMPORARY_ORDER_LIST = "getcustomerorder";
     public static final String API_ACCESS_FUNCTION_GET_ORDER_LIST_DETAILS = "getorderdetail";
     public static final String API_ACCESS_FUNCTION_GET_ITEMS_PRICE = "getitemprice";
+    public static final String API_ACCESS_FUNCTION_GET_SCHEDULE_LIST = "getSchedule";
+    public static final String API_ACCESS_FUNCTION_INSERT_SCHEDULE = "updateSchedule";
 
     public static String BASE_URL = "http://transparentgroup.net/services/services/";
     public static String _IMAGE_BASE_URL = "http://transparentgroup.net/services/services/";
@@ -137,7 +139,7 @@ public class Functions {
     public static long convertMillsFromDMY(String inputDate) { // DMY= Day Month Year
 //        String[] parts = inputDate.split( "." );
 
-        SimpleDateFormat sdf = new SimpleDateFormat( "dd.MM.yyyy" );
+        SimpleDateFormat sdf = new SimpleDateFormat( "dd-MM-yyyy" );
 
         Date date = null;
         try {
