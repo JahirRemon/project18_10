@@ -175,6 +175,7 @@ public class RegistrationActivity extends AppCompatActivity implements OnMapRead
         if (isConnected) {
             findViewById( R.id.regMainNoInternetView ).setVisibility( View.GONE );
             findViewById( R.id.registrationScrollViewSV ).setVisibility( View.VISIBLE );
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
             initialization();
 
@@ -184,7 +185,6 @@ public class RegistrationActivity extends AppCompatActivity implements OnMapRead
             Log.d( TAG, "onCreate: " + Functions.getMyPhoneNO( this ) );
 
             if (getIntent().getStringExtra(_INTENT_FROM).equalsIgnoreCase( ProfileViewActivity.class.getSimpleName()) ){
-                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                 setUserInformation();
                 findViewById(R.id.reg_user_password_section).setVisibility(View.GONE);
             }else {

@@ -96,7 +96,7 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/button_height"
     android:text="@string/schedule_time"
-    android:background="@color/colorPrimary"
+    android:background="@color/colorPlus"
     android:gravity="center"
     android:textColor="@color/colorWhite"
     android:padding="6dp"

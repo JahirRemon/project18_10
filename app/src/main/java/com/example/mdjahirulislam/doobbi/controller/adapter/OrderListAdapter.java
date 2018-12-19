@@ -152,7 +152,7 @@ public class OrderListAdapter extends RecyclerSwipeAdapter<OrderListAdapter.MyVi
                     .load(_IMAGE_BASE_URL + order.getPhone())
                     .placeholder(R.drawable.order_status_temp)
                     .into(viewHolder.statusIV);
-            viewHolder.orderStatus.setBackgroundResource(R.color.colorOrderStatusProcessing);
+            viewHolder.orderStatus.setBackgroundResource(R.color.colorOrderStatusTemporary);
 
         } else {
             // TODO: 05/12/18 add more status
@@ -234,12 +234,12 @@ public class OrderListAdapter extends RecyclerSwipeAdapter<OrderListAdapter.MyVi
         viewHolder.Delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mItemManger.removeShownLayouts(viewHolder.swipeLayout);
-                orderList.remove(position);
-                notifyItemRemoved(position);
-                notifyItemRangeChanged(position, orderList.size());
-                mItemManger.closeAllItems();
-                Toast.makeText(v.getContext(), "Deleted ", Toast.LENGTH_SHORT).show();
+//                mItemManger.removeShownLayouts(viewHolder.swipeLayout);
+//                orderList.remove(position);
+//                notifyItemRemoved(position);
+//                notifyItemRangeChanged(position, orderList.size());
+//                mItemManger.closeAllItems();
+                Toast.makeText(v.getContext(), "For Deleted Need Delete Api", Toast.LENGTH_SHORT).show();
             }
         });
 

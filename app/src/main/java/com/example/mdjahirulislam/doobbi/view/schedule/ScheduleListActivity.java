@@ -74,7 +74,6 @@ public class ScheduleListActivity extends AppCompatActivity {
 
         scheduleListRV.setVisibility(View.VISIBLE);
         noScheduleTV.setVisibility(View.GONE);
-        userPhone = DBFunctions.getUserInformation().getPhone();
 
         mLayoutManager = new LinearLayoutManager(this);
         mAdapter = new ScheduleAdapter(this, scheduleArrayList);
@@ -83,11 +82,22 @@ public class ScheduleListActivity extends AppCompatActivity {
         scheduleListRV.setLayoutManager(mLayoutManager);
 
 
-        Thread scheduleListThread = new Thread(new GetScheduleListThread());
-        scheduleListThread.start();
 
-        Functions.ProgressDialog(this);
-        Functions.showDialog();
+
+
+        if (sessionManager.isLoggedIn()) {
+            userPhone = DBFunctions.getUserInformation().getPhone();
+
+            Thread scheduleListThread = new Thread(new GetScheduleListThread());
+            scheduleListThread.start();
+
+            Functions.ProgressDialog(this);
+            Functions.showDialog();
+        }else {
+            scheduleListRV.setVisibility(View.GONE);
+            noScheduleTV.setVisibility(View.VISIBLE);
+            noScheduleTV.setText("Please Login!!!");
+        }
 
     }
 

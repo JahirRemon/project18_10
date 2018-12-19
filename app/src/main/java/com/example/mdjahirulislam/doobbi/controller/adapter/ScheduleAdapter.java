@@ -29,6 +29,7 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions._IMAGE_BASE_URL;
+import static com.example.mdjahirulislam.doobbi.controller.helper.Functions._INTENT_FROM;
 
 public class ScheduleAdapter extends RecyclerSwipeAdapter<ScheduleAdapter.MyViewHolder> {
 
@@ -142,7 +143,10 @@ public class ScheduleAdapter extends RecyclerSwipeAdapter<ScheduleAdapter.MyView
         viewHolder.mainLL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mContext.startActivity(new Intent(mContext, ScheduleSummaryActivity.class).putExtra("position", scheduleList.get(position).getSid()));
+                mContext.startActivity(new Intent(mContext, ScheduleSummaryActivity.class)
+                        .putExtra("date", scheduleList.get(position).getScDate())
+                        .putExtra("time", scheduleList.get(position).getScTime())
+                        .putExtra(_INTENT_FROM,TAG));
 
             }
         });
@@ -152,7 +156,14 @@ public class ScheduleAdapter extends RecyclerSwipeAdapter<ScheduleAdapter.MyView
                     .load(_IMAGE_BASE_URL + schedule.getPhone())
                     .placeholder(R.drawable.order_status_temp)
                     .into(viewHolder.statusIV);
-            viewHolder.orderStatus.setBackgroundResource(R.color.colorOrderStatusProcessing);
+            viewHolder.orderStatus.setBackgroundResource(R.color.colorOrderStatusTemporary);
+
+        } else if (schedule.getStatusDetial().equalsIgnoreCase("Active")) {
+            Picasso.get()
+                    .load(_IMAGE_BASE_URL + schedule.getPhone())
+                    .placeholder(R.drawable.order_status_confirm)
+                    .into(viewHolder.statusIV);
+            viewHolder.orderStatus.setBackgroundResource(R.color.colorOrderStatusConfirmed);
 
         } else {
             // TODO: 05/12/18 add more status
@@ -234,12 +245,12 @@ public class ScheduleAdapter extends RecyclerSwipeAdapter<ScheduleAdapter.MyView
         viewHolder.Delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mItemManger.removeShownLayouts(viewHolder.swipeLayout);
-                scheduleList.remove(position);
-                notifyItemRemoved(position);
-                notifyItemRangeChanged(position, scheduleList.size());
-                mItemManger.closeAllItems();
-                Toast.makeText(v.getContext(), "Deleted ", Toast.LENGTH_SHORT).show();
+//                mItemManger.removeShownLayouts(viewHolder.swipeLayout);
+//                scheduleList.remove(position);
+//                notifyItemRemoved(position);
+//                notifyItemRangeChanged(position, scheduleList.size());
+//                mItemManger.closeAllItems();
+                Toast.makeText(v.getContext(), "For Deleted Need Delete Api ", Toast.LENGTH_SHORT).show();
             }
         });
 

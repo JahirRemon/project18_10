@@ -135,6 +135,14 @@ public class Functions {
         return convertDateFormat.format( inputDate );
     }
 
+    public static String convertDateForApi(long inputDate) {
+//        SimpleDateFormat simpleDateFormat = new SimpleDateFormat( "yyyy-MM-dd hh:mm:ss" );
+
+        SimpleDateFormat convertDateFormat = new SimpleDateFormat( "dd-MM-yyyy" );
+
+        return convertDateFormat.format( inputDate );
+    }
+
 
     public static long convertMillsFromDMY(String inputDate) { // DMY= Day Month Year
 //        String[] parts = inputDate.split( "." );

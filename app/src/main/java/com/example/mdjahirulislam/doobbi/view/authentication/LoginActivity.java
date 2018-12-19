@@ -8,12 +8,14 @@ import android.os.Bundle;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.mdjahirulislam.doobbi.R;
+import com.example.mdjahirulislam.doobbi.controller.adapter.ScheduleAdapter;
 import com.example.mdjahirulislam.doobbi.controller.connectionInterface.ConnectionAPI;
 import com.example.mdjahirulislam.doobbi.controller.helper.Functions;
 import com.example.mdjahirulislam.doobbi.controller.helper.SessionManager;
@@ -27,6 +29,9 @@ import com.example.mdjahirulislam.doobbi.view.makeMyOrder.OrderSummaryActivity;
 import com.example.mdjahirulislam.doobbi.view.makeMyOrder.SelectItemActivity;
 import com.example.mdjahirulislam.doobbi.view.order.OrderListActivity;
 import com.example.mdjahirulislam.doobbi.view.profile.ProfileViewActivity;
+import com.example.mdjahirulislam.doobbi.view.schedule.ScheduleCalendarActivity;
+import com.example.mdjahirulislam.doobbi.view.schedule.ScheduleListActivity;
+import com.example.mdjahirulislam.doobbi.view.schedule.ScheduleSummaryActivity;
 
 import io.realm.Realm;
 import okhttp3.MultipartBody;
@@ -59,6 +64,8 @@ public class LoginActivity extends AppCompatActivity {
     private ImageView showPassIV;
     private boolean showPass = false;
     private String from;
+    private Long getDate;
+    private String getTime;
 
 
     private void initialization() {
@@ -71,10 +78,15 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_login );
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         initialization();
         from = getIntent().getStringExtra( _INTENT_FROM );
         userPhone = Functions.getMyPhoneNO( this );
 
+        if (from.equalsIgnoreCase(ScheduleSummaryActivity.class.getSimpleName())){
+            getDate = getIntent().getLongExtra("date",00);
+            getTime = getIntent().getStringExtra("time");
+        }
         getUserDetailsThread = new GetUserDetailsThread( this, userPhone,from );
 
         if (!userPhone.isEmpty()) {
@@ -87,7 +99,47 @@ public class LoginActivity extends AppCompatActivity {
 
 
     }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+           intentFunction();
+        }
+        // app icon in action bar clicked; goto parent activity.
+        this.finish();
+        return super.onOptionsItemSelected(item);
+    }
 
+    private void intentFunction() {
+        Intent intent = null;
+        if (from != null) {
+            if (from.equalsIgnoreCase(ScheduleSummaryActivity.class.getSimpleName())) {
+                intent = new Intent(this, ScheduleSummaryActivity.class);
+
+            } else if (from.equalsIgnoreCase(HomeActivity.class.getSimpleName())) {
+                intent = new Intent(this, HomeActivity.class);
+
+            } else if (from.equalsIgnoreCase(OrderListActivity.class.getSimpleName())) {
+                intent = new Intent(this, OrderListActivity.class);
+
+            }else if (from.equalsIgnoreCase(OrderSummaryActivity.class.getSimpleName())) {
+                intent = new Intent(this, OrderSummaryActivity.class);
+
+            }else if (from.equalsIgnoreCase(ProfileViewActivity.class.getSimpleName())) {
+                intent = new Intent(this, ProfileViewActivity.class);
+
+            } else {
+                intent = new Intent(this, HomeActivity.class);
+            }
+        }else {
+            intent = new Intent(this, HomeActivity.class);
+
+        }
+
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        finish();
+
+    }
     public void goToRegistrationActivityFormLoginActivity(View view) {
         startActivity( new Intent( this, RegistrationActivity.class ).putExtra(_INTENT_FROM,TAG) );
     }
@@ -139,7 +191,6 @@ public class LoginActivity extends AppCompatActivity {
 
     public class GetLoginUserDetailsThread implements Runnable {
 
-        private final String TAG = GetLoginUserDetailsThread.class.getSimpleName();
 
         private ConnectionAPI connectionApi;
         private Context context;
@@ -232,6 +283,12 @@ public class LoginActivity extends AppCompatActivity {
                                     } else if (from.equalsIgnoreCase(ProfileViewActivity.class.getSimpleName())) {
                                         myIntent = new Intent(context, ProfileViewActivity.class);
 
+                                    } else if (from.equalsIgnoreCase(ScheduleSummaryActivity.class.getSimpleName())) {
+                                        myIntent = new Intent(context, ScheduleSummaryActivity.class);
+                                        myIntent.putExtra("dateTimeMills",getDate);
+                                        myIntent.putExtra("time",getTime);
+                                        myIntent.putExtra(_INTENT_FROM,TAG);
+
                                     }
                                     context.startActivity(myIntent);
                                     finish();
@@ -266,7 +323,7 @@ public class LoginActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<GetUserDetailsResponseModel> call, Throwable t) {
-
+                        Toast.makeText(context, t.getLocalizedMessage()+" Try Again!!!", Toast.LENGTH_SHORT).show();
                         Log.d( TAG, "onFailure: " + t.getLocalizedMessage() );
                         Log.d( TAG, "onFailure: " + t.toString() );
                         Log.d( TAG, "onFailure: " + t.getMessage() );

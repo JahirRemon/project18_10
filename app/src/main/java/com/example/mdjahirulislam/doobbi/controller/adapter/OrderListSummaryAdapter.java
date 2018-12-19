@@ -12,16 +12,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.mdjahirulislam.doobbi.R;
 import com.example.mdjahirulislam.doobbi.controller.helper.DBFunctions;
 import com.example.mdjahirulislam.doobbi.controller.helper.SessionManager;
-import com.example.mdjahirulislam.doobbi.model.ItemPriceModel;
 import com.example.mdjahirulislam.doobbi.model.requestModel.InsertOrderHistoryDBModel;
-import com.example.mdjahirulislam.doobbi.view.authentication.LoginActivity;
-import com.example.mdjahirulislam.doobbi.view.makeMyOrder.OrderSummaryActivity;
-
 import java.util.List;
 import java.util.UUID;
 

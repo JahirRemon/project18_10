@@ -2,6 +2,7 @@ package com.example.mdjahirulislam.doobbi.view.schedule;
 
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +19,8 @@ import com.example.mdjahirulislam.doobbi.controller.helper.Functions;
 import com.example.mdjahirulislam.doobbi.view.HomeActivity;
 
 import java.util.Calendar;
+
+import static com.example.mdjahirulislam.doobbi.controller.helper.Functions._INTENT_FROM;
 
 public class ScheduleCalendarActivity extends AppCompatActivity {
 
@@ -46,6 +49,7 @@ public class ScheduleCalendarActivity extends AppCompatActivity {
         selectedDateTV = findViewById(R.id.selectedDateTV);
         selectedTimeTV = findViewById(R.id.selectedTimeTV);
         scheduleDoneTV = findViewById(R.id.scheduleDoneTV);
+
 
         calendar = Calendar.getInstance();
         nextMonth = 60 * 60 * 24 * 60;
@@ -76,6 +80,8 @@ public class ScheduleCalendarActivity extends AppCompatActivity {
         } else {
             startActivity(new Intent(this, ScheduleSummaryActivity.class)
                     .putExtra("dateTimeMills", selectedTimeInMills)
+                    .putExtra("date", selectedDateTV.getText())
+                    .putExtra(_INTENT_FROM, TAG)
                     .putExtra("time", selectedTimeTV.getText()));
         }
 
@@ -105,6 +111,7 @@ public class ScheduleCalendarActivity extends AppCompatActivity {
                     selectedTimeTV.setText(String.format("%02d", selectedHour - 12) + ":" + String.format("%02d", selectedMinute) + " PM");
                 }
                 scheduleDoneTV.setText("Done");
+                scheduleDoneTV.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
             }
         }, hour, minute, false);//Yes 24 hour time
         mTimePicker.setTitle("Select Time");
@@ -112,22 +119,22 @@ public class ScheduleCalendarActivity extends AppCompatActivity {
 
     }
 
-    //    @Override
-//    public void onBackPressed() {
-//        Intent intent = new Intent(this,ScheduleListActivity.class);
-//        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//        startActivity(intent);
-//        finish();
-//    }
+        @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this,ScheduleListActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        finish();
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-//        if (item.getItemId() == android.R.id.home) {
-//            Intent intent = new Intent(this,ScheduleListActivity.class);
-//            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//            startActivity(intent);
-//
-//            finish();
-//        }
+        if (item.getItemId() == android.R.id.home) {
+            Intent intent = new Intent(this,ScheduleListActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+
+            finish();
+        }
         // app icon in action bar clicked; goto parent activity.
         this.finish();
         return super.onOptionsItemSelected(item);

@@ -17,7 +17,6 @@ import com.example.mdjahirulislam.doobbi.controller.helper.DBFunctions;
 import com.example.mdjahirulislam.doobbi.controller.helper.SessionManager;
 import com.example.mdjahirulislam.doobbi.model.ItemPriceModel;
 import com.example.mdjahirulislam.doobbi.model.requestModel.InsertOrderHistoryDBModel;
-import com.example.mdjahirulislam.doobbi.view.authentication.LoginActivity;
 
 import java.util.List;
 import java.util.UUID;
