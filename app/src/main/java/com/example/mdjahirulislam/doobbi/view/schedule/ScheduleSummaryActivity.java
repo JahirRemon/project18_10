@@ -16,14 +16,8 @@ import com.example.mdjahirulislam.doobbi.controller.connectionInterface.Connecti
 import com.example.mdjahirulislam.doobbi.controller.helper.DBFunctions;
 import com.example.mdjahirulislam.doobbi.controller.helper.Functions;
 import com.example.mdjahirulislam.doobbi.controller.helper.SessionManager;
-import com.example.mdjahirulislam.doobbi.model.responseModel.GetScheduleListResponseModel;
 import com.example.mdjahirulislam.doobbi.model.responseModel.InsertResponseModel;
-import com.example.mdjahirulislam.doobbi.view.HomeActivity;
 import com.example.mdjahirulislam.doobbi.view.authentication.LoginActivity;
-import com.example.mdjahirulislam.doobbi.view.authentication.RegistrationActivity;
-
-import java.util.ArrayList;
-import java.util.Calendar;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -97,7 +91,7 @@ public class ScheduleSummaryActivity extends AppCompatActivity {
         }
 
         getDate = Functions.convertDateForApi(dateTimeMills);
-        Log.d(TAG, "onCreate: date --> "+getDate+" Time --> "+getTime);
+        Log.d(TAG, "onCreate: date --> " + getDate + " Time --> " + getTime);
 
         dateTV.setText(Functions.convertDate(dateTimeMills));
         dayTV.setText(Functions.convertDayFromMills(dateTimeMills));
@@ -140,7 +134,7 @@ public class ScheduleSummaryActivity extends AppCompatActivity {
             } else {
                 intent = new Intent(this, ScheduleListActivity.class);
             }
-        }else {
+        } else {
             intent = new Intent(this, ScheduleListActivity.class);
 
         }

@@ -89,70 +89,75 @@ public class HomeActivity extends AppCompatActivity
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate( savedInstanceState );
-        setContentView( R.layout.activity_home );
-        Toolbar toolbar = (Toolbar) findViewById( R.id.toolbar );
-        scheduleIconLL = findViewById( R.id.scheduleIconLL );
-        makeOrderLL = findViewById( R.id.makeOrderLL );
-        priceListLL = findViewById( R.id.priceListLL );
-        pickUpMeLL = findViewById( R.id.pickUpMeLL );
-        orderListLL = findViewById( R.id.orderListLL );
-        myOfferLL = findViewById( R.id.myOfferLL );
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_home);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        scheduleIconLL = findViewById(R.id.scheduleIconLL);
+        makeOrderLL = findViewById(R.id.makeOrderLL);
+        priceListLL = findViewById(R.id.priceListLL);
+        pickUpMeLL = findViewById(R.id.pickUpMeLL);
+        orderListLL = findViewById(R.id.orderListLL);
+        myOfferLL = findViewById(R.id.myOfferLL);
         mRealm = Realm.getDefaultInstance();
-        sessionManager = new SessionManager( this );
+        sessionManager = new SessionManager(this);
 
-        final DrawerLayout drawer = (DrawerLayout) findViewById( R.id.drawer_layout );
+        if (!sessionManager.isSetUp()) {
+            addShortcut();
+        }
+
+
+        final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close );
-        toggle.setDrawerIndicatorEnabled( false );
-        toggle.setToolbarNavigationClickListener( new View.OnClickListener() {
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        toggle.setDrawerIndicatorEnabled(false);
+        toggle.setToolbarNavigationClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                drawer.openDrawer( GravityCompat.START );
+                drawer.openDrawer(GravityCompat.START);
             }
-        } );
-        toggle.setHomeAsUpIndicator( R.drawable.ic_dashboard_white_24dp );
+        });
+        toggle.setHomeAsUpIndicator(R.drawable.ic_dashboard_white_24dp);
 
-        drawer.addDrawerListener( toggle );
+        drawer.addDrawerListener(toggle);
         toggle.syncState();
 
 //        mDrawerToggle = ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close);
 
 //        mDrawerToggle.setDrawerIndicatorEnabled(false);
 
-        NavigationView navigationView = (NavigationView) findViewById( R.id.nav_view );
-        navigationView.setNavigationItemSelectedListener( this );
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
 
-        View headerLayout = navigationView.getHeaderView( 0 );
+        View headerLayout = navigationView.getHeaderView(0);
 
-        navUserName = headerLayout.findViewById( R.id.navUserName );
-        navUserMobile = headerLayout.findViewById( R.id.navUserMobile );
+        navUserName = headerLayout.findViewById(R.id.navUserName);
+        navUserMobile = headerLayout.findViewById(R.id.navUserMobile);
         navMenuItem = navigationView.getMenu();
 
 
-        sliderLayout = findViewById( R.id.imageSlider );
-        sliderLayout.setIndicatorAnimation( SliderLayout.Animations.WORM ); //set indicator animation by using SliderLayout.Animations. :WORM or THIN_WORM or COLOR or DROP or FILL or NONE or SCALE or SCALE_DOWN or SLIDE and SWAP!!
-        sliderLayout.setScrollTimeInSec( 1 ); //set scroll delay in seconds :
+        sliderLayout = findViewById(R.id.imageSlider);
+        sliderLayout.setIndicatorAnimation(SliderLayout.Animations.WORM); //set indicator animation by using SliderLayout.Animations. :WORM or THIN_WORM or COLOR or DROP or FILL or NONE or SCALE or SCALE_DOWN or SLIDE and SWAP!!
+        sliderLayout.setScrollTimeInSec(1); //set scroll delay in seconds :
 
 
         setSliderViews();
 
-        scheduleIconLL.setOnTouchListener( new View.OnTouchListener() {
+        scheduleIconLL.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
 
                 float width = scheduleIconLL.getWidth();
                 float height = scheduleIconLL.getHeight();
-                Log.d( TAG, "onTouch 1: classTimeLL ---> " + event.getAction() );
+                Log.d(TAG, "onTouch 1: classTimeLL ---> " + event.getAction());
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
-                        scheduleIconLL.setAlpha( 0.5f );
-                        Log.d( TAG, "onTouch 2: classTimeLL ---> " + MotionEvent.ACTION_DOWN );
+                        scheduleIconLL.setAlpha(0.5f);
+                        Log.d(TAG, "onTouch 2: classTimeLL ---> " + MotionEvent.ACTION_DOWN);
                         break;
                     case MotionEvent.ACTION_UP:
                         if (event.getX() < width && event.getY() < height && event.getY() > 0) {
-                            scheduleIconLL.setAlpha( 1.0f );
-                            startActivity( new Intent( HomeActivity.this, ScheduleListActivity.class ) );
+                            scheduleIconLL.setAlpha(1.0f);
+                            startActivity(new Intent(HomeActivity.this, ScheduleListActivity.class));
 
 //
 //                            InsertClassTimeDataThread insertClassTimeDataThread = new InsertClassTimeDataThread( getContext() );
@@ -163,184 +168,184 @@ public class HomeActivity extends AppCompatActivity
                         }
                         break;
                     case MotionEvent.ACTION_CANCEL:
-                        scheduleIconLL.setAlpha( 1.0f );
+                        scheduleIconLL.setAlpha(1.0f);
                         break;
                     case MotionEvent.ACTION_MOVE:
-                        scheduleIconLL.setAlpha( 1.0f );
+                        scheduleIconLL.setAlpha(1.0f);
                         break;
                     default:
                         break;
                 }
                 return true;
             }
-        } );
+        });
 
-        Functions.getMyPhoneNO( this );
+        Functions.getMyPhoneNO(this);
 
-        makeOrderLL.setOnTouchListener( new View.OnTouchListener() {
+        makeOrderLL.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
 
                 float width = makeOrderLL.getWidth();
                 float height = makeOrderLL.getHeight();
-                Log.d( TAG, "onTouch 1: classTimeLL ---> " + event.getAction() );
+                Log.d(TAG, "onTouch 1: classTimeLL ---> " + event.getAction());
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
-                        makeOrderLL.setAlpha( 0.5f );
-                        Log.d( TAG, "onTouch 2: classTimeLL ---> " + MotionEvent.ACTION_DOWN );
+                        makeOrderLL.setAlpha(0.5f);
+                        Log.d(TAG, "onTouch 2: classTimeLL ---> " + MotionEvent.ACTION_DOWN);
                         break;
                     case MotionEvent.ACTION_UP:
                         if (event.getX() < width && event.getY() < height && event.getY() > 0) {
-                            makeOrderLL.setAlpha( 1.0f );
-                            startActivity( new Intent( HomeActivity.this, OrderHomeActivity.class ) );
+                            makeOrderLL.setAlpha(1.0f);
+                            startActivity(new Intent(HomeActivity.this, OrderHomeActivity.class));
 
                         }
                         break;
                     case MotionEvent.ACTION_CANCEL:
-                        makeOrderLL.setAlpha( 1.0f );
+                        makeOrderLL.setAlpha(1.0f);
                         break;
                     case MotionEvent.ACTION_MOVE:
-                        makeOrderLL.setAlpha( 1.0f );
+                        makeOrderLL.setAlpha(1.0f);
                         break;
                     default:
                         break;
                 }
                 return true;
             }
-        } );
+        });
 
 
-        priceListLL.setOnTouchListener( new View.OnTouchListener() {
+        priceListLL.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
 
                 float width = priceListLL.getWidth();
                 float height = priceListLL.getHeight();
-                Log.d( TAG, "onTouch 1: classTimeLL ---> " + event.getAction() );
+                Log.d(TAG, "onTouch 1: classTimeLL ---> " + event.getAction());
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
-                        priceListLL.setAlpha( 0.5f );
-                        Log.d( TAG, "onTouch 2: classTimeLL ---> " + MotionEvent.ACTION_DOWN );
+                        priceListLL.setAlpha(0.5f);
+                        Log.d(TAG, "onTouch 2: classTimeLL ---> " + MotionEvent.ACTION_DOWN);
                         break;
                     case MotionEvent.ACTION_UP:
                         if (event.getX() < width && event.getY() < height && event.getY() > 0) {
-                            priceListLL.setAlpha( 1.0f );
-                            startActivity( new Intent( HomeActivity.this, PriceListActivity.class ) );
+                            priceListLL.setAlpha(1.0f);
+                            startActivity(new Intent(HomeActivity.this, PriceListActivity.class));
 
                         }
                         break;
                     case MotionEvent.ACTION_CANCEL:
-                        priceListLL.setAlpha( 1.0f );
+                        priceListLL.setAlpha(1.0f);
                         break;
                     case MotionEvent.ACTION_MOVE:
-                        priceListLL.setAlpha( 1.0f );
+                        priceListLL.setAlpha(1.0f);
                         break;
                     default:
                         break;
                 }
                 return true;
             }
-        } );
+        });
 
 
-        pickUpMeLL.setOnTouchListener( new View.OnTouchListener() {
+        pickUpMeLL.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
 
                 float width = pickUpMeLL.getWidth();
                 float height = pickUpMeLL.getHeight();
-                Log.d( TAG, "onTouch 1: classTimeLL ---> " + event.getAction() );
+                Log.d(TAG, "onTouch 1: classTimeLL ---> " + event.getAction());
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
-                        pickUpMeLL.setAlpha( 0.5f );
-                        Log.d( TAG, "onTouch 2: classTimeLL ---> " + MotionEvent.ACTION_DOWN );
+                        pickUpMeLL.setAlpha(0.5f);
+                        Log.d(TAG, "onTouch 2: classTimeLL ---> " + MotionEvent.ACTION_DOWN);
                         break;
                     case MotionEvent.ACTION_UP:
-                        Log.d( TAG, "onTouch: X: " + event.getX() + "\nY: " + event.getY() );
+                        Log.d(TAG, "onTouch: X: " + event.getX() + "\nY: " + event.getY());
                         if (event.getX() < width && event.getY() < height && event.getY() > 0) {
-                            pickUpMeLL.setAlpha( 1.0f );
-                            startActivity( new Intent( HomeActivity.this, PickUpLocationActivity.class ) );
+                            pickUpMeLL.setAlpha(1.0f);
+                            startActivity(new Intent(HomeActivity.this, PickUpLocationActivity.class));
 
                         }
                         break;
                     case MotionEvent.ACTION_CANCEL:
-                        pickUpMeLL.setAlpha( 1.0f );
+                        pickUpMeLL.setAlpha(1.0f);
                         break;
                     case MotionEvent.ACTION_MOVE:
-                        pickUpMeLL.setAlpha( 1.0f );
+                        pickUpMeLL.setAlpha(1.0f);
                         break;
                     default:
                         break;
                 }
                 return true;
             }
-        } );
+        });
 
-        orderListLL.setOnTouchListener( new View.OnTouchListener() {
+        orderListLL.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
 
                 float width = orderListLL.getWidth();
                 float height = orderListLL.getHeight();
-                Log.d( TAG, "onTouch 1: classTimeLL ---> " + event.getAction() );
+                Log.d(TAG, "onTouch 1: classTimeLL ---> " + event.getAction());
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
-                        orderListLL.setAlpha( 0.5f );
-                        Log.d( TAG, "onTouch 2: classTimeLL ---> " + MotionEvent.ACTION_DOWN );
+                        orderListLL.setAlpha(0.5f);
+                        Log.d(TAG, "onTouch 2: classTimeLL ---> " + MotionEvent.ACTION_DOWN);
                         break;
                     case MotionEvent.ACTION_UP:
-                        Log.d( TAG, "onTouch: X: " + event.getX() + "\nY: " + event.getY() );
+                        Log.d(TAG, "onTouch: X: " + event.getX() + "\nY: " + event.getY());
                         if (event.getX() < width && event.getY() < height && event.getY() > 0) {
-                            orderListLL.setAlpha( 1.0f );
-                            startActivity( new Intent( HomeActivity.this, OrderListActivity.class ) );
+                            orderListLL.setAlpha(1.0f);
+                            startActivity(new Intent(HomeActivity.this, OrderListActivity.class));
 
                         }
                         break;
                     case MotionEvent.ACTION_CANCEL:
-                        orderListLL.setAlpha( 1.0f );
+                        orderListLL.setAlpha(1.0f);
                         break;
                     case MotionEvent.ACTION_MOVE:
-                        orderListLL.setAlpha( 1.0f );
+                        orderListLL.setAlpha(1.0f);
                         break;
                     default:
                         break;
                 }
                 return true;
             }
-        } );
+        });
 
-        myOfferLL.setOnTouchListener( new View.OnTouchListener() {
+        myOfferLL.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
 
                 float width = myOfferLL.getWidth();
                 float height = myOfferLL.getHeight();
-                Log.d( TAG, "onTouch 1: classTimeLL ---> " + event.getAction() );
+                Log.d(TAG, "onTouch 1: classTimeLL ---> " + event.getAction());
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
-                        myOfferLL.setAlpha( 0.5f );
-                        Log.d( TAG, "onTouch 2: classTimeLL ---> " + MotionEvent.ACTION_DOWN );
+                        myOfferLL.setAlpha(0.5f);
+                        Log.d(TAG, "onTouch 2: classTimeLL ---> " + MotionEvent.ACTION_DOWN);
                         break;
                     case MotionEvent.ACTION_UP:
-                        Log.d( TAG, "onTouch: X: " + event.getX() + "\nY: " + event.getY() );
+                        Log.d(TAG, "onTouch: X: " + event.getX() + "\nY: " + event.getY());
                         if (event.getX() < width && event.getY() < height && event.getY() > 0) {
-                            myOfferLL.setAlpha( 1.0f );
-                            startActivity( new Intent( HomeActivity.this, MyOfferActivity.class ) );
+                            myOfferLL.setAlpha(1.0f);
+                            startActivity(new Intent(HomeActivity.this, MyOfferActivity.class));
 
                         }
                         break;
                     case MotionEvent.ACTION_CANCEL:
-                        myOfferLL.setAlpha( 1.0f );
+                        myOfferLL.setAlpha(1.0f);
                         break;
                     case MotionEvent.ACTION_MOVE:
-                        orderListLL.setAlpha( 1.0f );
+                        orderListLL.setAlpha(1.0f);
                         break;
                     default:
                         break;
                 }
                 return true;
             }
-        } );
+        });
 
     }
 
@@ -349,28 +354,45 @@ public class HomeActivity extends AppCompatActivity
         super.onResume();
         mRealm.beginTransaction();
 
-        final RealmResults<InsertUserDataModel> getUserInfo = mRealm.where( InsertUserDataModel.class ).findAll();
+        final RealmResults<InsertUserDataModel> getUserInfo = mRealm.where(InsertUserDataModel.class).findAll();
 
-        Log.d( TAG, "onResume: " + getUserInfo.size() );
+        Log.d(TAG, "onResume: " + getUserInfo.size());
 
         if (0 < getUserInfo.size()) {
             for (InsertUserDataModel userDataModel : getUserInfo) {
-                navUserName.setText( userDataModel.getName() );
-                navUserMobile.setText( getUserInfo.get( 0 ).getPhone() );
-                navMenuItem.findItem( R.id.nav_log_out ).setVisible( true );
-                navMenuItem.findItem( R.id.nav_signIn ).setVisible( false );
-                this.user_id = getUserInfo.get( 0 ).getClint_id();
+                navUserName.setText(userDataModel.getName());
+                navUserMobile.setText(getUserInfo.get(0).getPhone());
+                navMenuItem.findItem(R.id.nav_log_out).setVisible(true);
+                navMenuItem.findItem(R.id.nav_signIn).setVisible(false);
+                this.user_id = getUserInfo.get(0).getClint_id();
             }
         } else {
-            Log.d( TAG, "onResume: Data not found of not login" );
-            navMenuItem.findItem( R.id.nav_log_out ).setVisible( false );
-            navMenuItem.findItem( R.id.nav_signIn ).setVisible( true );
+            Log.d(TAG, "onResume: Data not found of not login");
+            navMenuItem.findItem(R.id.nav_log_out).setVisible(false);
+            navMenuItem.findItem(R.id.nav_signIn).setVisible(true);
 
 
         }
         mRealm.commitTransaction();
 
+    }
 
+    private void addShortcut() {
+//Adding shortcut for MainActivity
+//on Home screen
+        Intent shortcutIntent = new Intent(getApplicationContext(), HomeActivity.class);
+        shortcutIntent.setAction(Intent.ACTION_MAIN);
+        Intent addIntent = new Intent();
+        addIntent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
+        addIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME, getString(R.string.app_name));
+        addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE,
+                Intent.ShortcutIconResource.fromContext(getApplicationContext(),
+                        R.drawable.laundry));
+        addIntent.putExtra("duplicate", false);
+        addIntent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
+        getApplicationContext().sendBroadcast(addIntent);
+        sessionManager.setUp(true);
+        Log.d(TAG, "addShortcut: finish ----> "+sessionManager.isSetUp());
     }
 
     @Override
@@ -381,9 +403,9 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById( R.id.drawer_layout );
-        if (drawer.isDrawerOpen( GravityCompat.START )) {
-            drawer.closeDrawer( GravityCompat.START );
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
         } else if (doubleBackToExitPressedOnce) {
             super.onBackPressed();
             finish();
@@ -391,15 +413,15 @@ public class HomeActivity extends AppCompatActivity
         }
 
         this.doubleBackToExitPressedOnce = true;
-        Toast.makeText( this, "Please click BACK again to exit", Toast.LENGTH_SHORT ).show();
+        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
 
-        new Handler().postDelayed( new Runnable() {
+        new Handler().postDelayed(new Runnable() {
 
             @Override
             public void run() {
                 doubleBackToExitPressedOnce = false;
             }
-        }, 1000 );
+        }, 1000);
     }
 
 
@@ -415,7 +437,7 @@ public class HomeActivity extends AppCompatActivity
             return true;
         }
 
-        return super.onOptionsItemSelected( item );
+        return super.onOptionsItemSelected(item);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -426,31 +448,31 @@ public class HomeActivity extends AppCompatActivity
 
         if (id == R.id.nav_profile) {
             // Handle the camera action
-            startActivity( new Intent( HomeActivity.this, ProfileViewActivity.class ).putExtra( _INTENT_FROM,TAG) );//HomeActivity.class.getSimpleName()
+            startActivity(new Intent(HomeActivity.this, ProfileViewActivity.class).putExtra(_INTENT_FROM, TAG));//HomeActivity.class.getSimpleName()
 
         } else if (id == R.id.nav_payment) {
 
         } else if (id == R.id.nav_signIn) {
-            startActivity( new Intent( HomeActivity.this, LoginActivity.class ).putExtra( _INTENT_FROM,TAG) );//HomeActivity.class.getSimpleName()
+            startActivity(new Intent(HomeActivity.this, LoginActivity.class).putExtra(_INTENT_FROM, TAG));//HomeActivity.class.getSimpleName()
 
         } else if (id == R.id.nav_log_out) {
-            Log.d( TAG, "onNavigationItemSelected: log out " + user_id );
+            Log.d(TAG, "onNavigationItemSelected: log out " + user_id);
 
             mRealm.beginTransaction();
-            RealmResults<InsertUserDataModel> result = mRealm.where( InsertUserDataModel.class ).equalTo( "clint_id", user_id ).findAll();
+            RealmResults<InsertUserDataModel> result = mRealm.where(InsertUserDataModel.class).equalTo("clint_id", user_id).findAll();
             result.deleteAllFromRealm();
 
 
             mRealm.commitTransaction();
 
-            Functions.ProgressDialog( this );
-            sessionManager.setLogin( false );
+            Functions.ProgressDialog(this);
+            sessionManager.setLogin(false);
             finish();
-            startActivity( getIntent() );
+            startActivity(getIntent());
 
         }
-        DrawerLayout drawer = (DrawerLayout) findViewById( R.id.drawer_layout );
-        drawer.closeDrawer( GravityCompat.START );
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
@@ -458,55 +480,55 @@ public class HomeActivity extends AppCompatActivity
 
         for (int i = 0; i <= 3; i++) {
 
-            SliderView sliderView = new SliderView( this );
+            SliderView sliderView = new SliderView(this);
 
             switch (i) {
                 case 0:
-                    sliderView.setImageUrl( "https://i.imgur.com/3rNjPzP.jpg" );
+                    sliderView.setImageUrl("https://i.imgur.com/3rNjPzP.jpg");
                     break;
                 case 1:
-                    sliderView.setImageUrl( "https://i.imgur.com/8wX7Ttz.jpg" );
+                    sliderView.setImageUrl("https://i.imgur.com/8wX7Ttz.jpg");
                     break;
                 case 2:
-                    sliderView.setImageUrl( "https://imgur.com/mOa6L8z.jpg" );
+                    sliderView.setImageUrl("https://imgur.com/mOa6L8z.jpg");
                     break;
                 case 3:
-                    sliderView.setImageUrl( "https://imgur.com/aWCAnF5.jpg" );
+                    sliderView.setImageUrl("https://imgur.com/aWCAnF5.jpg");
                     break;
             }
 
-            sliderView.setImageScaleType( ImageView.ScaleType.CENTER_CROP );
+            sliderView.setImageScaleType(ImageView.ScaleType.CENTER_CROP);
 //            sliderView.setDescription("setDescription " + (i + 1));
 
             final int finalI = i;
-            sliderView.setOnSliderClickListener( new SliderView.OnSliderClickListener() {
+            sliderView.setOnSliderClickListener(new SliderView.OnSliderClickListener() {
                 @Override
                 public void onSliderClick(SliderView sliderView) {
-                    Toast.makeText( HomeActivity.this, "This is slider " + (finalI + 1), Toast.LENGTH_SHORT ).show();
+                    Toast.makeText(HomeActivity.this, "This is slider " + (finalI + 1), Toast.LENGTH_SHORT).show();
                 }
-            } );
+            });
 
             //at last add this view in your layout :
-            sliderLayout.addSliderView( sliderView );
+            sliderLayout.addSliderView(sliderView);
         }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate( R.menu.home_menu, menu );
+        inflater.inflate(R.menu.home_menu, menu);
         return true;
     }
 
     public void goToScheduleListActivity(final View view) {
 
-        Log.d( TAG, "goToScheduleListActivity: " );
+        Log.d(TAG, "goToScheduleListActivity: ");
     }
 
 
     public void callTheAuthority(View view) {
-        Log.d( TAG, "callTheAuthority: " );
-        Functions.showSnack( ConnectivityReceiver.isConnected( HomeActivity.this ), view );
+        Log.d(TAG, "callTheAuthority: ");
+        Functions.showSnack(ConnectivityReceiver.isConnected(HomeActivity.this), view);
     }
 
 

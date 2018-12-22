@@ -26,8 +26,6 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-import io.realm.Realm;
-
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions._IMAGE_BASE_URL;
 
 public class OrderListAdapter extends RecyclerSwipeAdapter<OrderListAdapter.MyViewHolder> {
@@ -154,7 +152,28 @@ public class OrderListAdapter extends RecyclerSwipeAdapter<OrderListAdapter.MyVi
                     .into(viewHolder.statusIV);
             viewHolder.orderStatus.setBackgroundResource(R.color.colorOrderStatusTemporary);
 
-        } else {
+        } else if (order.getStatusDetial().equalsIgnoreCase("Confirmed")) {
+            Picasso.get()
+                    .load(_IMAGE_BASE_URL + order.getPhone())
+                    .placeholder(R.drawable.order_status_confirm)
+                    .into(viewHolder.statusIV);
+            viewHolder.orderStatus.setBackgroundResource(R.color.colorOrderStatusConfirmed);
+
+        }else if (order.getStatusDetial().equalsIgnoreCase("Processing")) {
+            Picasso.get()
+                    .load(_IMAGE_BASE_URL + order.getPhone())
+                    .placeholder(R.drawable.order_status_process)
+                    .into(viewHolder.statusIV);
+            viewHolder.orderStatus.setBackgroundResource(R.color.colorOrderStatusProcessing);
+
+        }else if (order.getStatusDetial().equalsIgnoreCase("Delivery")) {
+            Picasso.get()
+                    .load(_IMAGE_BASE_URL + order.getPhone())
+                    .placeholder(R.drawable.order_status_delivery)
+                    .into(viewHolder.statusIV);
+            viewHolder.orderStatus.setBackgroundResource(R.color.colorOrderStatusDelivered);
+
+        }else {
             // TODO: 05/12/18 add more status
             Log.d(TAG, "onBindViewHolder: Please add more status");
             Toast.makeText(mContext, "Please add more status", Toast.LENGTH_SHORT).show();

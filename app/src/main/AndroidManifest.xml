@@ -25,6 +25,9 @@
     <!-- My Location -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="com.example.mapdemo.permission.MAPS_RECEIVE" />
+    <!-- Create Shortcut -->
+    <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
+    <uses-permission android:name="com.android.launcher.permission.UNINSTALL_SHORTCUT" />
 
     <application
         android:name=".controller.helper.MyApplication"
