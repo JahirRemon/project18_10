@@ -136,7 +136,8 @@ public class ScheduleAdapter extends RecyclerSwipeAdapter<ScheduleAdapter.MyView
         viewHolder.dateTV.setText(schedule.getScDate());
         viewHolder.timeTV.setText(schedule.getScTime());
         viewHolder.orderIDTV.setText("ID-" + String.format("%04d", Integer.parseInt(schedule.getSid())));
-        viewHolder.quantityTV.setText("");
+        viewHolder.quantityTV.setText("No Comment");
+        viewHolder.quantityTV.setTextSize(12);
         viewHolder.totalPriceTV.setText("");
         viewHolder.statusTV.setText(schedule.getStatusDetial());
 

@@ -36,10 +36,9 @@ import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.API_
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.API_ACCESS_SUCCESS_CODE;
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.NO_USER_FOUND_CODE;
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions._INTENT_FROM;
-import static com.example.mdjahirulislam.doobbi.controller.helper.Functions._PROGRESS_TIME_IN_MILLISECOND;
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.hideDialog;
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.tabIconsAss;
-import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.tabIconsWhite;
+import static com.example.mdjahirulislam.doobbi.controller.helper.Functions._tabIconsWhite;
 
 public class OrderHomeActivity extends AppCompatActivity implements SelectedCategoryItemPriceAdapter.OnTotalPriceListener{
 
@@ -99,7 +98,6 @@ public class OrderHomeActivity extends AppCompatActivity implements SelectedCate
 //        tabLayout.setTabTextColors(Color.parseColor("#000000"), Color.parseColor("#ffffff"));
 
 
-//        setupTabIcons();
 
 
         tabLayout.setOnTabSelectedListener( new TabLayout.OnTabSelectedListener() {
@@ -109,21 +107,22 @@ public class OrderHomeActivity extends AppCompatActivity implements SelectedCate
 
                 switch (position) {
                     case 0:
-                        tabLayout.getTabAt( position ).setIcon( tabIconsWhite[position] );
+                        tabLayout.getTabAt( position ).setIcon( _tabIconsWhite[position] );
+                        Log.d(TAG, "onTabSelected: position---> "+position);
 //                        tabLayout.setTabTextColors(R.color.colorBlack,R.color.colorWhite);
 
                         break;
                     case 1:
-                        tabLayout.getTabAt( position ).setIcon( tabIconsWhite[position] );
+                        tabLayout.getTabAt( position ).setIcon( _tabIconsWhite[position] );
                         break;
                     case 2:
-                        tabLayout.getTabAt( position ).setIcon( tabIconsWhite[position] );
+                        tabLayout.getTabAt( position ).setIcon( _tabIconsWhite[position] );
                         break;
                     case 3:
-                        tabLayout.getTabAt( position ).setIcon( tabIconsWhite[position] );
+                        tabLayout.getTabAt( position ).setIcon( _tabIconsWhite[position] );
                         break;
                     case 4:
-                        tabLayout.getTabAt( position ).setIcon( tabIconsWhite[position] );
+                        tabLayout.getTabAt( position ).setIcon( _tabIconsWhite[position] );
                         break;
                 }
 
@@ -162,6 +161,16 @@ public class OrderHomeActivity extends AppCompatActivity implements SelectedCate
             }
         } );
 
+
+    }
+
+    private void setupTabIcons() {
+
+        tabLayout.getTabAt( 0 ).setIcon( _tabIconsWhite[0] );
+        tabLayout.getTabAt( 1 ).setIcon( tabIconsAss[1] );
+//        tabLayout.getTabAt( 2 ).setIcon( tabIconsAss[2] );
+//        tabLayout.getTabAt( 3 ).setIcon( tabIconsAss[3] );
+//        tabLayout.getTabAt( 4 ).setIcon( tabIconsAss[4] );
 
     }
 
@@ -255,6 +264,7 @@ public class OrderHomeActivity extends AppCompatActivity implements SelectedCate
                             tabLayout.setupWithViewPager( viewPager );
 
                             tabPageAdapter.notifyDataSetChanged();
+                            setupTabIcons();
 
                             if (tabNameList.size()>4){
                                 tabLayout.setTabMode( TabLayout.MODE_SCROLLABLE );

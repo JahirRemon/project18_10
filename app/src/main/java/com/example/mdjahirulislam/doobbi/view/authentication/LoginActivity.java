@@ -69,40 +69,42 @@ public class LoginActivity extends AppCompatActivity {
 
 
     private void initialization() {
-        userIdET = findViewById( R.id.login_user_name );
-        userPasswordET = findViewById( R.id.login_user_password );
-        showPassIV = findViewById( R.id.login_show_or_hidden_password_eye );
+        userIdET = findViewById(R.id.login_user_name);
+        userPasswordET = findViewById(R.id.login_user_password);
+        showPassIV = findViewById(R.id.login_show_or_hidden_password_eye);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate( savedInstanceState );
-        setContentView( R.layout.activity_login );
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_login);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         initialization();
-        from = getIntent().getStringExtra( _INTENT_FROM );
-        userPhone = Functions.getMyPhoneNO( this );
-
-        if (from.equalsIgnoreCase(ScheduleSummaryActivity.class.getSimpleName())){
-            getDate = getIntent().getLongExtra("date",00);
-            getTime = getIntent().getStringExtra("time");
+        from = getIntent().getStringExtra(_INTENT_FROM);
+        userPhone = Functions.getMyPhoneNO(this);
+        if (from != null) {
+            if (from.equalsIgnoreCase(ScheduleSummaryActivity.class.getSimpleName())) {
+                getDate = getIntent().getLongExtra("date", 00);
+                getTime = getIntent().getStringExtra("time");
+            }
         }
-        getUserDetailsThread = new GetUserDetailsThread( this, userPhone,from );
+        getUserDetailsThread = new GetUserDetailsThread(this, userPhone, from);
 
         if (!userPhone.isEmpty()) {
             getUserDetailsThread.run();
-            Functions.ProgressDialog( this );
+            Functions.ProgressDialog(this);
             Functions.showDialog();
         } else {
-            Log.d( TAG, "onCreate: no number found" );
+            Log.d(TAG, "onCreate: no number found");
         }
 
 
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-           intentFunction();
+            intentFunction();
         }
         // app icon in action bar clicked; goto parent activity.
         this.finish();
@@ -121,16 +123,16 @@ public class LoginActivity extends AppCompatActivity {
             } else if (from.equalsIgnoreCase(OrderListActivity.class.getSimpleName())) {
                 intent = new Intent(this, OrderListActivity.class);
 
-            }else if (from.equalsIgnoreCase(OrderSummaryActivity.class.getSimpleName())) {
+            } else if (from.equalsIgnoreCase(OrderSummaryActivity.class.getSimpleName())) {
                 intent = new Intent(this, OrderSummaryActivity.class);
 
-            }else if (from.equalsIgnoreCase(ProfileViewActivity.class.getSimpleName())) {
+            } else if (from.equalsIgnoreCase(ProfileViewActivity.class.getSimpleName())) {
                 intent = new Intent(this, ProfileViewActivity.class);
 
             } else {
                 intent = new Intent(this, HomeActivity.class);
             }
-        }else {
+        } else {
             intent = new Intent(this, HomeActivity.class);
 
         }
@@ -140,21 +142,22 @@ public class LoginActivity extends AppCompatActivity {
         finish();
 
     }
+
     public void goToRegistrationActivityFormLoginActivity(View view) {
-        startActivity( new Intent( this, RegistrationActivity.class ).putExtra(_INTENT_FROM,TAG) );
+        startActivity(new Intent(this, RegistrationActivity.class).putExtra(_INTENT_FROM, TAG));
     }
 
     public void clickOnLogin(View view) {
 
-        if (isEmpty( userIdET )) {
-            setError( userIdET, "Enter Your Mobile No. " );
-        } else if (isEmpty( userPasswordET )) {
-            setError( userPasswordET, "Enter Your Password. " );
+        if (isEmpty(userIdET)) {
+            setError(userIdET, "Enter Your Mobile No. ");
+        } else if (isEmpty(userPasswordET)) {
+            setError(userPasswordET, "Enter Your Password. ");
         } else {
 
-            getLoginUserDetailsThread = new Thread( new GetLoginUserDetailsThread( this, userIdET.getText().toString(), userPasswordET.getText().toString() ) );
+            getLoginUserDetailsThread = new Thread(new GetLoginUserDetailsThread(this, userIdET.getText().toString(), userPasswordET.getText().toString()));
             getLoginUserDetailsThread.start();
-            Functions.ProgressDialog( this );
+            Functions.ProgressDialog(this);
             Functions.showDialog();
 
         }
@@ -173,16 +176,16 @@ public class LoginActivity extends AppCompatActivity {
 
     public void loginShowPassword(View view) {
         if (!showPass) {
-            Log.d( TAG, "showPassword: false --> " + showPass );
-            userPasswordET.setTransformationMethod( new HideReturnsTransformationMethod() );
+            Log.d(TAG, "showPassword: false --> " + showPass);
+            userPasswordET.setTransformationMethod(new HideReturnsTransformationMethod());
 
-            showPassIV.setImageResource( R.drawable.ic_visibility_blue_24dp );
+            showPassIV.setImageResource(R.drawable.ic_visibility_blue_24dp);
             showPass = true;
         } else {
-            Log.d( TAG, "showPassword: true ---> " + showPass );
+            Log.d(TAG, "showPassword: true ---> " + showPass);
 
-            showPassIV.setImageResource( R.drawable.ic_visibility_off_ass_24dp );
-            userPasswordET.setTransformationMethod( new PasswordTransformationMethod() );
+            showPassIV.setImageResource(R.drawable.ic_visibility_off_ass_24dp);
+            userPasswordET.setTransformationMethod(new PasswordTransformationMethod());
 
             showPass = false;
         }
@@ -206,34 +209,34 @@ public class LoginActivity extends AppCompatActivity {
 
         public GetLoginUserDetailsThread(Context context, String userPhone, String userPassword) {
             this.context = context;
-            connectionApi = Functions.getRetrofit().create( ConnectionAPI.class );
+            connectionApi = Functions.getRetrofit().create(ConnectionAPI.class);
             this.userPhone = userPhone;
             this.userPassword = userPassword;
-            sessionManager = new SessionManager( context );
+            sessionManager = new SessionManager(context);
         }
 
         @Override
         public void run() {
             try {
 
-                RequestBody password = RequestBody.create( MultipartBody.FORM, API_ACCESS_PASSWORD );
-                RequestBody user = RequestBody.create( MultipartBody.FORM, API_ACCESS_ID );
-                RequestBody function = RequestBody.create( MultipartBody.FORM, API_ACCESS_FUNCTION_LOGIN );
-                RequestBody phone = RequestBody.create( MultipartBody.FORM, String.valueOf( userPhone ) );
-                RequestBody userPass = RequestBody.create( MultipartBody.FORM, String.valueOf( userPassword ) );
+                RequestBody password = RequestBody.create(MultipartBody.FORM, API_ACCESS_PASSWORD);
+                RequestBody user = RequestBody.create(MultipartBody.FORM, API_ACCESS_ID);
+                RequestBody function = RequestBody.create(MultipartBody.FORM, API_ACCESS_FUNCTION_LOGIN);
+                RequestBody phone = RequestBody.create(MultipartBody.FORM, String.valueOf(userPhone));
+                RequestBody userPass = RequestBody.create(MultipartBody.FORM, String.valueOf(userPassword));
 
-                Log.d( TAG, "run: data: " + phone + "\ndataModel: " + userPhone );
+                Log.d(TAG, "run: data: " + phone + "\ndataModel: " + userPhone);
 
-                final Call<GetUserDetailsResponseModel> insertUserResponseModelCallBack = connectionApi.getLogin( password, user,
-                        function, phone, userPass );
+                final Call<GetUserDetailsResponseModel> insertUserResponseModelCallBack = connectionApi.getLogin(password, user,
+                        function, phone, userPass);
 
 
-                insertUserResponseModelCallBack.enqueue( new Callback<GetUserDetailsResponseModel>() {
+                insertUserResponseModelCallBack.enqueue(new Callback<GetUserDetailsResponseModel>() {
                     @Override
                     public void onResponse(Call<GetUserDetailsResponseModel> call, Response<GetUserDetailsResponseModel> response) {
                         if (response.code() == 200) {
                             userDetailsResponseModel = response.body();
-                            if (userDetailsResponseModel!=null) {
+                            if (userDetailsResponseModel != null) {
                                 String status = userDetailsResponseModel.getStatus();
                                 Log.d(TAG, "Status : " + userDetailsResponseModel.toString());
                                 // deny code is 100
@@ -283,11 +286,14 @@ public class LoginActivity extends AppCompatActivity {
                                     } else if (from.equalsIgnoreCase(ProfileViewActivity.class.getSimpleName())) {
                                         myIntent = new Intent(context, ProfileViewActivity.class);
 
+                                    }else if (from.equalsIgnoreCase(ScheduleListActivity.class.getSimpleName())) {
+                                        myIntent = new Intent(context, ScheduleListActivity.class);
+
                                     } else if (from.equalsIgnoreCase(ScheduleSummaryActivity.class.getSimpleName())) {
                                         myIntent = new Intent(context, ScheduleSummaryActivity.class);
-                                        myIntent.putExtra("dateTimeMills",getDate);
-                                        myIntent.putExtra("time",getTime);
-                                        myIntent.putExtra(_INTENT_FROM,TAG);
+                                        myIntent.putExtra("dateTimeMills", getDate);
+                                        myIntent.putExtra("time", getTime);
+                                        myIntent.putExtra(_INTENT_FROM, TAG);
 
                                     }
                                     context.startActivity(myIntent);
@@ -308,29 +314,29 @@ public class LoginActivity extends AppCompatActivity {
                                     Log.d(TAG, "onResponse: Some Is Wrong");
 
                                 }
-                            }else {
+                            } else {
                                 Toast.makeText(context, "Please Try again something is wrong!!!", Toast.LENGTH_SHORT).show();
                             }
 
                         } else {
 //                    Toast.makeText(context, "Server Error", Toast.LENGTH_SHORT).show();
-                            Log.d( TAG, "onResponse: Server Error response.code ===> " + response.code() );
+                            Log.d(TAG, "onResponse: Server Error response.code ===> " + response.code());
                         }
-                        Log.d( TAG, "onResponse: " + response.body() + " \n\n" + response.raw() + " \n\n" + response.toString() + " \n\n" + response.errorBody() );
+                        Log.d(TAG, "onResponse: " + response.body() + " \n\n" + response.raw() + " \n\n" + response.toString() + " \n\n" + response.errorBody());
                         hideDialog();
 
                     }
 
                     @Override
                     public void onFailure(Call<GetUserDetailsResponseModel> call, Throwable t) {
-                        Toast.makeText(context, t.getLocalizedMessage()+" Try Again!!!", Toast.LENGTH_SHORT).show();
-                        Log.d( TAG, "onFailure: " + t.getLocalizedMessage() );
-                        Log.d( TAG, "onFailure: " + t.toString() );
-                        Log.d( TAG, "onFailure: " + t.getMessage() );
+                        Toast.makeText(context, t.getLocalizedMessage() + " Try Again!!!", Toast.LENGTH_SHORT).show();
+                        Log.d(TAG, "onFailure: " + t.getLocalizedMessage());
+                        Log.d(TAG, "onFailure: " + t.toString());
+                        Log.d(TAG, "onFailure: " + t.getMessage());
                         hideDialog();
 
                     }
-                } );
+                });
             } finally {
 
                 if (mRealm != null) {

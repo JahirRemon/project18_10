@@ -18,10 +18,11 @@
         android:layout_marginTop="@dimen/home_icon_margin"
         android:textAlignment="center"
         app:tabBackground="@color/colorBackgroundDarkAss"
-        app:tabGravity="fill"
         app:tabIndicatorColor="@color/colorWhite"
         app:tabIndicatorHeight="2dp"
-        app:tabMode="scrollable"
+        app:tabMaxWidth="500dp"
+        app:tabGravity="fill"
+        app:tabMode="fixed"
         app:tabSelectedTextColor="@color/colorBlack"
         app:tabTextColor="@color/colorBlack"
         />

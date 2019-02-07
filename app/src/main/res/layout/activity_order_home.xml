@@ -22,6 +22,7 @@
         app:tabIndicatorColor="@color/colorWhite"
         app:tabIndicatorHeight="2dp"
         app:tabMode="fixed"
+        app:tabMaxWidth="0dp"
         app:tabSelectedTextColor="@color/colorBlack"
         app:tabTextColor="@color/colorBlack"
         />

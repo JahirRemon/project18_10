@@ -7,11 +7,15 @@ import android.util.Log;
 
 import com.example.mdjahirulislam.doobbi.controller.connectionInterface.ConnectionAPI;
 import com.example.mdjahirulislam.doobbi.controller.helper.Functions;
+import com.example.mdjahirulislam.doobbi.controller.helper.SessionManager;
+import com.example.mdjahirulislam.doobbi.model.requestModel.InsertUserDataModel;
 import com.example.mdjahirulislam.doobbi.model.responseModel.InsertResponseModel;
 import com.example.mdjahirulislam.doobbi.view.HomeActivity;
+import com.google.gson.Gson;
 
 import java.io.File;
 
+import io.realm.Realm;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -39,18 +43,29 @@ public class InsertNewUserThread extends Thread {
     private String dataModel;
     private File file;
     private InsertResponseModel registrationResponseModel;
+    private Realm mRealm;
+    private InsertUserDataModel userDetailsModelDB;
+    private InsertUserDataModel passData;
+    private SessionManager sessionManager;
 
 
-    public InsertNewUserThread(Context context,String  dataModel) {
+
+
+    public InsertNewUserThread(Context context,InsertUserDataModel  dataModel) {
         this.context = context;
         connectionApi = Functions.getRetrofit().create( ConnectionAPI.class );
-        this.dataModel  = dataModel;
+        passData = dataModel;
+        Gson gson = new Gson();
+        String data = gson.toJson(dataModel);
+        Log.d(TAG, "goToScheduleListActivityFromRegistrationActivity: " + data);
+        this.dataModel  = data;
+        sessionManager = new SessionManager(context);
     }
 
     @Override
     public void run() {
         super.run();
-        RequestBody password = RequestBody.create( MultipartBody.FORM,API_ACCESS_PASSWORD );
+        final RequestBody password = RequestBody.create( MultipartBody.FORM,API_ACCESS_PASSWORD );
         RequestBody user = RequestBody.create( MultipartBody.FORM,API_ACCESS_ID );
         RequestBody function = RequestBody.create( MultipartBody.FORM, API_ACCESS_FUNCTION_ADD_USER );
         RequestBody data = RequestBody.create( MultipartBody.FORM, String.valueOf( dataModel ) );
@@ -69,6 +84,33 @@ public class InsertNewUserThread extends Thread {
                     String status = registrationResponseModel.getStatus().toString();
                     Log.d( TAG, "Status : " + status );
                     if (status.equalsIgnoreCase( API_ACCESS_SUCCESS_CODE )) {
+
+
+
+                        mRealm = Realm.getDefaultInstance();
+
+                        mRealm.beginTransaction();
+
+                        userDetailsModelDB = mRealm.createObject(InsertUserDataModel.class);
+                        userDetailsModelDB.setClint_id(passData.getClint_id());
+                        userDetailsModelDB.setName(passData.getName());
+                        userDetailsModelDB.setPhone(passData.getPhone());
+                        userDetailsModelDB.setEmail(passData.getEmail());
+                        userDetailsModelDB.setAddress(passData.getAddress());
+                        userDetailsModelDB.setClint_image_path(passData.getClint_image_path());
+                        userDetailsModelDB.setFlat_no(passData.getFlat_no());
+                        userDetailsModelDB.setRoad_no(passData.getRoad_no());
+                        userDetailsModelDB.setHouse_no(passData.getHouse_no());
+                        userDetailsModelDB.setArea(passData.getArea());
+                        userDetailsModelDB.setLatitude(passData.getLatitude());
+                        userDetailsModelDB.setLongitude(passData.getLongitude());
+
+                        mRealm.commitTransaction();
+
+
+                        sessionManager.setLogin(true);
+                        sessionManager.setUserID(passData.getClint_id());
+
                         Intent myIntent = new Intent( context, HomeActivity.class );
                         context.startActivity( myIntent );
                     } else if (status.equalsIgnoreCase( API_ACCESS_DENY_CODE)) {

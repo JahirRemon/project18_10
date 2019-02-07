@@ -13,15 +13,11 @@ import com.example.mdjahirulislam.doobbi.controller.adapter.TabPageAdapter;
 import com.example.mdjahirulislam.doobbi.controller.adapter.ViewPagerAdapter;
 import com.example.mdjahirulislam.doobbi.controller.connectionInterface.ConnectionAPI;
 import com.example.mdjahirulislam.doobbi.controller.helper.Functions;
-import com.example.mdjahirulislam.doobbi.controller.helper.SessionManager;
-import com.example.mdjahirulislam.doobbi.model.responseModel.GetItemWisePriceResponseModel;
 import com.example.mdjahirulislam.doobbi.model.responseModel.GetTadItemResponseModel;
 import com.example.mdjahirulislam.doobbi.view.HomeActivity;
-import com.example.mdjahirulislam.doobbi.view.makeMyOrder.OrderHomeActivity;
 
 import java.util.ArrayList;
 
-import io.realm.Realm;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -35,7 +31,7 @@ import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.API_
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.NO_USER_FOUND_CODE;
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.hideDialog;
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.tabIconsAss;
-import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.tabIconsWhite;
+import static com.example.mdjahirulislam.doobbi.controller.helper.Functions._tabIconsWhite;
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.tabNames;
 
 public class PriceListActivity extends AppCompatActivity {
@@ -95,21 +91,21 @@ public class PriceListActivity extends AppCompatActivity {
 
                 switch (position) {
                     case 0:
-                        tabLayout.getTabAt( position ).setIcon( tabIconsWhite[position] );
+                        tabLayout.getTabAt( position ).setIcon( _tabIconsWhite[position] );
 //                        tabLayout.setTabTextColors(R.color.colorBlack,R.color.colorWhite);
 
                         break;
                     case 1:
-                        tabLayout.getTabAt( position ).setIcon( tabIconsWhite[position] );
+                        tabLayout.getTabAt( position ).setIcon( _tabIconsWhite[position] );
                         break;
                     case 2:
-                        tabLayout.getTabAt( position ).setIcon( tabIconsWhite[position] );
+                        tabLayout.getTabAt( position ).setIcon( _tabIconsWhite[position] );
                         break;
                     case 3:
-                        tabLayout.getTabAt( position ).setIcon( tabIconsWhite[position] );
+                        tabLayout.getTabAt( position ).setIcon( _tabIconsWhite[position] );
                         break;
                     case 4:
-                        tabLayout.getTabAt( position ).setIcon( tabIconsWhite[position] );
+                        tabLayout.getTabAt( position ).setIcon( _tabIconsWhite[position] );
                         break;
                 }
 
@@ -154,11 +150,11 @@ public class PriceListActivity extends AppCompatActivity {
 
     private void setupTabIcons() {
 
-        tabLayout.getTabAt( 0 ).setIcon( tabIconsWhite[0] );
+        tabLayout.getTabAt( 0 ).setIcon( _tabIconsWhite[0] );
         tabLayout.getTabAt( 1 ).setIcon( tabIconsAss[1] );
-        tabLayout.getTabAt( 2 ).setIcon( tabIconsAss[2] );
-        tabLayout.getTabAt( 3 ).setIcon( tabIconsAss[3] );
-        tabLayout.getTabAt( 4 ).setIcon( tabIconsAss[4] );
+//        tabLayout.getTabAt( 2 ).setIcon( tabIconsAss[2] );
+//        tabLayout.getTabAt( 3 ).setIcon( tabIconsAss[3] );
+//        tabLayout.getTabAt( 4 ).setIcon( tabIconsAss[4] );
 
     }
 
@@ -229,6 +225,7 @@ public class PriceListActivity extends AppCompatActivity {
 
                             tabPageAdapter.notifyDataSetChanged();
 
+                            setupTabIcons();
                             if (tabNameList.size()>4){
                                 tabLayout.setTabMode( TabLayout.MODE_SCROLLABLE );
                             }else {

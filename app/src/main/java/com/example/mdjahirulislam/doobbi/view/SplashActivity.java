@@ -5,6 +5,9 @@ import android.graphics.PixelFormat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Window;
+import android.view.WindowManager;
+
+import com.example.mdjahirulislam.doobbi.R;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -18,6 +21,8 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.splash_activity);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         StartAnimations();
     }
     private void StartAnimations() {

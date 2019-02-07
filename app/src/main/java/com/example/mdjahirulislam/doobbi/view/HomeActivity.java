@@ -1,10 +1,14 @@
 package com.example.mdjahirulislam.doobbi.view;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.nfc.Tag;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.MenuInflater;
 import android.support.design.widget.NavigationView;
@@ -105,6 +109,7 @@ public class HomeActivity extends AppCompatActivity
             addShortcut();
         }
 
+        toolbar.setTitle("Apal");
 
         final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -138,6 +143,7 @@ public class HomeActivity extends AppCompatActivity
         sliderLayout = findViewById(R.id.imageSlider);
         sliderLayout.setIndicatorAnimation(SliderLayout.Animations.WORM); //set indicator animation by using SliderLayout.Animations. :WORM or THIN_WORM or COLOR or DROP or FILL or NONE or SCALE or SCALE_DOWN or SLIDE and SWAP!!
         sliderLayout.setScrollTimeInSec(1); //set scroll delay in seconds :
+        Functions.getMyPhoneNO(this);
 
 
         setSliderViews();
@@ -180,7 +186,6 @@ public class HomeActivity extends AppCompatActivity
             }
         });
 
-        Functions.getMyPhoneNO(this);
 
         makeOrderLL.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -392,7 +397,7 @@ public class HomeActivity extends AppCompatActivity
         addIntent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
         getApplicationContext().sendBroadcast(addIntent);
         sessionManager.setUp(true);
-        Log.d(TAG, "addShortcut: finish ----> "+sessionManager.isSetUp());
+        Log.d(TAG, "addShortcut: finish ----> " + sessionManager.isSetUp());
     }
 
     @Override
@@ -528,7 +533,26 @@ public class HomeActivity extends AppCompatActivity
 
     public void callTheAuthority(View view) {
         Log.d(TAG, "callTheAuthority: ");
-        Functions.showSnack(ConnectivityReceiver.isConnected(HomeActivity.this), view);
+//        Functions.showSnack(ConnectivityReceiver.isConnected(HomeActivity.this), view);
+
+        Intent callIntent = new Intent(Intent.ACTION_CALL);
+        callIntent.setData(Uri.parse("tel:01618004000"));
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+//                ActivityCompat#requestPermissions
+//             here to request the missing permissions, and then overriding
+//               public void onRequestPermissionsResult(int requestCode, String[] permissions,
+//                                                      int[] grantResults)
+//             to handle the case where the user grants the permission. See the documentation
+//             for ActivityCompat#requestPermissions for more details.
+            Log.d(TAG, "callTheAuthority: if -> "+ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE));
+//            startActivity(callIntent);
+
+            return;
+        } else {
+            Log.d(TAG, "callTheAuthority: else");
+            startActivity(callIntent);
+        }
     }
 
 

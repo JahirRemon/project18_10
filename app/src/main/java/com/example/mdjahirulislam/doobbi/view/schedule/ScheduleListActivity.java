@@ -21,6 +21,7 @@ import com.example.mdjahirulislam.doobbi.controller.helper.SessionManager;
 import com.example.mdjahirulislam.doobbi.model.responseModel.GetOrderListResponseModel;
 import com.example.mdjahirulislam.doobbi.model.responseModel.GetScheduleListResponseModel;
 import com.example.mdjahirulislam.doobbi.view.HomeActivity;
+import com.example.mdjahirulislam.doobbi.view.authentication.LoginActivity;
 import com.example.mdjahirulislam.doobbi.view.order.OrderListActivity;
 
 import java.util.ArrayList;
@@ -37,6 +38,7 @@ import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.API_
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.API_ACCESS_PASSWORD;
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.API_ACCESS_SUCCESS_CODE;
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.NO_USER_FOUND_CODE;
+import static com.example.mdjahirulislam.doobbi.controller.helper.Functions._INTENT_FROM;
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.hideDialog;
 
 public class ScheduleListActivity extends AppCompatActivity {
@@ -126,6 +128,11 @@ public class ScheduleListActivity extends AppCompatActivity {
     public void goToAddScheduleActivity(View view) {
         startActivity(new Intent(ScheduleListActivity.this, ScheduleCalendarActivity.class));
 //        finish();
+    }
+
+    public void clickOnLogin(View view) {
+        startActivity(new Intent(ScheduleListActivity.this, LoginActivity.class).putExtra(_INTENT_FROM,TAG));
+
     }
 
     public class GetScheduleListThread implements Runnable {

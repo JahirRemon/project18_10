@@ -287,8 +287,7 @@ public class RegistrationActivity extends AppCompatActivity implements OnMapRead
             setError(userHouseET, "Required Field");
         } else if (isEmpty(userRoadNoET)) {
             setError(userRoadNoET, "Required Field");
-        }
-        if (getIntent().getStringExtra(_INTENT_FROM).equalsIgnoreCase( ProfileViewActivity.class.getSimpleName()) ){
+        } else if (getIntent().getStringExtra(_INTENT_FROM).equalsIgnoreCase( ProfileViewActivity.class.getSimpleName()) ){
             //todo implement update user api.
             Toast.makeText(this, "Need Update Api", Toast.LENGTH_SHORT).show();
 
@@ -317,7 +316,7 @@ public class RegistrationActivity extends AppCompatActivity implements OnMapRead
                     Log.d(TAG, "goToScheduleListActivityFromRegistrationActivity: " + data);
 
 
-                    InsertNewUserThread insertEventThread = new InsertNewUserThread(this, data);
+                    InsertNewUserThread insertEventThread = new InsertNewUserThread(this, insertUserDataModel);
                     insertEventThread.start();
 
                     if (mediaPath.equalsIgnoreCase("noImage")) {

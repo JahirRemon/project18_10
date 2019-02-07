@@ -28,6 +28,7 @@ import io.realm.Realm;
 
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions._INTENT_FROM;
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions._PROGRESS_TIME_IN_MILLISECOND;
+import static com.example.mdjahirulislam.doobbi.controller.helper.Functions._tabIconsWhite;
 import static com.example.mdjahirulislam.doobbi.controller.helper.Functions.hideDialog;
 
 public class SelectItemActivity extends AppCompatActivity implements SelectedCategoryItemPriceAdapter.OnTotalPriceListener,OrderListSummaryAdapter.OnTotalPriceAndQuantityListener {
@@ -50,7 +51,7 @@ public class SelectItemActivity extends AppCompatActivity implements SelectedCat
 
     private TabPageAdapter tabPageAdapter;
     private final int[] tabIconsAss = {
-            R.drawable.ic_tab_shirt_white,
+            R.drawable.ic_tab_man_ass,
             R.drawable.ic_tab_pant_white,
             R.drawable.ic_tab_child_white,
             R.drawable.ic_tab_suit_white,
@@ -114,9 +115,11 @@ public class SelectItemActivity extends AppCompatActivity implements SelectedCat
 
         tabLayout = (TabLayout) findViewById( R.id.select_category_tab_layout );
         tabLayout.setupWithViewPager( viewPager );
+        Log.d(TAG, "onCreate: item size---> "+items.size());
         if (items.size() > 4) {
             tabLayout.setTabMode( TabLayout.MODE_SCROLLABLE );
-        } else {
+        }
+        else {
             tabLayout.setTabMode( TabLayout.MODE_FIXED );
         }
         for (int i = 0; i < items.size(); i++) {
@@ -160,63 +163,65 @@ public class SelectItemActivity extends AppCompatActivity implements SelectedCat
         });
 
 
-        tabLayout.setOnTabSelectedListener( new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                int position = tab.getPosition();
-
-                switch (position) {
-                    case 0:
-                        tabLayout.getTabAt( position ).setIcon( tabIconsWhite[position] );
-                        break;
-                    case 1:
-                        tabLayout.getTabAt( position ).setIcon( tabIconsWhite[position] );
-                        break;
-                    case 2:
-                        tabLayout.getTabAt( position ).setIcon( tabIconsWhite[position] );
-                        break;
-                    case 3:
-                        tabLayout.getTabAt( position ).setIcon( tabIconsWhite[position] );
-                        break;
-                    case 4:
-                        tabLayout.getTabAt( position ).setIcon( tabIconsWhite[position] );
-                        break;
-                }
-
-
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-                int position = tab.getPosition();
-
-                switch (position) {
-                    case 0:
-                        tabLayout.getTabAt( position ).setIcon( tabIconsAss[position] );
-                        break;
-                    case 1:
-                        tabLayout.getTabAt( position ).setIcon( tabIconsAss[position] );
-                        break;
-                    case 2:
-                        tabLayout.getTabAt( position ).setIcon( tabIconsAss[position] );
-                        break;
-                    case 3:
-                        tabLayout.getTabAt( position ).setIcon( tabIconsAss[position] );
-                        break;
-
-                    case 4:
-                        tabLayout.getTabAt( position ).setIcon( tabIconsAss[position] );
-                        break;
-                }
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        } );
+//        tabLayout.setOnTabSelectedListener( new TabLayout.OnTabSelectedListener() {
+//            @Override
+//            public void onTabSelected(TabLayout.Tab tab) {
+//                int position = tab.getPosition();
+//
+//                switch (position) {
+//                    case 0:
+//                        tabLayout.getTabAt( position ).setIcon( _tabIconsWhite[position] );
+//                        Log.d(TAG, "onTabSelected: position ---> "+position);
+//
+//                        break;
+//                    case 1:
+//                        tabLayout.getTabAt( position ).setIcon( tabIconsWhite[position] );
+//                        break;
+//                    case 2:
+//                        tabLayout.getTabAt( position ).setIcon( tabIconsWhite[position] );
+//                        break;
+//                    case 3:
+//                        tabLayout.getTabAt( position ).setIcon( tabIconsWhite[position] );
+//                        break;
+//                    case 4:
+//                        tabLayout.getTabAt( position ).setIcon( tabIconsWhite[position] );
+//                        break;
+//                }
+//
+//
+//            }
+//
+//            @Override
+//            public void onTabUnselected(TabLayout.Tab tab) {
+//
+//                int position = tab.getPosition();
+//
+//                switch (position) {
+//                    case 0:
+//                        tabLayout.getTabAt( position ).setIcon( tabIconsAss[position] );
+//                        break;
+//                    case 1:
+//                        tabLayout.getTabAt( position ).setIcon( tabIconsAss[position] );
+//                        break;
+//                    case 2:
+//                        tabLayout.getTabAt( position ).setIcon( tabIconsAss[position] );
+//                        break;
+//                    case 3:
+//                        tabLayout.getTabAt( position ).setIcon( tabIconsAss[position] );
+//                        break;
+//
+//                    case 4:
+//                        tabLayout.getTabAt( position ).setIcon( tabIconsAss[position] );
+//                        break;
+//                }
+//
+//            }
+//
+//            @Override
+//            public void onTabReselected(TabLayout.Tab tab) {
+//
+//            }
+//        } );
 
     }
 

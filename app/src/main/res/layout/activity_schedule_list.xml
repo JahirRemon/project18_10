@@ -23,6 +23,7 @@
         android:text="Please Login !!!"
         android:textSize="@dimen/large_text_size"
         android:textColor="@color/holo_red_light"
+        android:onClick="clickOnLogin"
         />
 
 
@@ -55,7 +56,7 @@
                 android:gravity="center"
                 android:lineSpacingExtra="@dimen/margin_16dp"
                 android:paddingBottom="@dimen/margin_16dp"
-                android:text="Your next Schedule is within \n2 hours 58 secend"
+                android:text="Your next Schedule is within \n2 hours 58 minutes"
                 android:textColor="@color/colorWhite"
                 android:textSize="@dimen/regular_text_size"
                 android:textStyle="bold" />
